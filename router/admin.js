@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const userModel = require('../model/userModel');
+
 // 사용자 등록
 let category = [
     {
@@ -86,6 +88,11 @@ router.get('/user/register', (req, res) => {
         purchase: category,
         active: 'user_register'
     });
+});
+router.post('/user/register', async (req, res) => {
+    console.log('posted body : ', req.body);
+    let result = await userModel.insertMany(req.body);
+    res.json(result);
 });
 
 // 사용자 관리
