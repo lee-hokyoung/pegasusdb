@@ -42,17 +42,25 @@ function fnRegisterUser() {
         user_pw.focus();
         return false;
     }
-
-    let data = $('form[name="formDataRegister"]').serialize();
-    console.log('data : ', data);
+    let data = {}, category = [];
+    document.querySelectorAll('input[type="text"]').forEach((v)=>{
+        data[v.name] = v.value;
+    });
+    document.querySelectorAll('input[type="checkbox"]:checked').forEach((v) => {
+        category.push(v.name);
+    });
+    data['category'] = category;
+    // let data = $('form[name="formDataRegister"]').serialize();
+    // let category = $('form[name="formCategory"]').serialize();
+    console.log('data : ', data, ', category : ', category);
     let xhr = new XMLHttpRequest();
     xhr.open('POST', '/admin/user/register', true);
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.onreadystatechange = function () {
         if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
             let res = JSON.parse(this.response);
             console.log('res : ', res);
         }
     };
-    xhr.send(data);
+    xhr.send(JSON.stringify(data));
 }

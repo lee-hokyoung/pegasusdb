@@ -8,7 +8,7 @@ mongoose.connect(process.env.MONGO_URI, {useNewUrlParser: true}, (error) => {
 });
 (async function main() {
     let list = await Category.aggregate([
-        {$group:{_id:'$group_id'}}
+        {$group:{_id:'$group_id', list:{$push:'$$ROOT'}}}
     ]);
     console.log('list : ', list);
 })();
