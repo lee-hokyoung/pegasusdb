@@ -9,7 +9,6 @@ const cateSchema = new Schema({
     group_id: {type: String, required:true},
     group_name: {type: String, required: true},
     group_order:{type:Number},
-    status:{type:Number, default:1},
     created: {type: Date, default: Date.now},
 });
 module.exports = mongoose.model('Category', cateSchema);

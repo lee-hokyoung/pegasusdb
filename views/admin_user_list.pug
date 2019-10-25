@@ -31,13 +31,15 @@ block content
 						td #{item.user_id}
 						td #{item.user_pw}
 						td
-							each pur in item.purchase_list
-								| #{pur}
+							each cate in item.cate_info
+								| #{cate.cate_name}
 								br
 						td
 							select
-								option(value=2) 중지
-								option(value=1) 제공
-								option(value=9) 삭제
+								option(value=2, selected=item.status===2) 중지
+								option(value=1, selected=item.status===1) 제공
+								option(value=9, selected=item.status===9) 삭제
 						td #{item.status===1?'제공':item.status===2?'중지':'삭제'}
 	block append_Js
+		script.
+			console.log((!{JSON.stringify(users)}))

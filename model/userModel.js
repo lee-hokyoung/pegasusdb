@@ -10,6 +10,7 @@ const userSchema = new Schema({
     email: {type: String},
     user_id: {type:String, required:true, unique:true},
     user_pw: {type:String, required:true},
+    status:{type:Number, default:1},
     category:{type:Array, ref:'Category'},
     created: {type: Date, default: Date.now},
 });

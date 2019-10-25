@@ -52,15 +52,43 @@ function fnRegisterUser() {
     data['category'] = category;
     // let data = $('form[name="formDataRegister"]').serialize();
     // let category = $('form[name="formCategory"]').serialize();
-    console.log('data : ', data, ', category : ', category);
     let xhr = new XMLHttpRequest();
     xhr.open('POST', '/admin/user/register', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.onreadystatechange = function () {
         if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
             let res = JSON.parse(this.response);
-            console.log('res : ', res);
+            if(res.result === 1){
+                alert(res.message);
+                location.reload();
+            }else{
+                alert(res.message);
+            }
         }
     };
     xhr.send(JSON.stringify(data));
+}
+
+// 데이터 테이블 컬럼 추가
+function fnAddCol(){
+    document.querySelectorAll('tr').forEach(function(tr){
+        let data_type = tr.dataset.type;
+        let current_idx = parseInt(tr.dataset.idx);
+        let td = document.createElement('td');
+        td.dataset.idx = current_idx;
+        let input = document.createElement('input');
+        input.type= 'text';
+        input.name= data_type + '_data_' + (current_idx + 1);
+        td.appendChild(input);
+        tr.appendChild(td);
+        tr.dataset.idx = current_idx + 1;
+    });
+}
+// 데이터 테이블 컬럼 제거
+function fnRemoveCol(){
+    document.querySelectorAll('tr').forEach(function(tr){
+        let target_idx = parseInt(tr.dataset.idx) - 1;
+        tr.querySelector('td[data-idx="' + target_idx + '"]').remove();
+        tr.dataset.idx = target_idx;
+    });
 }

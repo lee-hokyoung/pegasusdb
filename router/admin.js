@@ -101,7 +101,6 @@ router.get('/user/register', async (req, res) => {
   });
 });
 router.post('/user/register', async (req, res) => {
-  console.log('posted body : ', req.body);
   let exUser = await userModel.findOne({user_id:req.body.user_id});
   let exUserNo = await userModel.findOne({user_no:req.body.user_no});
   if(exUser){
@@ -109,37 +108,23 @@ router.post('/user/register', async (req, res) => {
   }else if(exUserNo){
     res.json({result:3, message:'이미 등록된 고객번호가 있습니다.'});
   }else{
-    let result = await userModel.create(req.body);
-    res.json({result:1, result});
+    await userModel.create(req.body);
+    res.json({result:1, message:'정상적으로 등록되었습니다.'});
   }
 });
 
 // 사용자 관리
-router.get('/user/list', (req, res) => {
-  let users = [
+router.get('/user/list', async (req, res) => {
+  let users = await userModel.aggregate([
     {
-      user_no: 'A0001',
-      user_corp: '주파오컨설팅',
-      manager_name: '정우성',
-      manager_tel: '010-5531-2559',
-      email: 'jws2559@zhupao.co.kr',
-      user_id: 'jws2559',
-      user_pw: 'jws2220',
-      status: 1,
-      purchase_list: ['Hair Salon', 'SPA', 'Nail Shop', 'Hotel', 'Delivery', 'Sharing', 'Electronic Vehicles', 'Drone']
-    },
-    {
-      user_no: 'A0002',
-      user_corp: '네이버',
-      manager_name: '홍길동',
-      manager_tel: '010-1213-2559',
-      email: 'naver@naver.com',
-      user_id: 'naver',
-      user_pw: 'naver1234',
-      status: 9,
-      purchase_list: ['Hair Salon', 'Nail Shop', 'Delivery', 'Sharing', 'Electronic Vehicles', 'Drone']
+      $lookup: {
+        from: 'categories',
+        localField: 'category',
+        foreignField: 'cate_id',
+        as: 'cate_info'
+      }
     }
-  ];
+  ]);
   res.render('admin_user_list', {
     users: users,
     active: 'user_list'
@@ -147,7 +132,17 @@ router.get('/user/list', (req, res) => {
 });
 
 // 데이터 등록
-router.get('/data/register', (req, res) => {
+router.get('/data/register', async (req, res) => {
+  let category = await categoryModel.aggregate([
+    {
+      $group: {
+        _id: {id: '$group_id', name: '$group_name'}
+        , group_order: {$first: '$group_order'}
+        , list: {$push: '$$ROOT'}
+      }
+    },
+    {$sort:{group_order:1}}
+  ]);
   res.render('admin_data_register', {
     active: 'data_register',
     category: category,

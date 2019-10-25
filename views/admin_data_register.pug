@@ -1,8 +1,37 @@
 extends admin_layout
 block content
 	style.
-		.input-group label{width:200px; font-weight:bold;}
-		#data-purchase-list input{width:15%;}
+		.input-group label {
+			width: 200px;
+			font-weight: bold;
+		}
+
+		#data-purchase-list input {
+			width: 15%;
+		}
+
+		#table_content th, #table_content td {
+			padding: .05rem;
+			border: none;
+		}
+
+		#table_content th {
+			max-width: 100px;
+		}
+
+		#table_content td {
+			min-width: 30px;
+		}
+
+		#table_content input {
+			width: 100%;
+			min-width: 50px;
+			text-align: center;
+		}
+
+		#table_content .space_td {
+			width: 30px;
+		}
 	.input-group.mt-3
 		label.text-zhupao.my-auto 제목
 		input.text-center.form-control.text-secondary.font-italic(type='text', name='user_no', placeholder='중국 허난성 지역 내 헤어 미용실 수 2019')
@@ -30,21 +59,56 @@ block content
 					input.form-control(type='checkbox')
 	.input-group.mt-3
 		label.text-zhupao.my-auto 내용(데이터)
-		input.text-center.form-control.text-secondary.font-italic(type='text', name='manager_tel', placeholder='010-5531-2559')
+		.overflow-auto(style='flex:1')
+			.table.table-responsive#table_content
+				table.table
+					thead
+						tr(data-type='x', data-idx=8)
+							th
+								input(type='text', name='chart_x', placeholder='규모')
+							td.space_td
+							each x in [1, 2, 3, 4, 5, 6, 7, 8]
+								td
+									input(type='text', name='x_data_' + x)
+					tbody
+						tr(data-type='y', data-idx=8)
+							th
+								input(type='text', name='chart_y', placeholder='인원')
+							td.space_td
+							each y in [1, 2, 3, 4, 5, 6, 7, 8]
+								td
+									input(type='text', name='y_data_' + y)
+			.d-flex.justify-content-center
+				div.mr-3
+					span.mr-3 x 축
+					button.btn.btn-sm.btn-success.mr-2(onclick='fnAddCol()') +
+					button.btn.btn-sm.btn-danger(onclick='fnRemoveCol()') -
+				div
+					span.mr-3 y 축
+					button.btn.btn-sm.btn-success.mr-2 +
+					button.btn.btn-sm.btn-danger -
+
 	.input-group.mt-3
 		label.text-zhupao.my-auto 자료번호
 		input.text-center.form-control.text-secondary.font-italic(type='text', name='data_no', placeholder='A-y03312')
+	.input-group.mt-3
+		label.text-zhupao.my-auto 이미지 입력
+		.border.d-flex.justify-content-between.mb-2
+			.d-flex.justify-content-center(style='flex:1')
+				img(src='/assets/svgs/png.svg', width='30%')
+				span PNG
+			input.form-control-file(type='file', name='add_img_graph', style='flex:4')
 	.input-group.mt-3
 		label.text-zhupao.mb-auto Category
 		.row(style='flex:1')
 			each item, idx in category
 				.col-4.mb-3(class=idx % 3 > 0 ? 'pl-0' : '')
 					#data-purchase-list.border.p-1
-						h5.mb-3 #{item.cate}
-						each sub, sub_idx in item.sub_cate
+						h5.mb-3 #{item._id.name}
+						each sub in item.list
 							.d-flex.justify-content-between
-								label(for='category_' + idx + '_' +  sub_idx).my-auto #{sub}
-								input.form-control(id='category_' + idx + '_' + sub_idx, type='checkbox', name=sub.replace(' ', '_'), style='width:30px;')
+								label(for=sub.cate_id).my-auto #{sub.cate_name}
+								input.form-control(id=sub.cate_id, type='checkbox', name=sub.cate_id, style='width:30px;')
 	.input-group.mt-3
 		label.text-zhupao.mb-auto Region
 		.row.border.m-0(style='flex:1')
@@ -101,6 +165,5 @@ block content
 					input.form-control-file(type='file', name='add_png', style='flex:4')
 			div.mt-auto(style='flex:1')
 				button.w-100.btn.btn-zhupao 등록
-
-
 	block append_Js
+		script(src='/assets/js/admin.js', type='text/javascript')
