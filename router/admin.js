@@ -2,7 +2,9 @@ const express = require('express');
 const router = express.Router();
 const userModel = require('../model/userModel');
 const categoryModel = require('../model/categoryModel');
-
+const regionModel = require('../model/regionModel');
+const cityModel = require('../model/cityModel');
+const dataModel = require('../model/dataModel');
 // 사용자 등록
 let category = [
   {
@@ -131,7 +133,7 @@ router.get('/user/list', async (req, res) => {
   })
 });
 
-// 데이터 등록
+// 데이터 등록 화면
 router.get('/data/register', async (req, res) => {
   let category = await categoryModel.aggregate([
     {
@@ -143,17 +145,25 @@ router.get('/data/register', async (req, res) => {
     },
     {$sort:{group_order:1}}
   ]);
+  let region = await regionModel.find({});
+  let city = await cityModel.find({});
   res.render('admin_data_register', {
     active: 'data_register',
     category: category,
-    province: province,
+    region: region,
     city: city,
     obj: obj
-  })
+  });
+});
+// 데이터 등록
+router.post('/data/register', async (req, res)=>{
+  let data = req.body;
+  let result = await dataModel.create(data);
+  res.json(result);
 });
 
 // 데이터 리스트
-router.get('/data/list', (req, res) => {
+router.get('/data/list', async (req, res) => {
   let data = [
     {
       id: 'A7777', title: '중국 허난성 지역 내 헤어 미용실 수 2019', unit: '개',
@@ -166,10 +176,17 @@ router.get('/data/list', (req, res) => {
       updated_data: '2019.09.29'
     }
   ];
+  let list = await dataModel.find({});
   res.render('admin_data_list', {
     active: 'data_list',
-    data: data
-  })
+    data: data,
+    list:list
+  });
+});
+// 데이터 삭제
+router.delete('/data/:id', async(req, res) => {
+  let result = await dataModel.deleteOne({_id:req.params.id});
+  res.json(result);
 });
 // 환경설정 (Set-up)
 router.get('/config', (req, res) => {
