@@ -134,9 +134,34 @@ function fnRemoveRow(){
 }
 // 제출하기
 function fnSubmit(){
+    let post_data = fnGenerateFormData();
+    // 데이터 등록
+    let xhr = new XMLHttpRequest();
+    xhr.open('POST', '/admin/data/register', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.onreadystatechange = function () {
+        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+            let res = JSON.parse(this.response);
+            alert('등록성공');
+            location.href = '/admin/data/list';
+        }
+    };
+    xhr.send(JSON.stringify(post_data));
+}
+// 폼 데이터 생성
+function fnGenerateFormData(){
     let data_title = document.querySelector('input[name="data_title"]');
+    if(data_title.value === '') fnAlertNFocus(data_title);
+
     let data_unit = document.querySelector('input[name="data_unit"]');
+    if(data_unit.value === '') fnAlertNFocus(data_unit);
+
     let chart_type = document.querySelector('input[type="radio"]:checked');
+    if(chart_type === null) {
+        alert('차트타입을 선택해주세요.');
+        document.querySelector('input[type="radio"]').focus();
+    }
+
     let table_obj = {};
     document.querySelectorAll('table tr').forEach(function(tr){
         let name = tr.querySelector('th input').value;
@@ -150,13 +175,17 @@ function fnSubmit(){
         });
     });
     let data_no = document.querySelector('input[name="data_no"]');
+    if(data_no.value === '') fnAlertNFocus(data_no);
+
     let category_obj = {};
     document.querySelectorAll('div.col-4.mb-3').forEach(function(div){
         let cate_header = div.querySelector('h5').id;
         console.log('h : ', cate_header);
         category_obj[cate_header] = [];
         div.querySelectorAll('input:checked').forEach(function(input){
-            category_obj[cate_header].push(input.id);
+            let obj = {};
+            obj[input.id] = input.value;
+            category_obj[cate_header].push(obj);
         });
     });
     let region_array = [];
@@ -190,24 +219,31 @@ function fnSubmit(){
     post_data['object'] = object;
     post_data['description'] = description.value;
     post_data['source'] = source.value;
-
+    return post_data;
+}
+// 알람 띄우기 & 포커싱
+function fnAlertNFocus(obj){
+    alert(obj.title + '값을 입력해주세요.');
+    obj.focus();
+}
+// 데이터 업데이트
+function fnUpdateData(id){
+    console.log('id : ', id);
+    let post_data = fnGenerateFormData();
     // 데이터 등록
     let xhr = new XMLHttpRequest();
-    xhr.open('POST', '/admin/data/register', true);
+    xhr.open('PUT', '/admin/data/update/' + id, true);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.onreadystatechange = function () {
         if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
             let res = JSON.parse(this.response);
-            alert('등록성공');
-            location.href = '/admin/data/list';
+            if(res.ok === 1){
+                alert('정상적으로 수정되었습니다.');
+                location.href = '/admin/data/list';
+            }
         }
     };
     xhr.send(JSON.stringify(post_data));
-}
-
-// 데이터 업데이트
-function fnUpdateData(id){
-
 }
 // 데이터 삭제
 function fnDeleteData(id){

@@ -161,7 +161,6 @@ router.post('/data/register', async (req, res)=>{
   let result = await dataModel.create(data);
   res.json(result);
 });
-
 // 데이터 리스트
 router.get('/data/list', async (req, res) => {
   let data = [
@@ -186,6 +185,34 @@ router.get('/data/list', async (req, res) => {
 // 데이터 삭제
 router.delete('/data/:id', async(req, res) => {
   let result = await dataModel.deleteOne({_id:req.params.id});
+  res.json(result);
+});
+// 데이터 read
+router.get('/data/read/:id', async(req, res)=>{
+  let doc = await dataModel.findOne({_id:req.params.id});
+  let category = await categoryModel.aggregate([
+    {
+      $group: {
+        _id: {id: '$group_id', name: '$group_name'}
+        , group_order: {$first: '$group_order'}
+        , list: {$push: '$$ROOT'}
+      }
+    },
+    {$sort:{group_order:1}}
+  ]);
+  let region = await regionModel.find({});
+  let city = await cityModel.find({});
+  res.render('admin_data_read', {
+    doc:doc,
+    category:category,
+    region:region,
+    city:city,
+    obj:obj
+  });
+});
+// 데이터 update
+router.put('/data/update/:id', async(req, res) => {
+  let result = await dataModel.updateMany({_id:req.params.id}, req.body);
   res.json(result);
 });
 // 환경설정 (Set-up)
