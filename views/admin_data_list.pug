@@ -2,7 +2,7 @@ extends admin_layout
 block content
 	style.
 		#user_table table td, #user_table table th{
-			white-space: nowrap;
+			/*white-space: nowrap;*/
 			text-align: center;
 		}
 		#user_table .title {
@@ -35,7 +35,7 @@ block content
 						td
 							- var region_items = item.region_array.concat(item.city_array)
 							each region in region_items
-								p #{region[Object.keys(region)]}
+								p #{region}
 						td
 							each obj in item.object
 								p.m-0 #{obj}

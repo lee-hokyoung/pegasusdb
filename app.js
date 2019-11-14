@@ -16,8 +16,9 @@ app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/chart.js', express.static(path.join(__dirname, 'node_modules/chart.js/dist')));
+app.use('/bootstrap-select', express.static(path.join(__dirname, 'node_modules/bootstrap-select/dist')));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extend:true}));
+app.use(bodyParser.urlencoded({extended:true}));
 
 app.use('/', homeRoute);
 app.use('/auth', authRoute);

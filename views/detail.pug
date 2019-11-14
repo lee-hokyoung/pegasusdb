@@ -1,7 +1,16 @@
 extends layout
 block content
 	style.
-		.icon-img{max-width:30px; width:100%;}
+		.icon-img {
+			max-width: 30px;
+			width: 100%;
+		}
+	- var sub_cate = [];
+	each key in Object.keys(data.category_obj)
+		if(data.category_obj[key].length > 0)
+			- var sub_list = data.category_obj[key]
+			each cate_item in sub_list
+				- sub_cate.push(cate_item);
 	.container
 		.bg-gradient-zhupao
 			a(href='/')
@@ -10,16 +19,15 @@ block content
 			h5.m-0.text-white.p-2
 				a.text-white(href='/') Home
 				| &nbsp; > &nbsp;
-				a.text-white(href='/list/' + data.cate) #{data.cate}
-				| &nbsp; > &nbsp;
-				a.text-white(href='/list/' + data.cate) #{data.sub_cate}
+				a.text-white(href='/list/' + cate_info[0].group_id + '/' + Object.keys(sub_cate[0])) #{cate_info[0].group_name}
+				| &nbsp; > &nbsp; #{sub_cate[0][Object.keys(sub_cate[0])]}
 		.row
 			.col-8
 				h4 #{data.title}
 				.card
 					.card-body.shadow
 						canvas#chart(width='100%', height='50')
-				h6.text-right.text-zhupao.mt-3 Data No. #{data.dataNo}
+				h6.text-right.text-zhupao.mt-3 Data No. #{data.data_no}
 			.col-4.font-weight-bold
 				.d-flex.mb-2
 					span.px-3.py-2(style='flex:1; border-bottom:4px solid #007bff') DOWNLOAD
@@ -47,30 +55,51 @@ block content
 					li.nav-item
 						a#pills-profile-tab.nav-link.rounded-0.border.border-primary.ml-1.py-1(data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false") SOURCE
 				#pills-tabContent.tab-content
-					#pills-home.tab-pane.fade.show.active(role="tabpanel" aria-labelledby="pills-home-tab")
-						| 중국 허난성 푸양시의 헤어살롱 업체는 2105년 이후로, 지속적인 성장을 보이고 있으며, 전년대비 15.3%의 성장률을 나타내고 있다.
-					#pills-profile.tab-pane.fade(role="tabpanel" aria-labelledby="pills-profile-tab")
-						| www.zhupao.co.kr 홈페이지 내 'ABC' 보고서 페이지 21쪽에서 발췌
-
-
-
-
+					#pills-home.tab-pane.fade.show.active(role="tabpanel" aria-labelledby="pills-home-tab") #{data.description}
+					#pills-profile.tab-pane.fade(role="tabpanel" aria-labelledby="pills-profile-tab") #{data.source}
 
 block append_js
 	script(src='/bootstrap/js/dist/util.js', type='text/javascript')
 	script(src='/chart.js/Chart.js')
 	script.
-		let d = !{JSON.stringify(data.chart)};
-		let x = d.data.map(function(v){return v.x});
-		let y = d.data.map(function(v){return v.y});
-		console.log(d, x, y);
+		let d = !{JSON.stringify(data)};
+		console.log('data : ', d);
+		// 차트 타입
+		let chart_type = '';
+		console.log('chart type : ', d.chart_type);
+		switch (d.chart_type) {
+			case 'bar_chart_vertical':
+				chart_type = 'bar';
+				break;
+			case 'bar_chart_horizontal':
+				chart_type = 'horizontalBar';
+				break;
+			case 'pie_chart':
+				chart_type = 'pie';
+				break;
+			case 'line_chart':
+				chart_type = 'line';
+				break;
+		}
+		console.log('chart type : ', chart_type);
+		let x_title = Object.keys(d.table_obj)[0];
+		let y_data = Object.keys(d.table_obj).filter(function (v, idx) {
+			if (idx > 0) return v;
+		});
+		console.log('y title : ', x_title, ', x data : ', y_data);
+		let x = d.table_obj[x_title].map(function (v) {
+			return v[Object.keys(v)]
+		});
+		let y = (y_data.length === 1) ? d.table_obj[y_data[0]].map(function (v) {
+			return v[Object.keys(v)]
+		}) : [];
 		let ctx = document.getElementById('chart');
 		let chart = new Chart(ctx, {
-			type: 'bar',
+			type: chart_type,
 			data: {
 				labels: x,
 				datasets: [{
-					label: '# of Votes',
+					label: '# ' + d.data_title,
 					data: y,
 					backgroundColor: [
 						'rgba(255, 99, 132, 0.2)',

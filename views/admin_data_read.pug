@@ -43,19 +43,19 @@ block content
 		.row(style='flex:1')
 			.col-3
 				.d-flex.justify-content-between
-					img(src='/assets/images/bar-chart.png', alt='바차트', style='width:50%')
+					img(src='/assets/images/verticalBar_admin.JPG', alt='세로 바차트', style='width:50%')
 					input.form-control(type='radio', name='chart_type', value='bar_chart', checked=doc.chart_type==='bar_chart')
 			.col-3
 				.d-flex.justify-content-between
-					img(src='/assets/images/bar-chart.png', alt='바차트 가로', style='width:50%')
+					img(src='/assets/images/horizonBar_admin.JPG', alt='가로 바차트', style='width:50%')
 					input.form-control(type='radio', name='chart_type', value='bar_chart_vertical', checked=doc.chart_type==='bar_chart_vertical')
 			.col-3
 				.d-flex.justify-content-between
-					img(src='/assets/images/pie-chart.png', alt='파이차트', style='width:50%')
+					img(src='/assets/images/pie_admin.JPG', alt='파이차트', style='width:50%')
 					input.form-control(type='radio', name='chart_type', value='pie_chart', checked=doc.chart_type==='pie_chart')
 			.col-3
 				.d-flex.justify-content-between
-					img(src='/assets/images/line-chart.png', alt='선형그래프', style='width:50%')
+					img(src='/assets/images/line_admin.JPG', alt='선형그래프', style='width:50%')
 					input.form-control(type='radio', name='chart_type', value='line_chart', checked=doc.chart_type==='line_chart')
 	.input-group.mt-3
 		label.text-zhupao.my-auto 내용(데이터)
@@ -122,8 +122,8 @@ block content
 								label(for=sub.cate_id).my-auto #{sub.cate_name}
 								input.form-control(id=sub.cate_id, type='checkbox', name=sub.cate_id, style='width:30px;', value=sub.cate_name, checked=selected_category.indexOf(sub.cate_id)>-1)
 	- var selected_region = [];
-	each key in doc.region_array
-		- selected_region.push(Object.keys(key)[0])
+	each val in doc.region_array
+		- selected_region.push(val)
 	.input-group.mt-3
 		label.text-zhupao.mb-auto Region
 		.row.border.m-0#region(style='flex:1')
@@ -131,10 +131,10 @@ block content
 				.col-4
 					.d-flex.justify-content-between
 						label.my-auto(for=item._id) #{item.name}
-						input.form-control(id=item._id, value=item.name, type='checkbox', style='width:30px;', checked=selected_region.indexOf(item._id.toString()) > -1)
+						input.form-control(id=item._id, value=item.name, type='checkbox', style='width:30px;', checked=selected_region.indexOf(item.name.toString()) > -1)
 	- var selected_city = [];
-	each key in doc.city_array
-		- selected_city.push(Object.keys(key)[0])
+	each val in doc.city_array
+		- selected_city.push(val)
 	.input-group.mt-3
 		label.text-zhupao.my-auto
 		.row.m-0.border#city(style='flex:1')
@@ -142,7 +142,7 @@ block content
 				.col-4
 					.d-flex.justify-content-between
 						label.my-auto(for=item._id) #{item.name}
-						input.form-control(id=item._id, value=item.name, type='checkbox', style='width:30px;', checked=selected_city.indexOf(item._id.toString()) > -1)
+						input.form-control(id=item._id, value=item.name, type='checkbox', style='width:30px;', checked=selected_city.indexOf(item.name.toString()) > -1)
 	.input-group.mt-3
 		label.text-zhupao.my-auto Object
 		.row.m-0.border(style='flex:1')

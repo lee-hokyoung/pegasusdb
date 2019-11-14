@@ -190,18 +190,21 @@ function fnGenerateFormData(){
     });
     let region_array = [];
     document.querySelectorAll('#region input:checked').forEach(function(input){
-        let obj = {};
-        obj[input.id] = input.value;
-        region_array.push(obj);
+        // let obj = {};
+        // obj[input.id] = input.value;
+        // region_array.push(obj);
+        region_array.push(input.value);
     });
     let city_array = [];
     document.querySelectorAll('#city input:checked').forEach(function(input){
-        let obj = {};
-        obj[input.id] = input.value;
-        city_array.push(obj);
+        // let obj = {};
+        // obj[input.id] = input.value;
+        // city_array.push(obj);
+        city_array.push(input.value);
     });
     let object = [];
     document.querySelectorAll('input[name="obj"]:checked').forEach(function(input){
+        // object.push(input.value);
         object.push(input.value);
     });
     let description = document.querySelector('textarea[name="description"]');
