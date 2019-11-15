@@ -4,6 +4,8 @@ const dataModel = require('../model/dataModel');
 const categoryModel = require('../model/categoryModel');
 const regionModel = require('../model/regionModel');
 const cityModel = require('../model/cityModel');
+const middle = require('./middlewares');
+
 let obj = [
   {name: 'Industry'},
   {name: 'Market'},
@@ -12,7 +14,7 @@ let obj = [
 ];
 
 // main 화면
-router.get('', async (req, res) => {
+router.get('', middle.isLoggedIn, async (req, res) => {
   let category = await categoryModel.aggregate([
     {
       $group: {
@@ -23,38 +25,12 @@ router.get('', async (req, res) => {
     },
     {$sort: {group_order: 1}}
   ]);
-  // let list = [
-  //     {
-  //         cate: 'Beauty',
-  //         sub_cate: ['Hair Salon', 'SPA', 'Nail Shop']
-  //     },
-  //     {
-  //         cate: 'O2O',
-  //         sub_cate: ['Hotel', 'Delivery', 'Sharing']
-  //     },
-  //     {
-  //         cate: 'Health',
-  //         sub_cate: ['Health care & Support', 'Silver care & Support', 'Baby care & Support']
-  //     },
-  //     {
-  //         cate: 'Transport',
-  //         sub_cate: ['Electronic Vehicles', 'Drone', 'Smart Mobility']
-  //     },
-  //     {
-  //         cate: 'Food & Beverage',
-  //         sub_cate: ['Restaurant', 'Cafe', 'Franchise']
-  //     },
-  //     {
-  //         cate: 'E-Commerce',
-  //         sub_cate: ['B2B Commerce', 'B2C Commerce', 'C2C Commerce']
-  //     }
-  // ];
   res.render('home', {
     category: category
   });
 });
 // list 화면
-router.get('/list/:cate/:cate_item?', async (req, res) => {
+router.get('/list/:cate/:cate_item?', middle.isLoggedIn, async (req, res) => {
   let strQuery = req.query;
   let cate = req.params.cate;
   let cate_item = req.params.cate_item;
@@ -76,7 +52,7 @@ router.get('/list/:cate/:cate_item?', async (req, res) => {
   });
 });
 // get by ajax
-router.get('/ajax/list/:cate/:cate_item?', async (req, res) => {
+router.get('/ajax/list/:cate/:cate_item?', middle.isLoggedIn, async (req, res) => {
   let strQuery = req.query;
   let list = await fnGetList(strQuery, req.params);
   res.json({list:list, cate:req.params.cate, cate_item:req.params.cate_item});

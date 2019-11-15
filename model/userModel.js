@@ -13,5 +13,6 @@ const userSchema = new Schema({
     status:{type:Number, default:1},
     category:{type:Array, ref:'Category'},
     created: {type: Date, default: Date.now},
+    lv:{type:Number, default:1}
 });
 module.exports = mongoose.model('User', userSchema);
