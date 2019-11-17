@@ -34,29 +34,29 @@ block content
 		}
 	.input-group.mt-3
 		label.text-zhupao.my-auto 제목
-		input.text-center.form-control.text-secondary.font-italic(type='text', name='user_no', placeholder='중국 허난성 지역 내 헤어 미용실 수 2019')
+		input.text-center.form-control.text-secondary.font-italic(type='text', title='제목', name='data_title', placeholder='중국 허난성 지역 내 헤어 미용실 수 2019')
 	.input-group.mt-3
 		label.text-zhupao.my-auto 단위
-		input.text-center.form-control.text-secondary.font-italic(type='text', name='user_corp', placeholder='%, 명, 개...')
+		input.text-center.form-control.text-secondary.font-italic(type='text', title='단위', name='data_unit', placeholder='%, 명, 개...')
 	.input-group.mt-3
 		label.text-zhupao.my-auto 그래프유형
 		.row(style='flex:1')
 			.col-3
 				.d-flex.justify-content-between
-					img(src='/assets/images/bar-chart.png', alt='바차트', style='width:50%')
-					input.form-control(type='checkbox', name='bar_chart')
+					img(src='/assets/images/verticalBar_admin.JPG', alt='세로 바차트', style='width:50%')
+					input.form-control(type='radio', name='chart_type', value='bar_chart')
 			.col-3
 				.d-flex.justify-content-between
-					img(src='/assets/images/bar-chart.png', alt='바차트 가로', style='width:50%')
-					input.form-control(type='checkbox')
+					img(src='/assets/images/horizonBar_admin.JPG', alt='가로 바차트', style='width:50%')
+					input.form-control(type='radio', name='chart_type', value='bar_chart_horizontal')
 			.col-3
 				.d-flex.justify-content-between
-					img(src='/assets/images/pie-chart.png', alt='파이차트', style='width:50%')
-					input.form-control(type='checkbox')
+					img(src='/assets/images/pie_admin.JPG', alt='파이차트', style='width:50%')
+					input.form-control(type='radio', name='chart_type', value='pie_chart')
 			.col-3
 				.d-flex.justify-content-between
-					img(src='/assets/images/line-chart.png', alt='선형그래프', style='width:50%')
-					input.form-control(type='checkbox')
+					img(src='/assets/images/line_admin.JPG', alt='선형그래프', style='width:50%')
+					input.form-control(type='radio', name='chart_type', value='line_chart')
 	.input-group.mt-3
 		label.text-zhupao.my-auto 내용(데이터)
 		.overflow-auto(style='flex:1')
@@ -70,8 +70,8 @@ block content
 							each x in [1, 2, 3, 4, 5, 6, 7, 8]
 								td
 									input(type='text', name='x_data_' + x)
-					tbody
-						tr(data-type='y', data-idx=8)
+					tbody(data-row=1)
+						tr(data-type='y', data-idx=8, data-row_idx=1)
 							th
 								input(type='text', name='chart_y', placeholder='인원')
 							td.space_td
@@ -85,9 +85,9 @@ block content
 					button.btn.btn-sm.btn-danger(onclick='fnRemoveCol()') -
 				div
 					span.mr-3 y 축
-					button.btn.btn-sm.btn-success.mr-2 +
-					button.btn.btn-sm.btn-danger -
-
+					button.btn.btn-sm.btn-success.mr-2(onclick='fnAddRow()') +
+					button.btn.btn-sm.btn-danger(onclick='fnRemoveRow()') -
+			.d-flex
 	.input-group.mt-3
 		label.text-zhupao.my-auto 자료번호
 		input.text-center.form-control.text-secondary.font-italic(type='text', name='data_no', placeholder='A-y03312')
@@ -104,35 +104,35 @@ block content
 			each item, idx in category
 				.col-4.mb-3(class=idx % 3 > 0 ? 'pl-0' : '')
 					#data-purchase-list.border.p-1
-						h5.mb-3 #{item._id.name}
+						h5.mb-3(id=item._id.id) #{item._id.name}
 						each sub in item.list
 							.d-flex.justify-content-between
 								label(for=sub.cate_id).my-auto #{sub.cate_name}
-								input.form-control(id=sub.cate_id, type='checkbox', name=sub.cate_id, style='width:30px;')
+								input.form-control(id=sub.cate_id, type='checkbox', name=sub.cate_id, style='width:30px;', value=sub.cate_name)
 	.input-group.mt-3
 		label.text-zhupao.mb-auto Region
-		.row.border.m-0(style='flex:1')
-			each item, idx in province
+		.row.border.m-0#region(style='flex:1')
+			each item in region
 				.col-4
 					.d-flex.justify-content-between
-						label.my-auto(for='province_' + idx) #{item.name}
-						input.form-control(id='province_' + idx, type='checkbox', style='width:30px;')
+						label.my-auto(for=item._id) #{item.name}
+						input.form-control(id=item._id, value=item.name, type='checkbox', style='width:30px;')
 
 	.input-group.mt-3
 		label.text-zhupao.my-auto
-		.row.m-0.border(style='flex:1')
+		.row.m-0.border#city(style='flex:1')
 			each item, idx in city
 				.col-4
 					.d-flex.justify-content-between
-						label.my-auto(for='city_' + idx) #{item.name}
-						input.form-control(id='city_' + idx, type='checkbox', style='width:30px;')
+						label.my-auto(for=item._id) #{item.name}
+						input.form-control(id=item._id, value=item.name, type='checkbox', style='width:30px;')
 	.input-group.mt-3
 		label.text-zhupao.my-auto Object
 		.row.m-0.border(style='flex:1')
 			each item, idx in obj
 				.col-3
 					label.my-auto(for='object_' + idx) #{item.name}
-					input.form-control(id='object_' + idx, type='checkbox', style='width:30px;')
+					input.form-control(id='object_' + idx, name='obj', value=item.name, type='checkbox', style='width:30px;')
 	.input-group.mt-3
 		label.text-zhupao.my-auto DESCRIPTION
 		textarea.form-control(name='description', rows=3, style='resize:none;')
@@ -164,6 +164,6 @@ block content
 						span PNG
 					input.form-control-file(type='file', name='add_png', style='flex:4')
 			div.mt-auto(style='flex:1')
-				button.w-100.btn.btn-zhupao 등록
+				button.w-100.btn.btn-zhupao(onclick='fnSubmit()') 등록
 	block append_Js
 		script(src='/assets/js/admin.js', type='text/javascript')

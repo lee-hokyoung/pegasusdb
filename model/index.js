@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 
 module.exports = () => {
     const connect = () => {
-        mongoose.connect(process.env.MONGO_URI, {useNewUrlParser:true}, (error)=>{
+        mongoose.connect(process.env.MONGO_URI, {useNewUrlParser:true, useUnifiedTopology:true, useCreateIndex:true}, (error)=>{
             if(error) console.log('몽고디비 연결 에러', error);
             else console.log('몽고디비 연결 성공');
         })
