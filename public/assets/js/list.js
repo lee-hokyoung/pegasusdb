@@ -54,7 +54,7 @@ const fnGenerateHtmlResult = function (res) {
     div.classList.add('text-center');
     let img = document.createElement('img');
     img.classList.add('p-1');
-    img.src = '/assets/images/' + v.chart_type + '.png';
+    img.src = '/assets/images/' + v.chart_type + '_user.JPG';
     img.alt = '';
     img.style = 'width:70px;';
     div.appendChild(img);

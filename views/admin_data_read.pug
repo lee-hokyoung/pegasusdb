@@ -31,32 +31,24 @@ block content
 		label.text-zhupao.my-auto 내용(데이터)
 		.overflow-auto(style='flex:1')
 			.table.table-responsive#table_content
-				- var x_title = Object.keys(doc.table_obj)[0];
-				- tbl_obj = {};
-				each key in Object.keys(doc.table_obj)
-					each tr in doc.table_obj[key]
-						- tbl_obj[Object.keys(tr)] = tr[Object.keys(tr)]
 				table.table
 					thead
-						tr(data-type='x', data-idx=doc.table_obj[x_title].length, data=x_title)
+						tr(data-type='x', data-idx=doc.table_x.content.length)
 							th
-								input(type='text', name='chart_x', value=x_title)
+								input(type='text', name='chart_x', value=doc.table_x.title, data-title='true')
 							td.space_td
-							// each x in [1, 2, 3, 4, 5, 6, 7, 8]
-							- for(var x = 1; x <= doc.table_obj[x_title].length; x++)
+							each x, idx in doc.table_x.content
 								td
-									input(type='text', name='x_data_' + x, value=tbl_obj['x_data_' + x])
+									input(type='text', name='x_data_' + (idx + 1), value=x)
 					tbody(data-row=1)
-						- var _tbody = Object.keys(doc.table_obj);
-						- for(var y = 1; y < _tbody.length; y++)
-							if(_tbody[y] !== "")
-								tr(data-type='y', data-idx=doc.table_obj[x_title].length, data-row_idx=y)
-									th
-										input(type='text', name='chart_y', value=_tbody[y])
-									td.space_td
-									- for(var x = 0; x < doc.table_obj[_tbody[y]].length; x++)
-										td
-											input(type='text', name='y_data_' + (x + 1), value=doc.table_obj[_tbody[y]][x]['y_data_' + (x + 1)])
+						each tr, tr_idx in doc.table_y
+							tr(data-type='y', data-idx=tr.content.length, data-row_idx=(tr_idx + 1))
+								th
+									input(type='text', name='chart_y', value=tr.title)
+								td.space_td
+								each y, idx in tr.content
+									td
+										input(type='text', name='y_data_' + (idx + 1), value=y)
 			.d-flex.justify-content-center
 				div.mr-3
 					span.mr-3 x 축

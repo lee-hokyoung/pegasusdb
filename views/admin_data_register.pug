@@ -34,7 +34,7 @@ block content
 					thead
 						tr(data-type='x', data-idx=2)
 							th
-								input(type='text', name='chart_x', placeholder='규모')
+								input(type='text', name='chart_x', placeholder='x', data-title='true')
 							td.space_td
 							each x in [1, 2]
 								td
@@ -42,7 +42,7 @@ block content
 					tbody(data-row=1)
 						tr(data-type='y', data-idx=2, data-row_idx=1)
 							th
-								input(type='text', name='chart_y', placeholder='인원')
+								input(type='text', name='chart_y', placeholder='y', data-title='true')
 							td.space_td
 							each y in [1, 2]
 								td
