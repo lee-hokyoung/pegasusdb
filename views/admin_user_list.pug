@@ -7,41 +7,92 @@ block content
 			font-size: 13.5px;
 			padding:0.35rem;
 		}
+		ul#user_list li .col-1, ul#user_list li .col{padding:0 .25rem;}
+		ul#user_list li a:after{content:'더보기'}
+		ul#user_list li a[aria-expanded=true]:after{content:'접기'}
 
-	#user_table.table
-		table.table-responsive.table-bordered
-			thead.bg-secondary.text-white
-				tr
-					th.text-nowrap 고객번호
-					th 기업명
-					th 담당자
-					th 연락처
-					th 이메일
-					th 아이디(ID)
-					th 비밀번호(PW)
-					th 데이터 구매목록
-					th 중지/삭제
-					th 상태
-			tbody
-				each item in users
-					tr
-						td.text-nowrap #{item.user_no}
-						td #{item.user_corp}
-						td #{item.manager_name}
-						td #{item.manager_tel}
-						td #{item.email}
-						td.text-nowrap #{item.user_id}
-						td.text-nowrap #{item.user_pw}
-						td
-							each cate in item.cate_info
-								| #{cate.cate_name}
-								br
-						td
-							select
-								option(value=2, selected=item.status===2) 중지
-								option(value=1, selected=item.status===1) 제공
-								option(value=9, selected=item.status===9) 삭제
-						td #{item.status===1?'제공':item.status===2?'중지':'삭제'}
+
+	ul.list-group.list-group-flush.text-center#user_list
+		li.list-group-item.list-group-item-primary
+			.row.small
+				.col-1 고객번호
+				.col-1 기업명
+				.col-1 담당자
+				.col-1 연락처
+				.col-1 이메일
+				.col 아이디(ID)
+				.col 비밀번호(PW)
+				.col-1 데이터 구매목록
+				.col-1 중지/삭제
+				.col-1 상태
+		each item, idx in users
+			- var n = 0
+			li.list-group-item(class=idx%2===1?'list-group-item-secondary':'')
+				.row.small
+					.col-1 #{item.user_no}
+					.col-1 #{item.user_corp}
+					.col-1 #{item.manager_name}
+					.col-1 #{item.manager_tel}
+					.col-1 #{item.email}
+					.col.text-nowrap #{item.user_id}
+					.col.text-nowrap #{item.user_pw}
+					.col-1 #{item.cate_info.length}
+						while n < (item.cate_info.length < 4 ? item.cate_info.length:4)
+							| #{item.cate_info[n++].cate_name}
+							br
+						if(item.cate_info.length > 4)
+							.overflow-hidden.collapse(style='line-height:1.3em;', id='cate_' + item._id)
+								while n < item.cate_info.length
+									| #{item.cate_info[n++].cate_name}
+									br
+							a(href='#', data-toggle='collapse', data-target='#cate_' + item._id)
+
+							//while n < item.cate_info.length
+						//if(item.cate_info.length > 4)
+						//		while idx < item.cate_info.length
+						//		| #{item.cate_info[idx++].cate_name}
+						//		br
+
+					.col-1
+						button.btn.btn-primary.btn-sm.p-1.mb-1 제공
+						button.btn.btn-warning.btn-sm.p-1.mb-1 중지
+						button.btn.btn-danger.btn-sm.p-1 삭제
+					.col-1 #{item.status===1?'제공':item.status===2?'중지':'삭제'}
+
+	//#user_table.table
+	//	table.table-responsive.table-bordered
+	//		thead.bg-secondary.text-white
+	//			tr
+	//				th.text-nowrap 고객번호
+	//				th 기업명
+	//				th 담당자
+	//				th 연락처
+	//				th 이메일
+	//				th 아이디(ID)
+	//				th 비밀번호(PW)
+	//				th 데이터 구매목록
+	//				th 중지/삭제
+	//				th 상태
+	//		tbody
+	//			each item in users
+	//				tr
+	//					td.text-nowrap #{item.user_no}
+	//					td #{item.user_corp}
+	//					td #{item.manager_name}
+	//					td #{item.manager_tel}
+	//					td #{item.email}
+	//					td.text-nowrap #{item.user_id}
+	//					td.text-nowrap #{item.user_pw}
+	//					td
+	//						each cate in item.cate_info
+	//							| #{cate.cate_name}
+	//							br
+	//					td
+	//						select
+	//							option(value=2, selected=item.status===2) 중지
+	//							option(value=1, selected=item.status===1) 제공
+	//							option(value=9, selected=item.status===9) 삭제
+	//					td #{item.status===1?'제공':item.status===2?'중지':'삭제'}
 	block append_Js
 		script.
 			console.log((!{JSON.stringify(users)}))

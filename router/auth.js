@@ -35,7 +35,7 @@ router.post('/login', (req, res, next) => {
             const token = jwt.sign(payload, process.env.JWT_SECRET,
               {expiresIn:'60m', issuer:'pegasusdb.link', subject:'userInfo'});
             await userModel.updateOne({user_id:user.user_id}, {tokens:token});
-            console.log('token : ', token);
+            // console.log('token : ', token);
             res.cookie('access_token', token, {
                 maxAge:1000*60*60,
                 httpOnly:true

@@ -32,13 +32,13 @@ exports.isAdmin = (req, res, next) => {
 exports.checkAuth = async (req, res, next) => {
   let token = req.cookies.access_token;
 
-  console.log('cookie : ', req.cookies);
+  // console.log('cookie : ', req.cookies);
   if (!token) {
     console.log('토큰 없음');
     res.redirect('/auth/login');
   } else {
     let decoded = jwt.verify(token, process.env.JWT_SECRET);
-    console.log('decode : ', decoded);
+    // console.log('decode : ', decoded);
     if (!decoded) {
       console.log('토큰 정보가 다름... 리다이렉트');
       res.redirect('/auth/login');
