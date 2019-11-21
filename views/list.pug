@@ -19,7 +19,7 @@ block content
 						select.selectpicker(name='category')
 							option Category Select
 							each cate in cate_list
-								option(value=cate.cate_id, selected=cate.cate_id===cate_item) !{cate.cate_name}
+								option(value=cate.cate_id, selected=cate.cate_id===cate_item, disabled=user_category.indexOf(cate.cate_id) === -1) !{cate.cate_name}
 					// Region
 					.form-group
 						label.font-weight-bold.text-primary.text-right Region

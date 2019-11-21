@@ -4,10 +4,13 @@ block content
 		#user_table table td, #user_table table th{
 			/*white-space: nowrap;*/
 			text-align: center;
+			font-size: 13.6px;
+			padding:.35rem;
 		}
 		#user_table .title {
 			white-space: normal !important;
 		}
+		.btn{font-size:11px !important;}
 	#user_table.table
 		table.table-responsive.table-bordered.table-hover
 			thead.bg-secondary.text-white
@@ -40,8 +43,8 @@ block content
 							each obj in item.object
 								p.m-0 #{obj}
 						td
-							a(href='/admin/data/read/' + item._id).btn.btn-primary.d-block.my-1.mx-auto 업데이트
-							button.btn.btn-danger.d-block.my-1.mx-auto(onclick='fnDeleteData(`' + item._id + '`)') 삭제
+							a(href='/admin/data/read/' + item._id).btn.btn-primary.btn-sm.d-block.my-1.mx-auto 업데이트
+							button.btn.btn-danger.d-block.my-1.mx-auto.btn-sm(onclick='fnDeleteData(`' + item._id + '`)') 삭제
 						td #{item.status === 1 ? '제공' : item.status === 2 ? '중지' : '삭제'}
 						td #{date.toLocaleDateString('ko')}
 	block append_Js

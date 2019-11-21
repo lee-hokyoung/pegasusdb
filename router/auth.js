@@ -2,32 +2,56 @@ const express = require('express');
 const router = express.Router();
 const passport = require('passport');
 const middle = require('./middlewares');
+const jwt = require('jsonwebtoken');
+const userModel = require('../model/userModel');
 
 router.get('/login', (req, res)=>{
     res.render('login');
 });
-router.post('/login', middle.isNotLoggedIn, (req, res, next) => {
-    passport.authenticate('local', (authError, user, info)=>{
-        if(info){
-            console.log('info : ', info);
-            return res.send('<script>alert("' + info.message + '"); location.href = "/auth/login";</script>');
-        }
+router.post('/login', (req, res, next) => {
+    passport.authenticate('local', {session:false}, (authError, user, info)=>{
+        console.log('info : ', info);
+        // if(info){
+        //     return res.send('<script>alert("' + info.message + '"); location.href = "/auth/login";</script>');
+        // }
         if(authError){
             console.error(authError);
             return next(authError);
         }
         if(!user){
-            console.log('user 인증 실패!');
+            console.log('not user');
             return res.redirect('/auth/login');
         }
-        return req.login(user, (loginError) => {
+        return req.login(user, {session:false}, async (loginError) => {
             if(loginError){
                 console.error(loginError);
                 return next(loginError);
             }
-            console.log('user : ', user);
-            console.log('로그인 성공');
-            return res.redirect('/');
+            let payload = {
+                user_state:user.user_state,
+                user_id:user.user_id,
+                user_lv:user.lv,
+            };
+            const token = jwt.sign(payload, process.env.JWT_SECRET,
+              {expiresIn:'60m', issuer:'pegasusdb.link', subject:'userInfo'});
+            await userModel.updateOne({user_id:user.user_id}, {tokens:token});
+            console.log('token : ', token);
+            res.cookie('access_token', token, {
+                maxAge:1000*60*60,
+                httpOnly:true
+            });
+            res.redirect('/');
+            // req.headers.authorization = token;
+            // res.set('Authorization', token);
+            // res.cookie('x-auth-token', token);
+            // console.log('result : ', result);
+            // res.cookie('x-auth-token', token).json({token});
+            // res.header("x-auth-token", token).send({
+            //     user_id: user.user_id,
+            //     user_lv: user.lv,
+            //     user_state: user.user_state
+            // });
+            // return res.cookie('x-auth-token', token);
         });
     })(req, res, next);
 });

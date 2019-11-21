@@ -2,15 +2,17 @@ extends admin_layout
 block content
 	style.
 		#user_table table td, #user_table table th{
-			white-space: nowrap;
+			/*white-space: nowrap;*/
 			text-align: center;
+			font-size: 13.5px;
+			padding:0.35rem;
 		}
 
 	#user_table.table
 		table.table-responsive.table-bordered
 			thead.bg-secondary.text-white
 				tr
-					th 고객번호
+					th.text-nowrap 고객번호
 					th 기업명
 					th 담당자
 					th 연락처
@@ -23,13 +25,13 @@ block content
 			tbody
 				each item in users
 					tr
-						td #{item.user_no}
+						td.text-nowrap #{item.user_no}
 						td #{item.user_corp}
 						td #{item.manager_name}
 						td #{item.manager_tel}
 						td #{item.email}
-						td #{item.user_id}
-						td #{item.user_pw}
+						td.text-nowrap #{item.user_id}
+						td.text-nowrap #{item.user_pw}
 						td
 							each cate in item.cate_info
 								| #{cate.cate_name}

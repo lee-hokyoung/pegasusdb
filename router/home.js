@@ -4,7 +4,9 @@ const dataModel = require('../model/dataModel');
 const categoryModel = require('../model/categoryModel');
 const regionModel = require('../model/regionModel');
 const cityModel = require('../model/cityModel');
+const userModel = require('../model/userModel');
 const middle = require('./middlewares');
+const passport = require('passport');
 
 let obj = [
   {name: 'Industry'},
@@ -14,7 +16,8 @@ let obj = [
 ];
 
 // main 화면
-router.get('', middle.isLoggedIn, async (req, res) => {
+router.get('', middle.checkAuth, async (req, res) => {
+  let user = res.locals.user_info;
   let category = await categoryModel.aggregate([
     {
       $group: {
@@ -26,11 +29,12 @@ router.get('', middle.isLoggedIn, async (req, res) => {
     {$sort: {group_order: 1}}
   ]);
   res.render('home', {
-    category: category
+    category: category,
+    user_category:user.category
   });
 });
 // list 화면
-router.get('/list/:cate/:cate_item?', middle.isLoggedIn, async (req, res) => {
+router.get('/list/:cate/:cate_item?', middle.checkAuth, async (req, res) => {
   let strQuery = req.query;
   let cate = req.params.cate;
   let cate_item = req.params.cate_item;
@@ -38,8 +42,12 @@ router.get('/list/:cate/:cate_item?', middle.isLoggedIn, async (req, res) => {
   let region_list = await regionModel.find({});
   let city_list = await cityModel.find({});
   let list = await fnGetList(strQuery, req.params);
-
-  console.log('str query : ', strQuery);
+  let user = res.locals.user_info;
+  if(user.category.indexOf(cate_item) === -1){
+    let msg = '<script>alert("접근권한이 없습니다.");history.back();</script>';
+    res.send(msg);
+    return false;
+  }
   res.render('list', {
     cate: cate,
     cate_item:cate_item,
@@ -49,14 +57,16 @@ router.get('/list/:cate/:cate_item?', middle.isLoggedIn, async (req, res) => {
     city_list: city_list,
     object: obj,
     strQuery: strQuery,
+    user_category:user.category
   });
 });
 // get by ajax
-router.get('/ajax/list/:cate/:cate_item?', middle.isLoggedIn, async (req, res) => {
+router.get('/ajax/list/:cate/:cate_item?', middle.checkAuth, async (req, res) => {
   let strQuery = req.query;
   let list = await fnGetList(strQuery, req.params);
   res.json({list:list, cate:req.params.cate, cate_item:req.params.cate_item});
 });
+
 const fnGetList = async(strQuery, params) => {
   let query_match = [{}];
   let cate = params.cate;
@@ -80,7 +90,6 @@ const fnGetList = async(strQuery, params) => {
       }
     });
   }
-  console.log('query : ', query_match);
   return await dataModel.aggregate([
     unwind_query, cate_query,
     {

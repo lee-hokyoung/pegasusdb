@@ -1,37 +1,7 @@
 extends admin_layout
 block content
-	style.
-		.input-group label {
-			width: 200px;
-			font-weight: bold;
-		}
+	link(rel='stylesheet', href='/assets/stylesheet/style.css')
 
-		#data-purchase-list input {
-			width: 15%;
-		}
-
-		#table_content th, #table_content td {
-			padding: .05rem;
-			border: none;
-		}
-
-		#table_content th {
-			max-width: 100px;
-		}
-
-		#table_content td {
-			min-width: 30px;
-		}
-
-		#table_content input {
-			width: 100%;
-			min-width: 50px;
-			text-align: center;
-		}
-
-		#table_content .space_td {
-			width: 30px;
-		}
 	.input-group.mt-3
 		label.text-zhupao.my-auto 제목
 		input.text-center.form-control.text-secondary.font-italic(type='text', title='제목', name='data_title', value=doc.data_title)
@@ -44,11 +14,11 @@ block content
 			.col-3
 				.d-flex.justify-content-between
 					img(src='/assets/images/verticalBar_admin.JPG', alt='세로 바차트', style='width:50%')
-					input.form-control(type='radio', name='chart_type', value='bar_chart', checked=doc.chart_type==='bar_chart')
+					input.form-control(type='radio', name='chart_type', value='bar_chart_vertical', checked=doc.chart_type==='bar_chart_vertical')
 			.col-3
 				.d-flex.justify-content-between
 					img(src='/assets/images/horizonBar_admin.JPG', alt='가로 바차트', style='width:50%')
-					input.form-control(type='radio', name='chart_type', value='bar_chart_vertical', checked=doc.chart_type==='bar_chart_vertical')
+					input.form-control(type='radio', name='chart_type', value='bar_chart_horizontal', checked=doc.chart_type==='bar_chart_horizontal')
 			.col-3
 				.d-flex.justify-content-between
 					img(src='/assets/images/pie_admin.JPG', alt='파이차트', style='width:50%')
@@ -68,7 +38,7 @@ block content
 						- tbl_obj[Object.keys(tr)] = tr[Object.keys(tr)]
 				table.table
 					thead
-						tr(data-type='x', data-idx=doc.table_obj[x_title].length)
+						tr(data-type='x', data-idx=doc.table_obj[x_title].length, data=x_title)
 							th
 								input(type='text', name='chart_x', value=x_title)
 							td.space_td
@@ -79,13 +49,14 @@ block content
 					tbody(data-row=1)
 						- var _tbody = Object.keys(doc.table_obj);
 						- for(var y = 1; y < _tbody.length; y++)
-							tr(data-type='y', data-idx=doc.table_obj[x_title].length, data-row_idx=y)
-								th
-									input(type='text', name='chart_y', value=_tbody[y])
-								td.space_td
-								- for(var x = 0; x < doc.table_obj[_tbody[y]].length; x++)
-									td
-										input(type='text', name='y_data_' + (x + 1), value=doc.table_obj[_tbody[y]][x]['y_data_' + (x + 1)])
+							if(_tbody[y] !== "")
+								tr(data-type='y', data-idx=doc.table_obj[x_title].length, data-row_idx=y)
+									th
+										input(type='text', name='chart_y', value=_tbody[y])
+									td.space_td
+									- for(var x = 0; x < doc.table_obj[_tbody[y]].length; x++)
+										td
+											input(type='text', name='y_data_' + (x + 1), value=doc.table_obj[_tbody[y]][x]['y_data_' + (x + 1)])
 			.d-flex.justify-content-center
 				div.mr-3
 					span.mr-3 x 축

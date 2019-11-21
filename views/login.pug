@@ -14,3 +14,22 @@ block content
 						div(style='flex:1')
 						button.text-white.btn.btn-primary(style='flex:1' type='submit') Login
 						span.text-white.text-right(style='flex:1') Forget Password ?
+	block append_js
+		script.
+			function fnAjaxLogin() {
+				let xhr = new XMLHttpRequest();
+				xhr.open('POST', '/auth/login');
+				xhr.setRequestHeader('Content-Type', 'application/json');
+				xhr.onreadystatechange = function () {
+					if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+						let res = JSON.parse(this.response);
+						// document.cookie = 'x-auth-token=' + res.token;
+						// localStorage.setItem('token', res.token);
+						location.href = '/';
+					}
+				}
+				xhr.send(JSON.stringify({
+					user_id:document.querySelector('input[name="user_id"]').value,
+					user_pw:document.querySelector('input[name="user_pw"]').value
+				}));
+			}
