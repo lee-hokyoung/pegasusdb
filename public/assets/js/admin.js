@@ -107,6 +107,7 @@ function fnAddRow(){
     let input = document.createElement('input');
     input.type = 'text';
     input.name = 'chart_y';
+    input.dataset.title = 'true';
     th.appendChild(input);
     tr.appendChild(th);
     let td = document.createElement('td');
@@ -162,18 +163,35 @@ function fnGenerateFormData(){
         document.querySelector('input[type="radio"]').focus();
     }
 
-    let table_obj = {};
-    document.querySelectorAll('table tr').forEach(function(tr){
-        let name = tr.querySelector('th input').value;
-        table_obj[name] = [];
-        tr.querySelectorAll('td input').forEach(function(input){
-            if(input.value !== ''){
-                let td_obj = {};
-                td_obj[input.name] = input.value;
-                table_obj[name].push(td_obj);
-            }
-        });
+    // x축 데이터 생성
+    let table_x = {title:'', content:[]};
+    document.querySelectorAll('table thead input').forEach(function(v){
+        if(v.dataset.title) table_x.title = v.value;
+        else table_x.content.push(v.value);
     });
+    // y축 데이터 생성 멀티 라인
+    let table_y = [];
+    document.querySelectorAll('tbody tr').forEach(function(tr){
+        let tr_obj = {title:'', content:[]};
+        tr.querySelectorAll('input').forEach(function(v){
+            if(v.dataset.title) tr_obj.title = v.value;
+            else tr_obj.content.push(v.value);
+        });
+        table_y.push(tr_obj);
+    });
+
+    // let table_obj = {};
+    // document.querySelectorAll('table tr').forEach(function(tr){
+    //     let name = tr.querySelector('th input').value;
+    //     table_obj[name] = [];
+    //     tr.querySelectorAll('td input').forEach(function(input){
+    //         if(input.value !== ''){
+    //             let td_obj = {};
+    //             td_obj[input.name] = input.value;
+    //             table_obj[name].push(td_obj);
+    //         }
+    //     });
+    // });
     let data_no = document.querySelector('input[name="data_no"]');
     if(data_no.value === '') fnAlertNFocus(data_no);
 
@@ -214,7 +232,8 @@ function fnGenerateFormData(){
     post_data['data_title'] = data_title.value;
     post_data['data_unit'] = data_unit.value;
     post_data['chart_type'] = chart_type.value;
-    post_data['table_obj'] = table_obj;
+    post_data['table_x'] = table_x;
+    post_data['table_y'] = table_y;
     post_data['data_no'] = data_no.value;
     post_data['category_obj'] = category_obj;
     post_data['region_array'] = region_array;
@@ -226,8 +245,8 @@ function fnGenerateFormData(){
 }
 // 알람 띄우기 & 포커싱
 function fnAlertNFocus(obj){
-    alert(obj.title + '값을 입력해주세요.');
-    obj.focus();
+    // alert(obj.title + '값을 입력해주세요.');
+    // obj.focus();
 }
 // 데이터 업데이트
 function fnUpdateData(id){

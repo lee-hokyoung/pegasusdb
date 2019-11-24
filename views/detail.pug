@@ -63,10 +63,12 @@ block append_js
 	script(src='/chart.js/Chart.js')
 	script.
 		let d = !{JSON.stringify(data)};
-		console.log('data : ', d);
+		// 차트 색 설정
+		let bg_list = [
+			'rgba(255, 99, 132, 0.4)', 'rgba(54, 162, 235, 0.4)', 'rgba(255, 206, 86, 0.4)', 'rgba(75, 192, 192, 0.4)', 'rgba(153, 102, 255, 0.4)', 'rgba(255, 159, 64, 0.4)'
+		];
 		// 차트 타입
 		let chart_type = '';
-		console.log('chart type : ', d.chart_type);
 		switch (d.chart_type) {
 			case 'bar_chart_vertical':
 				chart_type = 'bar';
@@ -81,51 +83,27 @@ block append_js
 				chart_type = 'line';
 				break;
 		}
-		console.log('chart type : ', chart_type);
-		let x_title = Object.keys(d.table_obj)[0];
-		let y_data = Object.keys(d.table_obj).filter(function (v, idx) {
-			if (idx > 0) return v;
+		let x_title = d.table_x.title;
+		let barChartData = {};
+		barChartData.labels = d.table_x.content;
+		barChartData.datasets = [];
+		d.table_y.forEach(function(row, idx){
+			let obj = {};
+			obj.label = row.title;
+			obj.data = row.content;
+			obj.backgroundColor = bg_list[idx%6];
+			barChartData.datasets.push(obj);
 		});
-		console.log('y title : ', x_title, ', x data : ', y_data);
-		let x = d.table_obj[x_title].map(function (v) {
-			return v[Object.keys(v)]
-		});
-		let y = (y_data.length === 1) ? d.table_obj[y_data[0]].map(function (v) {
-			return v[Object.keys(v)]
-		}) : [];
 		let ctx = document.getElementById('chart');
 		let chart = new Chart(ctx, {
 			type: chart_type,
-			data: {
-				labels: x,
-				datasets: [{
-					label: '# ' + d.data_title,
-					data: y,
-					backgroundColor: [
-						'rgba(255, 99, 132, 0.2)',
-						'rgba(54, 162, 235, 0.2)',
-						'rgba(255, 206, 86, 0.2)',
-						'rgba(75, 192, 192, 0.2)',
-						'rgba(153, 102, 255, 0.2)',
-						'rgba(255, 159, 64, 0.2)'
-					],
-					borderColor: [
-						'rgba(255, 99, 132, 1)',
-						'rgba(54, 162, 235, 1)',
-						'rgba(255, 206, 86, 1)',
-						'rgba(75, 192, 192, 1)',
-						'rgba(153, 102, 255, 1)',
-						'rgba(255, 159, 64, 1)'
-					],
-					borderWidth: 1
-				}]
-			},
+			data:barChartData,
 			options: {
 				scales: {
+					xAxes:[{stacked:true}],
 					yAxes: [{
-						ticks: {
-							beginAtZero: true
-						}
+						ticks: {beginAtZero: true},
+						stacked:true
 					}]
 				}
 			}

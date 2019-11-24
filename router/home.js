@@ -17,7 +17,7 @@ let obj = [
 
 // main 화면
 router.get('', middle.checkAuth, async (req, res) => {
-  let user = res.locals.user_info
+  let user = res.locals.user_info;
   let category = await categoryModel.aggregate([
     {
       $group: {
@@ -72,7 +72,7 @@ const fnGetList = async(strQuery, params) => {
   let cate = params.cate;
   let cate_item = params.cate_item;
   let cate_info = await categoryModel.findOne({cate_id:cate_item});
-  console.log('cate_info : ', cate_info);
+  // console.log('cate_info : ', cate_info);
   let cate_obj = {};
   cate_obj['category_obj.' + cate + '.' + cate_item] = cate_info.cate_name;
   let unwind_query = {'$unwind':'$category_obj.' + cate};

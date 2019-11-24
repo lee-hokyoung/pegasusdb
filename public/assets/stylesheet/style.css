@@ -1,0 +1,36 @@
+.input-group label {
+    width: 200px;
+    font-weight: bold;
+}
+
+#data-purchase-list input {
+    width: 15%;
+    font-size: 12px;
+}
+
+#table_content th, #table_content td {
+    padding: .05rem;
+    border: none;
+}
+
+#table_content th {
+    max-width: 100px;
+}
+
+#table_content td {
+    min-width: 30px;
+}
+
+#table_content input {
+    width: 100%;
+    min-width: 50px;
+    text-align: center;
+}
+#table_content thead input{background-color:lightblue}
+#table_content .space_td {
+    width: 30px;
+}
+
+#table_content th input {
+    min-width: 130px;
+}
