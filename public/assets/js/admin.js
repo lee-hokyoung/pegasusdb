@@ -88,8 +88,10 @@ function fnAddCol(){
 function fnRemoveCol(){
     document.querySelectorAll('tr').forEach(function(tr){
         let target_idx = tr.dataset.idx;
-        tr.querySelector('td[data-idx="' + target_idx + '"]').remove();
-        tr.dataset.idx = target_idx - 1;
+        if(target_idx){
+            tr.querySelector('td[data-idx="' + target_idx + '"]').remove();
+            tr.dataset.idx = target_idx - 1;
+        }
     });
 }
 // 데이터 테이블 로우 추가
@@ -277,7 +279,7 @@ function fnDeleteData(id){
             if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
                 let res = JSON.parse(this.response);
                 if(res.ok === 1){
-                    let tr = document.querySelector('tr[about="' + id + '"]');
+                    let tr = document.querySelector('li[about="' + id + '"]');
                     tr.remove();
                 }
             }

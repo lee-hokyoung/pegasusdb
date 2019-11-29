@@ -40,11 +40,11 @@ block content
 							each x, idx in doc.table_x.content
 								td
 									input(type='text', name='x_data_' + (idx + 1), value=x)
-					tbody(data-row=1)
+					tbody(data-row=doc.table_y.length)
 						each tr, tr_idx in doc.table_y
 							tr(data-type='y', data-idx=tr.content.length, data-row_idx=(tr_idx + 1))
 								th
-									input(type='text', name='chart_y', value=tr.title)
+									input(type='text', name='chart_y', value=tr.title, data-title='true')
 								td.space_td
 								each y, idx in tr.content
 									td

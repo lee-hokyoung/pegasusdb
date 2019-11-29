@@ -1,17 +1,9 @@
 extends admin_layout
 block content
 	style.
-		#user_table table td, #user_table table th{
-			/*white-space: nowrap;*/
-			text-align: center;
-			font-size: 13.6px;
-			padding:.35rem;
-		}
-		#user_table .title {
-			white-space: normal !important;
-		}
-		.btn{font-size:11px !important;}
-	ul.list-group.list-group-flush.text-center
+		#data_list li .text-normal{white-space:normal !important;}
+		#data_list .btn{font-size:11px !important;}
+	ul.list-group.list-group-flush.text-center#data_list
 		li.list-group-item.list-group-item-dark
 			.row.small.text-nowrap
 				.col-1 자료번호
@@ -25,12 +17,12 @@ block content
 				.col-2 업데이트 일자
 		each item in list
 			- var date = new Date(item.updated);
-			li.list-group-item
-				.row.small.text-nowrap(about=item._id)
+			li.list-group-item(about=item._id)
+				.row.small.text-nowrap
 					.col-1 #{item.data_no}
-					.col-2 #{item.data_title}
+					.col-2.text-normal #{item.data_title}
 					.col-1 #{item.data_unit}
-					.col-1
+					.col-1.text-normal
 						each category in item.category_obj
 							each item in category
 								p.m-0 #{item[Object.keys(item)]}
