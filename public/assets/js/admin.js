@@ -403,7 +403,7 @@ function fnDeleteData(id) {
     xhr.onreadystatechange = function () {
       if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
         let res = JSON.parse(this.response);
-        if (res.ok === 1) {
+        if (res.res === 1) {
           let tr = document.querySelector('li[about="' + id + '"]');
           tr.remove();
         }
@@ -411,4 +411,26 @@ function fnDeleteData(id) {
     };
     xhr.send();
   }
+}
+
+// config update
+function fnUpdateConfig(){
+  console.log('1');
+  let forgot_password = document.querySelector('input[name="forgot_password"]').value;
+  let request_report = document.querySelector('input[name="request_report"]').value;
+  let request_data = document.querySelector('input[name="request_data"]').value;
+
+  let xhr = new XMLHttpRequest();
+  xhr.open('POST', '/admin/config', true);
+  xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.onreadystatechange = function(){
+    if(this.readyState === XMLHttpRequest.DONE && this.status === 200){
+      let res = JSON.parse(this.response);
+      console.log('res : ', res);
+      if(res.code === 1){
+        alert('정상적으로 수정되었습니다.');
+      }
+    }
+  };
+  xhr.send(JSON.stringify({forgot_password:forgot_password,request_report:request_report,request_data:request_data}));
 }

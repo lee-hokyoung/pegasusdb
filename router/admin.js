@@ -5,6 +5,8 @@ const categoryModel = require('../model/categoryModel');
 const regionModel = require('../model/regionModel');
 const cityModel = require('../model/cityModel');
 const dataModel = require('../model/dataModel');
+const configModel = require('../model/configModel');
+
 // 사용자 등록
 let category = [
   {
@@ -230,9 +232,15 @@ router.put('/data/update/:id', async(req, res) => {
   res.json(result);
 });
 // 환경설정 (Set-up)
-router.get('/config', (req, res) => {
+router.get('/config', async (req, res) => {
+  let data = await configModel.findOne({});
   res.render('admin_config', {
-    active: 'config'
+    active: 'config',
+    data:data
   });
+});
+router.post('/config', async(req, res) => {
+  let result = await configModel.findOneAndUpdate({}, {$set:req.body}, {upsert:true});
+  res.json({result:result, code:1})
 });
 module.exports = router;
