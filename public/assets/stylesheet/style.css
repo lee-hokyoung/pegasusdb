@@ -1,37 +1,20 @@
-.input-group label {
-    width: 200px;
-    font-weight: bold;
-}
-
-#data-purchase-list input {
-    width: 15%;
-    font-size: 12px;
-}
-
-#table_content th, #table_content td {
-    padding: .05rem;
-    border: none;
-}
-
-#table_content th {
-    max-width: 100px;
-}
-
-#table_content td {
-    min-width: 30px;
-}
-
-#table_content input {
-    width: 100%;
-    min-width: 50px;
-    text-align: center;
-}
+.container{width:1140px; max-width:none !important;}
+.input-group label {width: 200px;font-weight: bold;}
+#data-purchase-list input {width: 15%;font-size: 12px;}
+#table_content th, #table_content td {padding: .05rem;border: none;}
+#table_content th {max-width: 100px;}
+#table_content td {min-width: 30px;}
+#table_content input {width: 100%;min-width: 50px;text-align: center;}
 #table_content thead input{background-color:lightblue}
-#table_content .space_td {
-    width: 30px;
-}
+#table_content .space_td {width: 30px;}
+#table_content th input {min-width: 130px;}
 
-#table_content th input {
-    min-width: 130px;
-}
 ul#data_list li .text-normal{white-space: normal !important;}
+ul#user_list li .col-1, ul#user_list li .col {padding: 0 .25rem;}
+ul#user_list li a:after {content: '더보기'}
+ul#user_list li a[aria-expanded=true]:after {content: '접기'}
+#register-list-warp .input-group input{color:black; font-weight:700;}
+#register-list-warp .input-group input::placeholder{font-style:italic; font-weight:normal;}
+
+#user_table table td, #user_table table th {text-align: center;font-size: 13.5px;padding: 0.35rem;}
+

@@ -2,7 +2,7 @@ extends admin_layout
 block content
 	form(onsubmit='fnSearch(); return false;')
 		.input-group.my-3.w-50
-			input.form-control(placeholder='담당자명을 입력해주세요', name='manager_name')
+			input.form-control(placeholder='ID 입력해주세요', name='user_id')
 			.input-group-append
 				button.btn.btn-primary(type='submit') 검색
 	ul.list-group.list-group-flush.text-center#user_list

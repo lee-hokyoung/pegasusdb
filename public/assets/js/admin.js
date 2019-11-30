@@ -70,7 +70,7 @@ function fnRegisterUser() {
 }
 //  사용자 검색
 function fnSearch() {
-  let manager_name = document.querySelector('input[name="manager_name"]');
+  let user_id = document.querySelector('input[name="user_id"]');
   // if(!manager_name.value){
   //   alert('담당자명을 입력해주세요.');
   //   manager_name.focus();
@@ -85,7 +85,7 @@ function fnSearch() {
       fnGenerateUserList(res);
     }
   };
-  xhr.send(JSON.stringify({manager_name:manager_name.value}));
+  xhr.send(JSON.stringify({manager_name:user_id.value}));
 }
 function fnGenerateUserList(res) {
   console.log('res : ', res);
@@ -186,7 +186,6 @@ function fnGenerateUserList(res) {
     list_wrap.appendChild(li);
   });
 }
-
 // 데이터 테이블 컬럼 추가
 function fnAddCol() {
   document.querySelectorAll('tr').forEach(function (tr) {

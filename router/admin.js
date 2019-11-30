@@ -133,11 +133,9 @@ router.get('/user/list', async (req, res) => {
 });
 // 사용자 조회
 router.post('/user/search', async(req, res) => {
-  console.log('body : ', req.body);
   let regex = {$regex:'.*' + req.body.manager_name + '.*'};
-  console.log('regex : ', regex);
   let list = await userModel.aggregate([
-    {$match:{manager_name:regex}},
+    {$match:{user_id:regex}},
     {
       $lookup: {
         from: 'categories',
@@ -149,7 +147,6 @@ router.post('/user/search', async(req, res) => {
   ]);
   res.json(list);
 });
-
 // 데이터 등록 화면
 router.get('/data/register', async (req, res) => {
   let category = await categoryModel.aggregate([
