@@ -114,7 +114,6 @@ router.post('/user/register', async (req, res) => {
     res.json({result:1, message:'정상적으로 등록되었습니다.'});
   }
 });
-
 // 사용자 관리
 router.get('/user/list', async (req, res) => {
   let users = await userModel.aggregate([
@@ -131,6 +130,24 @@ router.get('/user/list', async (req, res) => {
     users: users,
     active: 'user_list'
   })
+});
+// 사용자 조회
+router.post('/user/search', async(req, res) => {
+  console.log('body : ', req.body);
+  let regex = {$regex:'.*' + req.body.manager_name + '.*'};
+  console.log('regex : ', regex);
+  let list = await userModel.aggregate([
+    {$match:{manager_name:regex}},
+    {
+      $lookup: {
+        from: 'categories',
+        localField: 'category',
+        foreignField: 'cate_id',
+        as: 'cate_info'
+      }
+    }
+  ]);
+  res.json(list);
 });
 
 // 데이터 등록 화면

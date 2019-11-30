@@ -8,7 +8,7 @@ const passport = require('passport');
 const passportConfig = require('./config/passport');
 const app = express();
 
-require('./passport.js');
+// require('./passport.js');
 
 const connect = require('./model');
 // const passportConfig = require('./passport');
