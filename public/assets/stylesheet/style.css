@@ -34,3 +34,4 @@
 #table_content th input {
     min-width: 130px;
 }
+ul#data_list li .text-normal{white-space: normal !important;}
