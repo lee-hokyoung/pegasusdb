@@ -22,8 +22,9 @@ block content
 				a.text-white(href='/list/' + cate_info[0].group_id + '/' + Object.keys(sub_cate[0])) #{cate_info[0].group_name}
 				| &nbsp; > &nbsp; #{sub_cate[0][Object.keys(sub_cate[0])]}
 		.row
-			.col-8
-				h4 #{data.title}
+			.col-8.text-zhupao
+				h4.font-weight-bold #{data.data_title}
+				h5.text-right 단위 : #{data.data_unit}
 				.card
 					.card-body.shadow
 						canvas#chart(width='100%', height='50')

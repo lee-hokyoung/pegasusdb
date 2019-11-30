@@ -1,40 +1,58 @@
-$(document).ready(function () {
-  // Category 선택시
-  $('select[name="category"]').on('change', function(o){
-    console.log('option : ', o.currentTarget);
-    let path_obj = location.pathname.split('/');
-    let path_len = path_obj.length;
-    path_obj[path_len - 1] = o.currentTarget.value;
-    let pathname = path_obj.join('/');
-    let strQuery = fnGetQuery();
-
-    let xhr = new XMLHttpRequest();
-    xhr.open('GET', '/ajax' + pathname + strQuery, true);
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xhr.onreadystatechange = function () {
-      if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-        console.log('query : ', strQuery);
-        history.pushState(null, '', pathname + strQuery);
-        fnGenerateHtmlResult(JSON.parse(this.response));
-      }
-    };
-    xhr.send();
-  });
-  // Region, Object 선택시
-  $('select.add_query').on('change', function () {
-    let strQuery = fnGetQuery();
-    let xhr = new XMLHttpRequest();
-    xhr.open('GET', '/ajax' + location.pathname + strQuery, true);
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xhr.onreadystatechange = function () {
-      if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-        history.pushState(null, '', strQuery);
-        fnGenerateHtmlResult(JSON.parse(this.response));
-      }
-    };
-    xhr.send();
-  });
-});
+// $(document).ready(function () {
+//   // Category 선택시
+//   $('select[name="category"]').on('change', function(o){
+//     console.log('option : ', o.currentTarget);
+//     let path_obj = location.pathname.split('/');
+//     let path_len = path_obj.length;
+//     path_obj[path_len - 1] = o.currentTarget.value;
+//     let pathname = path_obj.join('/');
+//     let strQuery = fnGetQuery();
+//
+//     let xhr = new XMLHttpRequest();
+//     xhr.open('GET', '/ajax' + pathname + strQuery, true);
+//     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+//     xhr.onreadystatechange = function () {
+//       if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+//         console.log('query : ', strQuery);
+//         history.pushState(null, '', pathname + strQuery);
+//         fnGenerateHtmlResult(JSON.parse(this.response));
+//       }
+//     };
+//     xhr.send();
+//   });
+//   // Region, Object 선택시
+//   $('select.add_query').on('change', function () {
+//     let path_obj = location.pathname.split('/');
+//     let path_len = path_obj.length;
+//     path_obj[path_len - 1] = o.currentTarget.value;
+//     let pathname = path_obj.join('/');
+//     let strQuery = fnGetQuery();
+//     let xhr = new XMLHttpRequest();
+//     xhr.open('GET', '/ajax' + location.pathname + strQuery, true);
+//     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+//     xhr.onreadystatechange = function () {
+//       if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+//         history.pushState(null, '', pathname + strQuery);
+//         fnGenerateHtmlResult(JSON.parse(this.response));
+//       }
+//     };
+//     xhr.send();
+//   });
+// });
+const fnSearchDetail = function (){
+  let strQuery = fnGetQuery();
+  let xhr = new XMLHttpRequest();
+  xhr.open('GET', '/ajax' + location.pathname + strQuery, true);
+  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+  xhr.onreadystatechange = function () {
+    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+      history.pushState(null, '', strQuery);
+      fnGenerateHtmlResult(JSON.parse(this.response));
+    }
+  };
+  xhr.send();
+};
+// list 결과 HTML 생성하는 함수
 const fnGenerateHtmlResult = function (res) {
   console.log(res);
   let cate = res.cate;
@@ -110,6 +128,7 @@ const fnGenerateHtmlResult = function (res) {
     list.appendChild(a);
   });
 };
+// 쿼리 스트링 파싱 함수
 const fnGetQuery = function(){
   let query = [];
   document.querySelectorAll('select.add_query').forEach(function (s) {
