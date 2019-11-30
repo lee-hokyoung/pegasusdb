@@ -15,6 +15,6 @@ ul#user_list li a:after {content: '더보기'}
 ul#user_list li a[aria-expanded=true]:after {content: '접기'}
 #register-list-warp .input-group input, #config-wrap .input-group input{color:black; font-weight:700;}
 #register-list-warp .input-group input::placeholder, #config-wrap .input-group input::placeholder{font-style:italic; font-weight:normal;}
-
+#pills-tabContent{height:130px; overflow:auto;}
 #user_table table td, #user_table table th {text-align: center;font-size: 13.5px;padding: 0.35rem;}
 

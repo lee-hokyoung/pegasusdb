@@ -58,7 +58,11 @@ block content
 				#pills-tabContent.tab-content
 					#pills-home.tab-pane.fade.show.active(role="tabpanel" aria-labelledby="pills-home-tab") #{data.description}
 					#pills-profile.tab-pane.fade(role="tabpanel" aria-labelledby="pills-profile-tab") #{data.source}
-
+				.d-flex.justify-content-between
+					a(href='//' + config.request_report, target='_blank')
+						img(src='/assets/images/RequestReport.JPG', width='100%')
+					a(href='//' + config.request_data, target='_blank')
+						img(src='/assets/images/RequestData.JPG', width='100%')
 block append_js
 	script(src='/bootstrap/js/dist/util.js', type='text/javascript')
 	script(src='/chart.js/Chart.js')
