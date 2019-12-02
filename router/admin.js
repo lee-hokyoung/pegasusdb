@@ -6,6 +6,8 @@ const regionModel = require('../model/regionModel');
 const cityModel = require('../model/cityModel');
 const dataModel = require('../model/dataModel');
 const mongoose = require('mongoose');
+const configModel = require('../model/configModel');
+
 // 사용자 등록
 let category = [
   {
@@ -138,7 +140,7 @@ router.post('/user/search', async(req, res) => {
   let regex = {$regex:'.*' + req.body.manager_name + '.*'};
   console.log('regex : ', regex);
   let list = await userModel.aggregate([
-    {$match:{manager_name:regex}},
+    {$match:{user_id:regex}},
     {
       $lookup: {
         from: 'categories',
@@ -240,9 +242,15 @@ router.put('/data/update/:id', async(req, res) => {
   res.json(result);
 });
 // 환경설정 (Set-up)
-router.get('/config', (req, res) => {
+router.get('/config', async (req, res) => {
+  let data = await configModel.findOne({});
   res.render('admin_config', {
-    active: 'config'
+    active: 'config',
+    data:data
   });
+});
+router.post('/config', async(req, res) => {
+  let result = await configModel.findOneAndUpdate({}, {$set:req.body}, {upsert:true});
+  res.json({result:result, code:1})
 });
 module.exports = router;
