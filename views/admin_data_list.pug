@@ -35,46 +35,8 @@ block content
 							p.m-0 #{obj}
 					.col-2.text-center
 						a(href='/admin/data/read/' + item._id).btn.btn-primary.btn-sm.my-1.mx-auto 업데이트
-						button.btn.btn-danger.d-block.my-1.mx-auto.btn-sm(onclick='fnDeleteData(`' + item._id + '`)') 삭제
+						button.btn.btn-danger.d-block.my-1.mx-auto.btn-sm(onclick='fnDeleteData("' + item._id + '")') 삭제
 					.col-1 #{item.status === 1 ? '제공' : item.status === 2 ? '중지' : '삭제'}
 					.col-2 #{date.toLocaleDateString('ko')}
-	//#user_table.table
-	//	table.table-responsive.table-bordered.table-hover
-	//		thead.bg-secondary.text-white
-	//			tr
-	//				th 자료번호
-	//				th 제목
-	//				th 단위
-	//				th Category
-	//				th Region
-	//				th Object
-	//				th 업데이트/삭제
-	//				th 상태
-	//				th 업데이트 일자
-	//		tbody
-	//			each item in list
-	//				- var date = new Date(item.updated);
-	//				tr(about=item._id)
-	//					td #{item.data_no}
-	//					td.title #{item.data_title}
-	//					td #{item.data_unit}
-	//					td
-	//						each category in item.category_obj
-	//							each item in category
-	//								p.m-0 #{item[Object.keys(item)]}
-	//					td
-	//						- var region_items = item.region_array.concat(item.city_array)
-	//						each region in region_items
-	//							p #{region}
-	//					td
-	//						each obj in item.object
-	//							p.m-0 #{obj}
-	//					td
-	//						a(href='/admin/data/read/' + item._id).btn.btn-primary.btn-sm.d-block.my-1.mx-auto 업데이트
-	//						button.btn.btn-danger.d-block.my-1.mx-auto.btn-sm(onclick='fnDeleteData(`' + item._id + '`)') 삭제
-	//					td #{item.status === 1 ? '제공' : item.status === 2 ? '중지' : '삭제'}
-	//					td #{date.toLocaleDateString('ko')}
 	block append_Js
 		script(src='/assets/js/admin.js', type='text/javascript')
-		script.
-			console.log('list : ', !{JSON.stringify(list)});

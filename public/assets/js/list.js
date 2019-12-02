@@ -1,44 +1,45 @@
-// $(document).ready(function () {
-//   // Category 선택시
-//   $('select[name="category"]').on('change', function(o){
-//     console.log('option : ', o.currentTarget);
-//     let path_obj = location.pathname.split('/');
-//     let path_len = path_obj.length;
-//     path_obj[path_len - 1] = o.currentTarget.value;
-//     let pathname = path_obj.join('/');
-//     let strQuery = fnGetQuery();
-//
-//     let xhr = new XMLHttpRequest();
-//     xhr.open('GET', '/ajax' + pathname + strQuery, true);
-//     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-//     xhr.onreadystatechange = function () {
-//       if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-//         console.log('query : ', strQuery);
-//         history.pushState(null, '', pathname + strQuery);
-//         fnGenerateHtmlResult(JSON.parse(this.response));
-//       }
-//     };
-//     xhr.send();
-//   });
-//   // Region, Object 선택시
-//   $('select.add_query').on('change', function () {
-//     let path_obj = location.pathname.split('/');
-//     let path_len = path_obj.length;
-//     path_obj[path_len - 1] = o.currentTarget.value;
-//     let pathname = path_obj.join('/');
-//     let strQuery = fnGetQuery();
-//     let xhr = new XMLHttpRequest();
-//     xhr.open('GET', '/ajax' + location.pathname + strQuery, true);
-//     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-//     xhr.onreadystatechange = function () {
-//       if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-//         history.pushState(null, '', pathname + strQuery);
-//         fnGenerateHtmlResult(JSON.parse(this.response));
-//       }
-//     };
-//     xhr.send();
-//   });
-// });
+$(document).ready(function () {
+  // Category 선택시
+  $('select[name="category"]').on('change', function(o){
+    console.log('option : ', o.currentTarget);
+    let path_obj = location.pathname.split('/');
+    let path_len = path_obj.length;
+    path_obj[path_len - 1] = o.currentTarget.value;
+    let pathname = path_obj.join('/');
+    let strQuery = fnGetQuery();
+    history.pushState(null, '', pathname + strQuery);
+
+    // let xhr = new XMLHttpRequest();
+    // xhr.open('GET', '/ajax' + pathname + strQuery, true);
+    // xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    // xhr.onreadystatechange = function () {
+    //   if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+    //     console.log('query : ', strQuery);
+    //     history.pushState(null, '', pathname + strQuery);
+    //     fnGenerateHtmlResult(JSON.parse(this.response));
+    //   }
+    // };
+    // xhr.send();
+  });
+  // Region, Object 선택시
+  // $('select.add_query').on('change', function () {
+  //   let path_obj = location.pathname.split('/');
+  //   let path_len = path_obj.length;
+  //   path_obj[path_len - 1] = o.currentTarget.value;
+  //   let pathname = path_obj.join('/');
+  //   let strQuery = fnGetQuery();
+  //   let xhr = new XMLHttpRequest();
+  //   xhr.open('GET', '/ajax' + location.pathname + strQuery, true);
+  //   xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+  //   xhr.onreadystatechange = function () {
+  //     if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+  //       history.pushState(null, '', pathname + strQuery);
+  //       fnGenerateHtmlResult(JSON.parse(this.response));
+  //     }
+  //   };
+  //   xhr.send();
+  // });
+});
 const fnSearchDetail = function (){
   let strQuery = fnGetQuery();
   let xhr = new XMLHttpRequest();
@@ -60,11 +61,7 @@ const fnGenerateHtmlResult = function (res) {
   list.innerHTML = '';
   res.list.forEach(function(v){
     let a = document.createElement('a');
-    a.classList.add('list-group');
-    a.classList.add('list-group-item-action');
-    a.classList.add('flex-row');
-    a.classList.add('my-1');
-    a.classList.add('py-2');
+    a.classList.add('list-group', 'list-group-item-action', 'flex-row', 'my-1', 'py-2');
     a.href = '/detail/' + cate + '/' + v._id;
     a.style = 'min-height:1px;';
     let div = document.createElement('div');
@@ -74,14 +71,11 @@ const fnGenerateHtmlResult = function (res) {
     img.classList.add('p-1');
     img.src = '/assets/images/' + v.chart_type + '_user.JPG';
     img.alt = '';
-    img.style = 'width:70px;';
+    img.setAttribute('style', 'width:70%;');
     div.appendChild(img);
     a.appendChild(div);
     div = document.createElement('div');
-    div.classList.add('col-10');
-    div.classList.add('d-flex');
-    div.classList.add('flex-column');
-    div.classList.add('justify-content-around');
+    div.classList.add('col-10', 'd-flex', 'flex-column', 'justify-content-around');
     let h5 = document.createElement('h5');
     h5.innerText = v.data_title;
     div.appendChild(h5);
@@ -97,8 +91,7 @@ const fnGenerateHtmlResult = function (res) {
       }
     });
     let span = document.createElement('span');
-    span.classList.add('font-weight-bold');
-    span.classList.add('text-secondary');
+    span.classList.add('font-weight-bold', 'text-secondary');
     span.innerText = category_arr.join(',');
     div_1.appendChild(span);
     // bar add
@@ -108,8 +101,7 @@ const fnGenerateHtmlResult = function (res) {
     div_1.appendChild(span_bar);
     // region add
     span = document.createElement('span');
-    span.classList.add('font-weight-bold');
-    span.classList.add('text-secondary');
+    span.classList.add('font-weight-bold', 'text-secondary');
     span.innerText = v.region_array.concat(v.city_array).join(',');
     div_1.appendChild(span);
     // bar add
@@ -119,8 +111,7 @@ const fnGenerateHtmlResult = function (res) {
     div_1.appendChild(span_bar_1);
     // object add
     span = document.createElement('span');
-    span.classList.add('font-weight-bold');
-    span.classList.add('text-secondary');
+    span.classList.add('font-weight-bold', 'text-secondary');
     span.innerText = v.object;
     div_1.appendChild(span);
     div.appendChild(div_1);

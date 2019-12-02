@@ -5,6 +5,7 @@ const categoryModel = require('../model/categoryModel');
 const regionModel = require('../model/regionModel');
 const cityModel = require('../model/cityModel');
 const dataModel = require('../model/dataModel');
+const mongoose = require('mongoose');
 const configModel = require('../model/configModel');
 
 // 사용자 등록
@@ -97,7 +98,7 @@ router.get('/user/register', async (req, res) => {
         , list: {$push: '$$ROOT'}
       }
     },
-    {$sort:{group_order:1}}
+    {$sort: {group_order: 1}}
   ]);
   res.render('admin_user_register', {
     category: category,
@@ -105,15 +106,15 @@ router.get('/user/register', async (req, res) => {
   });
 });
 router.post('/user/register', async (req, res) => {
-  let exUser = await userModel.findOne({user_id:req.body.user_id});
-  let exUserNo = await userModel.findOne({user_no:req.body.user_no});
-  if(exUser){
-    res.json({result:2, message:'이미 등록된 ID가 있습니다.'});
-  }else if(exUserNo){
-    res.json({result:3, message:'이미 등록된 고객번호가 있습니다.'});
-  }else{
+  let exUser = await userModel.findOne({user_id: req.body.user_id});
+  let exUserNo = await userModel.findOne({user_no: req.body.user_no});
+  if (exUser) {
+    res.json({result: 2, message: '이미 등록된 ID가 있습니다.'});
+  } else if (exUserNo) {
+    res.json({result: 3, message: '이미 등록된 고객번호가 있습니다.'});
+  } else {
     await userModel.create(req.body);
-    res.json({result:1, message:'정상적으로 등록되었습니다.'});
+    res.json({result: 1, message: '정상적으로 등록되었습니다.'});
   }
 });
 // 사용자 관리
@@ -134,10 +135,21 @@ router.get('/user/list', async (req, res) => {
   })
 });
 // 사용자 조회
-router.post('/user/search', async(req, res) => {
-  let regex = {$regex:'.*' + req.body.manager_name + '.*'};
+router.post('/user/search', async (req, res) => {
+  console.log('body : ', req.body);
+  let regex = {$regex: '.*' + req.body.searchText + '.*'};
+  console.log('regex : ', regex);
   let list = await userModel.aggregate([
-    {$match:{user_id:regex}},
+    {
+      $match: {
+        $or: [
+          {user_id: regex},
+          {user_corp: regex},
+          {manager_name: regex},
+          {manager_tel: regex}
+        ]
+      }
+    },
     {
       $lookup: {
         from: 'categories',
@@ -149,6 +161,13 @@ router.post('/user/search', async(req, res) => {
   ]);
   res.json(list);
 });
+// 사용자 상태 변경
+router.post('/user/status', async (req, res) => {
+  let id = req.body.id;
+  let status = req.body.status;
+  let result = await userModel.updateOne({_id: mongoose.Types.ObjectId(id)}, {$set: {status: status}});
+  res.json(result);
+});
 // 데이터 등록 화면
 router.get('/data/register', async (req, res) => {
   let category = await categoryModel.aggregate([
@@ -159,7 +178,7 @@ router.get('/data/register', async (req, res) => {
         , list: {$push: '$$ROOT'}
       }
     },
-    {$sort:{group_order:1}}
+    {$sort: {group_order: 1}}
   ]);
   let region = await regionModel.find({});
   let city = await cityModel.find({});
@@ -172,7 +191,7 @@ router.get('/data/register', async (req, res) => {
   });
 });
 // 데이터 등록
-router.post('/data/register', async (req, res)=>{
+router.post('/data/register', async (req, res) => {
   let data = req.body;
   let result = await dataModel.create(data);
   res.json(result);
@@ -195,17 +214,17 @@ router.get('/data/list', async (req, res) => {
   res.render('admin_data_list', {
     active: 'data_list',
     data: data,
-    list:list
+    list: list
   });
 });
 // 데이터 삭제
-router.delete('/data/:id', async(req, res) => {
-  let result = await dataModel.deleteOne({_id:req.params.id});
+router.delete('/data/:id', async (req, res) => {
+  let result = await dataModel.deleteOne({_id: req.params.id});
   res.json(result);
 });
 // 데이터 read
-router.get('/data/read/:id', async(req, res)=>{
-  let doc = await dataModel.findOne({_id:req.params.id});
+router.get('/data/read/:id', async (req, res) => {
+  let doc = await dataModel.findOne({_id: req.params.id});
   let category = await categoryModel.aggregate([
     {
       $group: {
@@ -214,21 +233,21 @@ router.get('/data/read/:id', async(req, res)=>{
         , list: {$push: '$$ROOT'}
       }
     },
-    {$sort:{group_order:1}}
+    {$sort: {group_order: 1}}
   ]);
   let region = await regionModel.find({});
   let city = await cityModel.find({});
   res.render('admin_data_read', {
-    doc:doc,
-    category:category,
-    region:region,
-    city:city,
-    obj:obj
+    doc: doc,
+    category: category,
+    region: region,
+    city: city,
+    obj: obj
   });
 });
 // 데이터 update
-router.put('/data/update/:id', async(req, res) => {
-  let result = await dataModel.updateMany({_id:req.params.id}, req.body);
+router.put('/data/update/:id', async (req, res) => {
+  let result = await dataModel.updateMany({_id: req.params.id}, req.body);
   res.json(result);
 });
 // 환경설정 (Set-up)
@@ -236,11 +255,11 @@ router.get('/config', async (req, res) => {
   let data = await configModel.findOne({});
   res.render('admin_config', {
     active: 'config',
-    data:data
+    data: data
   });
 });
-router.post('/config', async(req, res) => {
-  let result = await configModel.findOneAndUpdate({}, {$set:req.body}, {upsert:true});
-  res.json({result:result, code:1})
+router.post('/config', async (req, res) => {
+  let result = await configModel.findOneAndUpdate({}, {$set: req.body}, {upsert: true});
+  res.json({result: result, code: 1})
 });
 module.exports = router;

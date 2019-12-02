@@ -43,10 +43,10 @@ function fnRegisterUser() {
     return false;
   }
   let data = {}, category = [];
-  document.querySelectorAll('input[type="text"]').forEach((v) => {
+  document.querySelectorAll('input[type="text"]').forEach(function(v){
     data[v.name] = v.value;
   });
-  document.querySelectorAll('input[type="checkbox"]:checked').forEach((v) => {
+  document.querySelectorAll('input[type="checkbox"]:checked').forEach(function(v){
     category.push(v.name);
   });
   data['category'] = category;
@@ -70,7 +70,7 @@ function fnRegisterUser() {
 }
 //  사용자 검색
 function fnSearch() {
-  let user_id = document.querySelector('input[name="user_id"]');
+  let searchText = document.querySelector('input[name="searchText"]');
   // if(!manager_name.value){
   //   alert('담당자명을 입력해주세요.');
   //   manager_name.focus();
@@ -85,7 +85,7 @@ function fnSearch() {
       fnGenerateUserList(res);
     }
   };
-  xhr.send(JSON.stringify({manager_name:user_id.value}));
+  xhr.send(JSON.stringify({searchText:searchText.value}));
 }
 function fnGenerateUserList(res) {
   console.log('res : ', res);
@@ -186,6 +186,30 @@ function fnGenerateUserList(res) {
     list_wrap.appendChild(li);
   });
 }
+
+// 사용자 상태 변경 버튼 클릭 이벤트
+document.addEventListener("DOMContentLoaded", function(){
+  document.querySelectorAll('.status-btn-wrap button').forEach(function(btn){
+    btn.addEventListener('click', function(e){
+      console.log(btn);
+      let id = btn.parentElement.dataset.id;
+      let status = btn.dataset.status;
+      let xhr = new XMLHttpRequest();
+      let status_txt = document.querySelector('.colorStatus[data-id="' + id + '"]');
+      xhr.open('POST', '/admin/user/status', true);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.onreadystatechange = function(){
+        if(this.readyState === XMLHttpRequest.DONE && this.status === 200){
+          let res = JSON.parse(this.response);
+          status_txt.dataset.status = status;
+        }
+      };
+      xhr.send(JSON.stringify({id:id, status:status}));
+    });
+  });
+});
+
+
 // 데이터 테이블 컬럼 추가
 function fnAddCol() {
   document.querySelectorAll('tr').forEach(function (tr) {
@@ -203,10 +227,10 @@ function fnAddCol() {
 }
 
 // 데이터 테이블 컬럼 제거
-function fnRemoveCol() {
-  document.querySelectorAll('tr').forEach(function (tr) {
+function fnRemoveCol(){
+  document.querySelectorAll('tr').forEach(function(tr){
     let target_idx = tr.dataset.idx;
-    if (target_idx) {
+    if(target_idx){
       tr.querySelector('td[data-idx="' + target_idx + '"]').remove();
       tr.dataset.idx = target_idx - 1;
     }
@@ -403,7 +427,7 @@ function fnDeleteData(id) {
     xhr.onreadystatechange = function () {
       if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
         let res = JSON.parse(this.response);
-        if (res.res === 1) {
+        if (res.ok === 1) {
           let tr = document.querySelector('li[about="' + id + '"]');
           tr.remove();
         }
