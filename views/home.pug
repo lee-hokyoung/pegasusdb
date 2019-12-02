@@ -8,17 +8,16 @@ block content
 		.w-100.bg-gradient-primary
 			.container
 				h5.m-0.text-white.py-2 Home
-		.container
-			.row
-				each item in category
-					.col-4.mt-3
-						.p-3(style='border:3px solid #aaa')
-							h5.pb-3 #{item._id.name}
-							each sub in item.list
-								if(user_category.indexOf(sub.cate_id) > -1)
-									a.d-block.font-weight-bold(href='/list/' + item._id.id + '/' + sub.cate_id) #{sub.cate_name}
-								else
-									a.d-block.font-weight-bold.text-secondary #{sub.cate_name}
+		.row
+			each item in category
+				.col-4.mt-3
+					.p-3(style='border:3px solid #aaa')
+						h5.pb-3 #{item._id.name}
+						each sub in item.list
+							if(user_category.indexOf(sub.cate_id) > -1)
+								a.d-block.font-weight-bold(href='/list/' + item._id.id + '/' + sub.cate_id) #{sub.cate_name}
+							else
+								a.d-block.font-weight-bold.text-secondary #{sub.cate_name}
 block append_js
 	script.
 		console.log(!{JSON.stringify(category)});

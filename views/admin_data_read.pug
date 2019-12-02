@@ -143,8 +143,8 @@ block content
 						img(src='/assets/svgs/png.svg', width='30%')
 						span PNG
 					input.form-control-file(type='file', name='add_png', style='flex:4')
-			div.mt-auto(style='flex:1')
-				button.w-100.btn.btn-zhupao(onclick='fnUpdateData("' + doc._id + '")') 업데이트
+	.text-center.p-3(style='flex:1')
+		button.btn.btn-zhupao.mb-3.px-5(onclick='fnUpdateData("' + doc._id + '")') 업데이트
 	block append_Js
 		script(src='/assets/js/admin.js', type='text/javascript')
 		script.

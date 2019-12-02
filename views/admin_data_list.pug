@@ -35,7 +35,7 @@ block content
 							p.m-0 #{obj}
 					.col-2.text-center
 						a(href='/admin/data/read/' + item._id).btn.btn-primary.btn-sm.my-1.mx-auto 업데이트
-						button.btn.btn-danger.d-block.my-1.mx-auto.btn-sm(onclick='fnDeleteData(`' + item._id + '`)') 삭제
+						button.btn.btn-danger.d-block.my-1.mx-auto.btn-sm(onclick='fnDeleteData("' + item._id + '")') 삭제
 					.col-1 #{item.status === 1 ? '제공' : item.status === 2 ? '중지' : '삭제'}
 					.col-2 #{date.toLocaleDateString('ko')}
 	//#user_table.table

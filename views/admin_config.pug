@@ -11,19 +11,26 @@ block content
 		#data-purchase-list input {
 			width: 15%;
 		}
-	.input-group.mt-3
-		label.text-zhupao.my-auto.text-zhupao Forget Password?
-		input.text-center.form-control.text-secondary.font-italic(type='text', name='forgot_password', placeholder='URL (http://www.zhupao.co.kr/)')
-	.input-group.mt-3
-		.img_wrap
-			img(src='/assets/images/request_report.jpg', alt='', width='100')
-			p.text-zhupao.m-0 REQUEST
-			p.text-zhupao REPORT
-		input.text-center.form-control.text-secondary.font-italic.my-auto(type='text', name='request_report', placeholder='URL (http://www.zhupao.co.kr/)')
-	.input-group.mt-3
-		.img_wrap
-			img(src='/assets/images/request_data.jpg', alt='', width='100')
-			p.text-zhupao.m-0 REQUEST
-			p.text-zhupao DATA
-		input.text-center.form-control.text-secondary.font-italic.my-auto(type='text', name='request_report', placeholder='URL (http://www.zhupao.co.kr/)')
+	#config-wrap
+		.input-group.mt-3
+			label.text-zhupao.my-auto.text-zhupao Forget Password?
+			input.text-center.form-control(type='text', name='forgot_password', placeholder='URL (http://www.zhupao.co.kr/)', value=data.forgot_password)
+		.input-group.mt-3
+			.img_wrap
+				img(src='/assets/images/RequestReport.JPG', alt='', width='100')
+				//p.text-zhupao.m-0 REQUEST
+				//p.text-zhupao REPORT
+			input.text-center.form-control.my-auto(type='text', name='request_report', placeholder='URL (http://www.zhupao.co.kr/)', value=data.request_report)
+		.input-group.mt-3
+			.img_wrap
+				img(src='/assets/images/RequestData.JPG', alt='', width='100')
+				//p.text-zhupao.m-0 REQUEST
+				//p.text-zhupao DATA
+			input.text-center.form-control.my-auto(type='text', name='request_data', placeholder='URL (http://www.zhupao.co.kr/)', value=data.request_data)
+		.row
+			.col.text-center
+				button.btn.btn-primary(type='button', onclick='fnUpdateConfig()') UPDATE
 	block append_Js
+		script(src='/assets/js/admin.js', type='text/javascript')
+		script.
+			console.log(!{JSON.stringify(data)})

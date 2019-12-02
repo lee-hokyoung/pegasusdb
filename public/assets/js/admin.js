@@ -43,10 +43,10 @@ function fnRegisterUser() {
     return false;
   }
   let data = {}, category = [];
-  document.querySelectorAll('input[type="text"]').forEach((v) => {
+  document.querySelectorAll('input[type="text"]').forEach(function(v){
     data[v.name] = v.value;
   });
-  document.querySelectorAll('input[type="checkbox"]:checked').forEach((v) => {
+  document.querySelectorAll('input[type="checkbox"]:checked').forEach(function(v){
     category.push(v.name);
   });
   data['category'] = category;
@@ -70,7 +70,7 @@ function fnRegisterUser() {
 }
 //  사용자 검색
 function fnSearch() {
-  let manager_name = document.querySelector('input[name="manager_name"]');
+  let user_id = document.querySelector('input[name="user_id"]');
   // if(!manager_name.value){
   //   alert('담당자명을 입력해주세요.');
   //   manager_name.focus();
@@ -85,7 +85,7 @@ function fnSearch() {
       fnGenerateUserList(res);
     }
   };
-  xhr.send(JSON.stringify({manager_name:manager_name.value}));
+  xhr.send(JSON.stringify({manager_name:user_id.value}));
 }
 function fnGenerateUserList(res) {
   console.log('res : ', res);
@@ -186,7 +186,6 @@ function fnGenerateUserList(res) {
     list_wrap.appendChild(li);
   });
 }
-
 // 데이터 테이블 컬럼 추가
 function fnAddCol() {
   document.querySelectorAll('tr').forEach(function (tr) {
@@ -205,11 +204,11 @@ function fnAddCol() {
 
 // 데이터 테이블 컬럼 제거
 function fnRemoveCol() {
-  document.querySelectorAll('tr').forEach(function (tr) {
+  document.querySelectorAll('.list-group-item').forEach(function (li) {
     let target_idx = tr.dataset.idx;
     if (target_idx) {
-      tr.querySelector('td[data-idx="' + target_idx + '"]').remove();
-      tr.dataset.idx = target_idx - 1;
+      li.querySelector('li[about="' + target_idx + '"]').remove();
+      li.dataset.idx = target_idx - 1;
     }
   });
 }
@@ -412,4 +411,26 @@ function fnDeleteData(id) {
     };
     xhr.send();
   }
+}
+
+// config update
+function fnUpdateConfig(){
+  console.log('1');
+  let forgot_password = document.querySelector('input[name="forgot_password"]').value;
+  let request_report = document.querySelector('input[name="request_report"]').value;
+  let request_data = document.querySelector('input[name="request_data"]').value;
+
+  let xhr = new XMLHttpRequest();
+  xhr.open('POST', '/admin/config', true);
+  xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.onreadystatechange = function(){
+    if(this.readyState === XMLHttpRequest.DONE && this.status === 200){
+      let res = JSON.parse(this.response);
+      console.log('res : ', res);
+      if(res.code === 1){
+        alert('정상적으로 수정되었습니다.');
+      }
+    }
+  };
+  xhr.send(JSON.stringify({forgot_password:forgot_password,request_report:request_report,request_data:request_data}));
 }
