@@ -13,6 +13,7 @@ module.exports = (passport) => {
   }, async (user_id, password, done) => {
     try{
       const exUser = await User.findOne({user_id:user_id});
+      console.log('ex user : ', exUser);
       if(exUser){
         if(exUser.user_pw === password){
           done(null, exUser);

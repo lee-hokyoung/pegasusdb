@@ -11,6 +11,7 @@ router.get('/login', (req, res)=>{
 router.post('/login', (req, res, next) => {
     passport.authenticate('local', {session:false}, (authError, user, info)=>{
         console.log('info : ', info);
+        console.log('user : ', user);
         // if(info){
         //     return res.send('<script>alert("' + info.message + '"); location.href = "/auth/login";</script>');
         // }
