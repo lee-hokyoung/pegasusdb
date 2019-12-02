@@ -5,6 +5,7 @@ const categoryModel = require('../model/categoryModel');
 const regionModel = require('../model/regionModel');
 const cityModel = require('../model/cityModel');
 const dataModel = require('../model/dataModel');
+const mongoose = require('mongoose');
 // 사용자 등록
 let category = [
   {
@@ -149,7 +150,13 @@ router.post('/user/search', async(req, res) => {
   ]);
   res.json(list);
 });
-
+// 사용자 상태 변경
+router.post('/user/status', async(req, res) => {
+  let id = req.body.id;
+  let status = req.body.status;
+  let result = await userModel.updateOne({_id:mongoose.Types.ObjectId(id)}, {$set:{status:status}});
+  res.json(result);
+});
 // 데이터 등록 화면
 router.get('/data/register', async (req, res) => {
   let category = await categoryModel.aggregate([

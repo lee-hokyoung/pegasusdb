@@ -186,6 +186,26 @@ function fnGenerateUserList(res) {
     list_wrap.appendChild(li);
   });
 }
+
+// 사용자 상태 변경 버튼 클릭 이벤트
+document.querySelectorAll('.status-btn-wrap button').forEach(function(btn){
+  btn.addEventListener('click', function(e){
+    console.log(btn);
+    let id = btn.parentElement.dataset.id;
+    let status = btn.dataset.status;
+    let xhr = new XMLHttpRequest();
+    let status_txt = document.querySelector(`.colorStatus[data-id="${id}"]`);
+    xhr.open('POST', '/admin/user/status', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.onreadystatechange = function(){
+      if(this.readyState === XMLHttpRequest.DONE && this.status === 200){
+        let res = JSON.parse(this.response);
+        status_txt.dataset.status = status;
+      }
+    };
+    xhr.send(JSON.stringify({id:id, status:status}));
+  });
+});
 // 데이터 테이블 컬럼 추가
 function fnAddCol() {
   document.querySelectorAll('tr').forEach(function (tr) {
