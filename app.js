@@ -10,6 +10,7 @@ const homeRoute = require('./router/home');
 const authRoute = require('./router/auth');
 const detailRoute = require('./router/detail');
 const adminRoute = require('./router/admin');
+const middle = require('./router/middlewares');
 
 // require('./passport.js');
 const connect = require('./model');
@@ -54,6 +55,6 @@ app.use(passport.session());
 app.use('/', homeRoute);
 app.use('/auth', authRoute);
 app.use('/detail', detailRoute);
-app.use('/admin', adminRoute);
+app.use('/admin', middle.isAdmin, adminRoute);
 
 app.listen(process.env.PORT, ()=>{console.log(process.env.PORT, ' port has started')});

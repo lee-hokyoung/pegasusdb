@@ -1,5 +1,6 @@
 extends layout
 block content
+	include nav
 	.container
 		.bg-gradient-zhupao
 			.container.text-center
@@ -19,3 +20,5 @@ block content
 							else
 								a.d-block.font-weight-bold.text-secondary #{sub.cate_name}
 block append_js
+	script.
+		console.log(!{JSON.stringify(user)});

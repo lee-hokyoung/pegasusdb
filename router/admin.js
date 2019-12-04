@@ -7,7 +7,6 @@ const cityModel = require('../model/cityModel');
 const dataModel = require('../model/dataModel');
 const mongoose = require('mongoose');
 const configModel = require('../model/configModel');
-
 // 사용자 등록
 let category = [
   {
@@ -100,9 +99,11 @@ router.get('/user/register', async (req, res) => {
     },
     {$sort: {group_order: 1}}
   ]);
+  let user = req.user;
   res.render('admin_user_register', {
     category: category,
-    active: 'user_register'
+    active: 'user_register',
+    user:user
   });
 });
 router.post('/user/register', async (req, res) => {
@@ -119,6 +120,7 @@ router.post('/user/register', async (req, res) => {
 });
 // 사용자 관리
 router.get('/user/list', async (req, res) => {
+  let user = req.user;
   let users = await userModel.aggregate([
     {
       $lookup: {
@@ -131,7 +133,8 @@ router.get('/user/list', async (req, res) => {
   ]);
   res.render('admin_user_list', {
     users: users,
-    active: 'user_list'
+    active: 'user_list',
+    user:user
   })
 });
 // 사용자 조회
@@ -170,6 +173,7 @@ router.post('/user/status', async (req, res) => {
 });
 // 데이터 등록 화면
 router.get('/data/register', async (req, res) => {
+  let user = req.user;
   let category = await categoryModel.aggregate([
     {
       $group: {
@@ -187,7 +191,8 @@ router.get('/data/register', async (req, res) => {
     category: category,
     region: region,
     city: city,
-    obj: obj
+    obj: obj,
+    user:user
   });
 });
 // 데이터 등록
@@ -198,6 +203,7 @@ router.post('/data/register', async (req, res) => {
 });
 // 데이터 리스트
 router.get('/data/list', async (req, res) => {
+  let user = req.user;
   let data = [
     {
       id: 'A7777', title: '중국 허난성 지역 내 헤어 미용실 수 2019', unit: '개',
@@ -214,7 +220,8 @@ router.get('/data/list', async (req, res) => {
   res.render('admin_data_list', {
     active: 'data_list',
     data: data,
-    list: list
+    list: list,
+    user:user
   });
 });
 // 데이터 삭제
@@ -224,6 +231,7 @@ router.delete('/data/:id', async (req, res) => {
 });
 // 데이터 read
 router.get('/data/read/:id', async (req, res) => {
+  let user = req.user;
   let doc = await dataModel.findOne({_id: req.params.id});
   let category = await categoryModel.aggregate([
     {
@@ -242,7 +250,8 @@ router.get('/data/read/:id', async (req, res) => {
     category: category,
     region: region,
     city: city,
-    obj: obj
+    obj: obj,
+    user:user
   });
 });
 // 데이터 update
@@ -253,9 +262,11 @@ router.put('/data/update/:id', async (req, res) => {
 // 환경설정 (Set-up)
 router.get('/config', async (req, res) => {
   let data = await configModel.findOne({});
+  let user = req.user;
   res.render('admin_config', {
     active: 'config',
-    data: data
+    data: data,
+    user:user
   });
 });
 router.post('/config', async (req, res) => {

@@ -1,9 +1,9 @@
 const jwt = require('jsonwebtoken');
 const User = require('../model/userModel');
+const basicAuth = require('basic-auth-connect');
 
 exports.isLoggedIn = (req, res, next) => {
   if (req.isAuthenticated()) {
-    res.locals.user_lv = req.session.passport.user.lv;
     next();
   } else {
     res.redirect('/auth/login');
@@ -18,12 +18,10 @@ exports.isNotLoggedIn = (req, res, next) => {
 };
 exports.isAdmin = (req, res, next) => {
   if (req.isAuthenticated()) {
-    if (req.session.passport.user.lv > 1) {
-      res.locals.user_lv = req.session.passport.user.lv;
+    if(req.user.lv === 9){
       next();
-    } else {
-      let msg = '<script>alert("접근권한이 없습니다.");history.back();</script>';
-      res.send(msg);
+    }else{
+      res.send('<script>alert("권한이 없습니다."); location.href = "/auth/login";</script>');
     }
   } else {
     res.redirect('/auth/login');

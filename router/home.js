@@ -30,7 +30,8 @@ router.get('', middle.isLoggedIn, async (req, res) => {
   ]);
   res.render('home', {
     category: category,
-    user_category:user.category
+    user_category:user.category,
+    user:user
   });
 });
 // list 화면
@@ -57,7 +58,8 @@ router.get('/list/:cate/:cate_item?', middle.isLoggedIn, async (req, res) => {
     city_list: city_list,
     object: obj,
     strQuery: strQuery,
-    user_category:user.category
+    user_category:user.category,
+    user:user
   });
 });
 // get by ajax
