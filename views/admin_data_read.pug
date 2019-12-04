@@ -1,67 +1,67 @@
 extends admin_layout
 block content
 	link(rel='stylesheet', href='/assets/stylesheet/style.css')
-
-	.input-group.mt-3
-		label.text-zhupao.my-auto 제목
-		input.text-center.form-control.text-secondary.font-italic(type='text', title='제목', name='data_title', value=doc.data_title)
-	.input-group.mt-3
-		label.text-zhupao.my-auto 단위
-		input.text-center.form-control.text-secondary.font-italic(type='text', title='단위', name='data_unit', value=doc.data_unit)
-	.input-group.mt-3
-		label.text-zhupao.my-auto 그래프유형
-		.row(style='flex:1')
-			.col-3
-				.d-flex.justify-content-between
-					img(src='/assets/images/verticalBar_admin.JPG', alt='세로 바차트', style='width:50%')
-					input.form-control(type='radio', name='chart_type', value='bar_chart_vertical', checked=doc.chart_type==='bar_chart_vertical')
-			.col-3
-				.d-flex.justify-content-between
-					img(src='/assets/images/horizonBar_admin.JPG', alt='가로 바차트', style='width:50%')
-					input.form-control(type='radio', name='chart_type', value='bar_chart_horizontal', checked=doc.chart_type==='bar_chart_horizontal')
-			.col-3
-				.d-flex.justify-content-between
-					img(src='/assets/images/pie_admin.JPG', alt='파이차트', style='width:50%')
-					input.form-control(type='radio', name='chart_type', value='pie_chart', checked=doc.chart_type==='pie_chart')
-			.col-3
-				.d-flex.justify-content-between
-					img(src='/assets/images/line_admin.JPG', alt='선형그래프', style='width:50%')
-					input.form-control(type='radio', name='chart_type', value='line_chart', checked=doc.chart_type==='line_chart')
-	.input-group.mt-3
-		label.text-zhupao.my-auto 내용(데이터)
-		.overflow-auto(style='flex:1')
-			.table.table-responsive#table_content
-				table.table
-					thead
-						tr(data-type='x', data-idx=doc.table_x.content.length)
-							th
-								input(type='text', name='chart_x', value=doc.table_x.title, data-title='true')
-							td.space_td
-							each x, idx in doc.table_x.content
-								td
-									input(type='text', name='x_data_' + (idx + 1), value=x)
-					tbody(data-row=doc.table_y.length)
-						each tr, tr_idx in doc.table_y
-							tr(data-type='y', data-idx=tr.content.length, data-row_idx=(tr_idx + 1))
+	#register-list-warp
+		.input-group.mt-3
+			label.text-zhupao.my-auto 제목
+			input.text-center.form-control(type='text', title='제목', name='data_title', value=doc.data_title)
+		.input-group.mt-3
+			label.text-zhupao.my-auto 단위
+			input.text-center.form-control(type='text', title='단위', name='data_unit', value=doc.data_unit)
+		.input-group.mt-3
+			label.text-zhupao.my-auto 그래프유형
+			.row(style='flex:1')
+				.col-3
+					.d-flex.justify-content-between
+						img(src='/assets/images/acc_vertical_admin.JPG', alt='세로 바차트', style='width:50%')
+						input.form-control(type='radio', name='chart_type', value='bar_chart_vertical', checked=doc.chart_type==='bar_chart_vertical')
+				.col-3
+					.d-flex.justify-content-between
+						img(src='/assets/images/acc_horizontal_admin.JPG', alt='가로 바차트', style='width:50%')
+						input.form-control(type='radio', name='chart_type', value='bar_chart_horizontal', checked=doc.chart_type==='bar_chart_horizontal')
+				.col-3
+					.d-flex.justify-content-between
+						img(src='/assets/images/pie_admin.JPG', alt='파이차트', style='width:50%')
+						input.form-control(type='radio', name='chart_type', value='pie_chart', checked=doc.chart_type==='pie_chart')
+				.col-3
+					.d-flex.justify-content-between
+						img(src='/assets/images/line_admin.JPG', alt='선형그래프', style='width:50%')
+						input.form-control(type='radio', name='chart_type', value='line_chart', checked=doc.chart_type==='line_chart')
+		.input-group.mt-3
+			label.text-zhupao.my-auto 내용(데이터)
+			.overflow-auto(style='flex:1')
+				.table.table-responsive#table_content
+					table.table
+						thead
+							tr(data-type='x', data-idx=doc.table_x.content.length)
 								th
-									input(type='text', name='chart_y', value=tr.title, data-title='true')
+									input(type='text', name='chart_x', value=doc.table_x.title, data-title='true')
 								td.space_td
-								each y, idx in tr.content
+								each x, idx in doc.table_x.content
 									td
-										input(type='text', name='y_data_' + (idx + 1), value=y)
-			.d-flex.justify-content-center
-				div.mr-3
-					span.mr-3 x 축
-					button.btn.btn-sm.btn-success.mr-2(onclick='fnAddCol()') +
-					button.btn.btn-sm.btn-danger(onclick='fnRemoveCol()') -
-				div
-					span.mr-3 y 축
-					button.btn.btn-sm.btn-success.mr-2(onclick='fnAddRow()') +
-					button.btn.btn-sm.btn-danger(onclick='fnRemoveRow()') -
-			.d-flex
-	.input-group.mt-3
-		label.text-zhupao.my-auto 자료번호
-		input.text-center.form-control.text-secondary.font-italic(type='text', name='data_no', value=doc.data_no)
+										input(type='text', name='x_data_' + (idx + 1), value=x)
+						tbody(data-row=doc.table_y.length)
+							each tr, tr_idx in doc.table_y
+								tr(data-type='y', data-idx=tr.content.length, data-row_idx=(tr_idx + 1))
+									th
+										input(type='text', name='chart_y', value=tr.title, data-title='true')
+									td.space_td
+									each y, idx in tr.content
+										td
+											input(type='text', name='y_data_' + (idx + 1), value=y)
+				.d-flex.justify-content-center
+					div.mr-3
+						span.mr-3 x 축
+						button.btn.btn-sm.btn-success.mr-2(onclick='fnAddCol()') +
+						button.btn.btn-sm.btn-danger(onclick='fnRemoveCol()') -
+					div
+						span.mr-3 y 축
+						button.btn.btn-sm.btn-success.mr-2(onclick='fnAddRow()') +
+						button.btn.btn-sm.btn-danger(onclick='fnRemoveRow()') -
+				.d-flex
+		.input-group.mt-3
+			label.text-zhupao.my-auto 자료번호
+			input.text-center.form-control(type='text', name='data_no', value=doc.data_no)
 	.input-group.mt-3
 		label.text-zhupao.my-auto 이미지 입력
 		.border.d-flex.justify-content-between.mb-2

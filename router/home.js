@@ -16,8 +16,8 @@ let obj = [
 ];
 
 // main 화면
-router.get('', middle.checkAuth, async (req, res) => {
-  let user = res.locals.user_info;
+router.get('', middle.isLoggedIn, async (req, res) => {
+  let user = req.user;
   let category = await categoryModel.aggregate([
     {
       $group: {
@@ -34,7 +34,7 @@ router.get('', middle.checkAuth, async (req, res) => {
   });
 });
 // list 화면
-router.get('/list/:cate/:cate_item?', middle.checkAuth, async (req, res) => {
+router.get('/list/:cate/:cate_item?', middle.isLoggedIn, async (req, res) => {
   let strQuery = req.query;
   let cate = req.params.cate;
   let cate_item = req.params.cate_item;
@@ -42,7 +42,7 @@ router.get('/list/:cate/:cate_item?', middle.checkAuth, async (req, res) => {
   let region_list = await regionModel.find({});
   let city_list = await cityModel.find({});
   let list = await fnGetList(strQuery, req.params);
-  let user = res.locals.user_info;
+  let user = req.user;
   if(user.category.indexOf(cate_item) === -1){
     let msg = '<script>alert("접근권한이 없습니다.");history.back();</script>';
     res.send(msg);
@@ -61,7 +61,7 @@ router.get('/list/:cate/:cate_item?', middle.checkAuth, async (req, res) => {
   });
 });
 // get by ajax
-router.get('/ajax/list/:cate/:cate_item?', middle.checkAuth, async (req, res) => {
+router.get('/ajax/list/:cate/:cate_item?', middle.isLoggedIn, async (req, res) => {
   let strQuery = req.query;
   let list = await fnGetList(strQuery, req.params);
   res.json({list:list, cate:req.params.cate, cate_item:req.params.cate_item});
