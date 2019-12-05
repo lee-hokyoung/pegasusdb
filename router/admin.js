@@ -7,6 +7,10 @@ const cityModel = require('../model/cityModel');
 const dataModel = require('../model/dataModel');
 const mongoose = require('mongoose');
 const configModel = require('../model/configModel');
+const multer = require('multer');
+const fs = require('fs');
+const path = require('path');
+
 // 사용자 등록
 let category = [
   {
@@ -88,6 +92,7 @@ let obj = [
   {name: 'Consumer'},
   {name: 'Company'}
 ];
+// 사용자 등록 화면
 router.get('/user/register', async (req, res) => {
   let category = await categoryModel.aggregate([
     {
@@ -106,6 +111,7 @@ router.get('/user/register', async (req, res) => {
     user:user
   });
 });
+// 사용자 등록
 router.post('/user/register', async (req, res) => {
   let exUser = await userModel.findOne({user_id: req.body.user_id});
   let exUserNo = await userModel.findOne({user_no: req.body.user_no});
@@ -122,6 +128,7 @@ router.post('/user/register', async (req, res) => {
 router.get('/user/list', async (req, res) => {
   let user = req.user;
   let users = await userModel.aggregate([
+    {$match:{lv:1}},
     {
       $lookup: {
         from: 'categories',
@@ -197,7 +204,35 @@ router.get('/data/register', async (req, res) => {
 });
 // 데이터 등록
 router.post('/data/register', async (req, res) => {
+  // temp 폴더 내에 모든 파일을 삭제
+  if(typeof req.body.files !== 'undefined'){
+    // path 에 올라온 파일들을 downloads 파일로 복사
+    let uploaded_files = req.body.files.path;
+    uploaded_files.forEach(function(v){
+      fs.createReadStream('./' + v)
+        .pipe(fs.createWriteStream('./downloads' + v.replace('temps','')));
+    });
+    console.log('files : ', req.body.files);
+    let directory = './temps';
+    fs.readdir(directory, (err, files) => {
+      if(!err){
+        try{
+          console.log('files : ', files);
+          for(let file of files){
+            if(uploaded_files.indexOf(file) === -1)
+              fs.unlink(path.join(directory, file), err => {
+                if(err) throw err;
+              });
+          }
+        }catch(e){
+          console.error(e);
+        }
+      }
+    });
+  }
+
   let data = req.body;
+  console.log('data : ', data);
   let result = await dataModel.create(data);
   res.json(result);
 });
@@ -258,6 +293,23 @@ router.get('/data/read/:id', async (req, res) => {
 router.put('/data/update/:id', async (req, res) => {
   let result = await dataModel.updateMany({_id: req.params.id}, req.body);
   res.json(result);
+});
+// 파일 upload
+const upload = multer({
+  storage: multer.diskStorage({
+    destination(req, file, cb) {
+      cb(null, './temps');
+    },
+    filename(req, file, cb) {
+      const ext = path.extname(file.originalname);
+      cb(null, path.basename(file.originalname, ext) + new Date().valueOf() + ext);
+    }
+  }),
+  limits:{fileSize:2*1024*1024}
+});
+router.post('/data/file_upload', upload.array('file', 10), async(req, res) => {
+  let files = await req.files;
+  res.json(files);
 });
 // 환경설정 (Set-up)
 router.get('/config', async (req, res) => {

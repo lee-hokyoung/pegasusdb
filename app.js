@@ -29,7 +29,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cookieParser());
 app.use('/chart.js', express.static(path.join(__dirname, 'node_modules/chart.js/dist')));
 app.use('/bootstrap-select', express.static(path.join(__dirname, 'node_modules/bootstrap-select/dist')));
-
+app.use('/downloads', express.static(path.join(__dirname, 'downloads')));
 app.use(session({
   secret: process.env.COOKIE_SECRET,
   resave: false,

@@ -36,21 +36,21 @@ block content
           div.border-bottom(style='flex:2')
         .d-flex
           .border
-            button.btn.d-flex.justify-content-between.p-2
+            a.btn.d-flex.justify-content-between.p-2(href=(data.add_png?'/downloads/' + data.add_png:'javascript:void(0);'), target='_blank', class=data.add_png?'':'disabled')
               img.icon-img(src='/assets/svgs/png.svg')
               span PNG
           .border.ml-2
-            button.btn.d-flex.justify-content-between.p-2
+            a.btn.d-flex.justify-content-between.p-2(href=(data.add_ppt?'/downloads/' + data.add_ppt:'javascript:void(0);'), target='_blank', class=data.add_ppt?'':'disabled')
               img.icon-img(src='/assets/svgs/ppt.svg')
-              span PNG
+              span PPT
           .border.ml-2
-            button.btn.d-flex.justify-content-between.p-2
+            a.btn.d-flex.justify-content-between.p-2(href=(data.add_xls?'/downloads/' + data.add_xls:'javascript:void(0);'), target='_blank', class=data.add_xls?'':'disabled')
               img.icon-img(src='/assets/svgs/xls.svg')
-              span PNG
+              span XLS
           .border.ml-2
-            button.btn.d-flex.justify-content-between.p-2
+            a.btn.d-flex.justify-content-between.p-2(href=(data.add_pdf?'/downloads/' + data.add_pdf:'javascript:void(0);'), target='_blank', class=data.add_pdf?'':'disabled')
               img.icon-img(src='/assets/svgs/pdf.svg')
-              span PNG
+              span PDF
         ul#pills-tab.nav.nav-pills.mt-4.mb-3.pb-2.border-bottom(role="tablist")
           li.nav-item
             a#pills-home-tab.nav-link.active.rounded-0.border.border-primary.py-1(data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true") DESCRIPTION
