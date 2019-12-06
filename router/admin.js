@@ -261,6 +261,14 @@ router.get('/data/list', async (req, res) => {
 });
 // 데이터 삭제
 router.delete('/data/:id', async (req, res) => {
+  // 데이터 내에 첨부 파일 경로 찾아서 삭제하기
+  let data = await dataModel.findOne({_id: req.params.id});
+  if(data.add_img_graph) fs.unlink('./downloads/' + data.add_img_graph, err => {if(err) throw err;});
+  if(data.add_pdf) fs.unlink('./downloads/' + data.add_pdf, err => {if(err) throw err;});
+  if(data.add_png) fs.unlink('./downloads/' + data.add_png, err => {if(err) throw err;});
+  if(data.add_ppt) fs.unlink('./downloads/' + data.add_ppt, err => {if(err) throw err;});
+  if(data.add_xls) fs.unlink('./downloads/' + data.add_xls, err => {if(err) throw err;});
+
   let result = await dataModel.deleteOne({_id: req.params.id});
   res.json(result);
 });

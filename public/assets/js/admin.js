@@ -43,10 +43,10 @@ function fnRegisterUser() {
     return false;
   }
   let data = {}, category = [];
-  document.querySelectorAll('input[type="text"]').forEach(function(v){
+  document.querySelectorAll('input[type="text"]').forEach(function (v) {
     data[v.name] = v.value;
   });
-  document.querySelectorAll('input[type="checkbox"]:checked').forEach(function(v){
+  document.querySelectorAll('input[type="checkbox"]:checked').forEach(function (v) {
     category.push(v.name);
   });
   data['category'] = category;
@@ -68,6 +68,7 @@ function fnRegisterUser() {
   };
   xhr.send(JSON.stringify(data));
 }
+
 //  사용자 검색
 function fnSearch() {
   let searchText = document.querySelector('input[name="searchText"]');
@@ -85,17 +86,18 @@ function fnSearch() {
       fnGenerateUserList(res);
     }
   };
-  xhr.send(JSON.stringify({searchText:searchText.value}));
+  xhr.send(JSON.stringify({searchText: searchText.value}));
 }
+
 function fnGenerateUserList(res) {
   console.log('res : ', res);
   let list_wrap = document.querySelector('.user-list-wrap');
   list_wrap.innerHTML = '';
-  res.forEach(function(v, idx){
+  res.forEach(function (v, idx) {
     // li Element
     let li = document.createElement('li');
     li.classList.add('list-group-item');
-    if(idx%2===1) li.classList.add('list-group-item-secondary');
+    if (idx % 2 === 1) li.classList.add('list-group-item-secondary');
     // 로우
     let row = document.createElement('div');
     row.classList.add('row');
@@ -132,16 +134,16 @@ function fnGenerateUserList(res) {
     let col8 = document.createElement('div');
     col8.classList.add('col-1');
     console.log(v.cate_info.length);
-    for(let i = 0; i < (v.cate_info.length < 4 ? v.cate_info.length : 4); i++){
+    for (let i = 0; i < (v.cate_info.length < 4 ? v.cate_info.length : 4); i++) {
       col8.append(v.cate_info[i].cate_name);
       col8.appendChild(document.createElement('br'));
     }
-    if(v.cate_info.length > 4){
+    if (v.cate_info.length > 4) {
       let collapse = document.createElement('div');
       collapse.classList.add('overflow-hidden', 'collapse');
       collapse.setAttribute('style', 'line-height:1.3em;');
       collapse.id = 'cate_' + v._id;
-      for(let i = 3; i < v.cate_info.length; i++){
+      for (let i = 3; i < v.cate_info.length; i++) {
         collapse.append(v.cate_info[i].cate_name);
         collapse.appendChild(document.createElement('br'));
       }
@@ -171,7 +173,7 @@ function fnGenerateUserList(res) {
     // 열번째 컬럼(상태)
     let col10 = document.createElement('div');
     col10.classList.add('col-1');
-    col10.innerText = v.status === 1 ? '제공':v.status === 2 ? '중지':'삭제';
+    col10.innerText = v.status === 1 ? '제공' : v.status === 2 ? '중지' : '삭제';
     row.appendChild(col1);
     row.appendChild(col2);
     row.appendChild(col3);
@@ -188,9 +190,9 @@ function fnGenerateUserList(res) {
 }
 
 // 사용자 상태 변경 버튼 클릭 이벤트
-document.addEventListener("DOMContentLoaded", function(){
-  document.querySelectorAll('.status-btn-wrap button').forEach(function(btn){
-    btn.addEventListener('click', function(e){
+document.addEventListener("DOMContentLoaded", function () {
+  document.querySelectorAll('.status-btn-wrap button').forEach(function (btn) {
+    btn.addEventListener('click', function (e) {
       console.log(btn);
       let id = btn.parentElement.dataset.id;
       let status = btn.dataset.status;
@@ -198,13 +200,14 @@ document.addEventListener("DOMContentLoaded", function(){
       let status_txt = document.querySelector('.colorStatus[data-id="' + id + '"]');
       xhr.open('POST', '/admin/user/status', true);
       xhr.setRequestHeader('Content-Type', 'application/json');
-      xhr.onreadystatechange = function(){
-        if(this.readyState === XMLHttpRequest.DONE && this.status === 200){
+      xhr.onreadystatechange = function () {
+        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
           let res = JSON.parse(this.response);
           status_txt.dataset.status = status;
+          alert('변경되었습니다.');
         }
       };
-      xhr.send(JSON.stringify({id:id, status:status}));
+      xhr.send(JSON.stringify({id: id, status: status}));
     });
   });
 });
@@ -227,10 +230,10 @@ function fnAddCol() {
 }
 
 // 데이터 테이블 컬럼 제거
-function fnRemoveCol(){
-  document.querySelectorAll('tr').forEach(function(tr){
+function fnRemoveCol() {
+  document.querySelectorAll('tr').forEach(function (tr) {
     let target_idx = tr.dataset.idx;
-    if(target_idx){
+    if (target_idx) {
       tr.querySelector('td[data-idx="' + target_idx + '"]').remove();
       tr.dataset.idx = target_idx - 1;
     }
@@ -327,19 +330,6 @@ function fnGenerateFormData() {
     });
     table_y.push(tr_obj);
   });
-
-  // let table_obj = {};
-  // document.querySelectorAll('table tr').forEach(function(tr){
-  //     let name = tr.querySelector('th input').value;
-  //     table_obj[name] = [];
-  //     tr.querySelectorAll('td input').forEach(function(input){
-  //         if(input.value !== ''){
-  //             let td_obj = {};
-  //             td_obj[input.name] = input.value;
-  //             table_obj[name].push(td_obj);
-  //         }
-  //     });
-  // });
   let data_no = document.querySelector('input[name="data_no"]');
   if (data_no.value === '') fnAlertNFocus(data_no);
 
@@ -356,21 +346,14 @@ function fnGenerateFormData() {
   });
   let region_array = [];
   document.querySelectorAll('#region input:checked').forEach(function (input) {
-    // let obj = {};
-    // obj[input.id] = input.value;
-    // region_array.push(obj);
     region_array.push(input.value);
   });
   let city_array = [];
   document.querySelectorAll('#city input:checked').forEach(function (input) {
-    // let obj = {};
-    // obj[input.id] = input.value;
-    // city_array.push(obj);
     city_array.push(input.value);
   });
   let object = [];
   document.querySelectorAll('input[name="obj"]:checked').forEach(function (input) {
-    // object.push(input.value);
     object.push(input.value);
   });
   let description = document.querySelector('textarea[name="description"]');
@@ -389,13 +372,25 @@ function fnGenerateFormData() {
   post_data['object'] = object;
   post_data['description'] = description.value;
   post_data['source'] = source.value;
+
+  // file upload. path, original name 이 있는지 확인 후 post_data 에 등록
+  let path_arr = [], originalname_arr = [];
+  document.querySelectorAll('input[type="file"]').forEach(function (file) {
+    if (file.value) {
+      path_arr.push(file.dataset.path);
+      originalname_arr.push(file.dataset.originalname);
+      post_data[file.name] = file.dataset.path.replace('temps\/', '');
+    }
+  });
+  post_data['files'] = {'path':path_arr, 'originalname':originalname_arr};
+  console.log('post data : ', post_data);
   return post_data;
 }
 
 // 알람 띄우기 & 포커싱
 function fnAlertNFocus(obj) {
-  // alert(obj.title + '값을 입력해주세요.');
-  // obj.focus();
+  alert(obj.title + '값을 입력해주세요.');
+  obj.focus();
 }
 
 // 데이터 업데이트
@@ -417,7 +412,6 @@ function fnUpdateData(id) {
   };
   xhr.send(JSON.stringify(post_data));
 }
-
 // 데이터 삭제
 function fnDeleteData(id) {
   if (confirm('정말 삭제시겠습니까?')) {
@@ -427,18 +421,48 @@ function fnDeleteData(id) {
     xhr.onreadystatechange = function () {
       if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
         let res = JSON.parse(this.response);
-        if (res.res === 1) {
-          let tr = document.querySelector('li[about="' + id + '"]');
-          tr.remove();
+        if (res.ok === 1) {
+          let li = document.querySelector('li[about="' + id + '"]');
+          li.remove();
+          alert('삭제되었습니다.');
         }
       }
     };
     xhr.send();
   }
 }
+/*
+*   파일 업로드
+*   1. 각각의 파일 입력 폼에 파일이 등록되면 change 이벤트 발생
+*   2. 파일이 있을 경우, 서버(temp 폴더)에 파일을 업로드
+*   3. 업로드 된 파일의 경로명(path), 파일명(originalname) 을 해당 input Element 의 dataset 에 기록한다.
+*   3. 파일이 없을 경우, 변화가 없으나 최종적으로 submit 을 할 때, value 유무 확인한 후 dataset 내용 업로드
+*/
+document.querySelectorAll('input[type="file"]').forEach(function (file) {
+  file.addEventListener('change', function (e) {
+    const formData = new FormData();
+    Object.keys(e.target.files).forEach(function (key) {
+      formData.append('file', e.target.files[key], e.target.files[key].name);
+    });
+    if (e.target.files.length > 0) {
+      let xhr = new XMLHttpRequest();
+      xhr.open('POST', '/admin/data/file_upload');
+      xhr.onreadystatechange = function () {
+        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+          let res = JSON.parse(this.response);
+          res.forEach(function (v) {
+            file.dataset.path = v.path;
+            file.dataset.originalname = v.originalname;
+          });
+        }
+      };
+      xhr.send(formData);
+    }
+  })
+});
 
 // config update
-function fnUpdateConfig(){
+function fnUpdateConfig() {
   console.log('1');
   let forgot_password = document.querySelector('input[name="forgot_password"]').value;
   let request_report = document.querySelector('input[name="request_report"]').value;
@@ -447,14 +471,18 @@ function fnUpdateConfig(){
   let xhr = new XMLHttpRequest();
   xhr.open('POST', '/admin/config', true);
   xhr.setRequestHeader('Content-Type', 'application/json');
-  xhr.onreadystatechange = function(){
-    if(this.readyState === XMLHttpRequest.DONE && this.status === 200){
+  xhr.onreadystatechange = function () {
+    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
       let res = JSON.parse(this.response);
       console.log('res : ', res);
-      if(res.code === 1){
+      if (res.code === 1) {
         alert('정상적으로 수정되었습니다.');
       }
     }
   };
-  xhr.send(JSON.stringify({forgot_password:forgot_password,request_report:request_report,request_data:request_data}));
+  xhr.send(JSON.stringify({
+    forgot_password: forgot_password,
+    request_report: request_report,
+    request_data: request_data
+  }));
 }

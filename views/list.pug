@@ -1,11 +1,12 @@
 extends layout
 block content
-	include nav
 	- var group_info = cate_list[0];
 	.container
 		.bg-gradient-zhupao
-			a(href='/')
-				img(src='/assets/images/pegasus_logo.jpg', alt='logo', style='width:250px;')
+			.d-flex.justify-content-between
+				a(href='/')
+					img(src='/assets/images/pegasus_logo.jpg', alt='logo', style='width:250px;')
+				include nav
 		.w-100.bg-gradient-primary.mb-3
 			h5.m-0.text-white.p-2
 				a.text-white(href='/') Home

@@ -1,8 +1,6 @@
-.container-fluid.fixed-top
-	.container
-		ul.nav.justify-content-end.text-white
-			if(user)
-				li.nav-item
-					.py-2 #{user.manager_name}님 안녕하세요
-				li.nav-item
-					a.nav-link.py-2(href='/auth/logout') logout
+ul.nav.justify-content-end.text-white
+	if(user)
+		li.nav-item
+			.py-2 #{user.manager_name}님 안녕하세요
+		li.nav-item
+			a.nav-link.py-2(href='/auth/logout') logout
