@@ -25,6 +25,12 @@ router.post('/login', middle.isNotLoggedIn, (req, res, next) => {
         console.error(loginError);
         return next(loginError);
       }
+      console.log('user : ', user);
+      if(user.status !== 1){
+        req.logout();
+        req.session.destroy();
+        res.send('<script>alert("로그인 권한이 없는 ID 입니다."); location.href = "/auth/login";</script>');
+      }
       return res.redirect('/');
     });
   })(req, res, next);

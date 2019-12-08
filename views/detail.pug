@@ -29,7 +29,10 @@ block content
         h5.text-right 단위 : #{data.data_unit}
         .card
           .card-body.shadow
-            canvas#chart(width='100%', height='50')
+            if(data.add_img_graph)
+              img(src='/downloads/' + data.add_img_graph)
+            else
+              canvas#chart(width='100%', height='50')
         h6.text-right.text-zhupao.mt-3 Data No. #{data.data_no}
       .col-4.font-weight-bold
         .d-flex.mb-2
@@ -71,86 +74,90 @@ block append_js
   script.
     let d = !{JSON.stringify(data)};
     console.log('d : ', d);
-    // 차트 색 설정
-    let bg_list = [
-      'rgba(255, 99, 132, 0.4)', 'rgba(54, 162, 235, 0.4)', 'rgba(255, 206, 86, 0.4)', 'rgba(75, 192, 192, 0.4)', 'rgba(153, 102, 255, 0.4)', 'rgba(255, 159, 64, 0.4)'
-    ];
-    // 차트 타입
-    let chart_type = '';
-    switch (d.chart_type) {
-      case 'bar_chart_vertical':
-        chart_type = 'bar';
-        break;
-      case 'bar_chart_horizontal':
-        chart_type = 'horizontalBar';
-        break;
-      case 'pie_chart':
-        chart_type = 'pie';
-        break;
-      case 'line_chart':
-        chart_type = 'line';
-        break;
-    }
-    let x = d.table_x;
-    let y = d.table_y;
-    let barChartData = {};
+    if(d.add_img_graph){
 
-    // 파이차트의 경우 좌표를 재배열해준다.
-    if (chart_type === 'pie') {
-      barChartData.datasets = [];
-      barChartData.labels = y.map(function (v) {
-        return v.title
-      });
+    }else{
+      // 차트 색 설정
+      let bg_list = [
+        'rgba(255, 99, 132, 0.4)', 'rgba(54, 162, 235, 0.4)', 'rgba(255, 206, 86, 0.4)', 'rgba(75, 192, 192, 0.4)', 'rgba(153, 102, 255, 0.4)', 'rgba(255, 159, 64, 0.4)'
+      ];
+      // 차트 타입
+      let chart_type = '';
+      switch (d.chart_type) {
+        case 'bar_chart_vertical':
+          chart_type = 'bar';
+          break;
+        case 'bar_chart_horizontal':
+          chart_type = 'horizontalBar';
+          break;
+        case 'pie_chart':
+          chart_type = 'pie';
+          break;
+        case 'line_chart':
+          chart_type = 'line';
+          break;
+      }
+      let x = d.table_x;
+      let y = d.table_y;
+      let barChartData = {};
 
-      let size = x.content.length;
-      // y 축 자료 피벗
-      for (let i = 0; i < size; i++) {
-        let new_y = {};
-        let arr = [];
-        let bg_arr = [];
-        y.forEach(function (v, idx) {
-          arr.push(v.content[i]);
-          bg_arr.push(bg_list[idx % 6]);
+      // 파이차트의 경우 좌표를 재배열해준다.
+      if (chart_type === 'pie') {
+        barChartData.datasets = [];
+        barChartData.labels = y.map(function (v) {
+          return v.title
         });
-        new_y.data = arr;
-        // new_y.label = x.content[i];
-        new_y.label = x.content;
-        new_y.backgroundColor = bg_arr;
-        barChartData.datasets.push(new_y);
+
+        let size = x.content.length;
+        // y 축 자료 피벗
+        for (let i = 0; i < size; i++) {
+          let new_y = {};
+          let arr = [];
+          let bg_arr = [];
+          y.forEach(function (v, idx) {
+            arr.push(v.content[i]);
+            bg_arr.push(bg_list[idx % 6]);
+          });
+          new_y.data = arr;
+          // new_y.label = x.content[i];
+          new_y.label = x.content;
+          new_y.backgroundColor = bg_arr;
+          barChartData.datasets.push(new_y);
+        }
+        barChartData.datasets.sort(function (a, b) {
+          return a.label < b.label ? 1 : -1
+        });
+      } else {
+        barChartData.labels = d.table_x.content;
+        barChartData.datasets = [];
+        d.table_y.forEach(function (row, idx) {
+          let obj = {};
+          obj.label = row.title;
+          obj.data = row.content;
+          obj.backgroundColor = bg_list[idx % 6];
+          barChartData.datasets.push(obj);
+        });
       }
-      barChartData.datasets.sort(function (a, b) {
-        return a.label < b.label ? 1 : -1
-      });
-    } else {
-      barChartData.labels = d.table_x.content;
-      barChartData.datasets = [];
-      d.table_y.forEach(function (row, idx) {
-        let obj = {};
-        obj.label = row.title;
-        obj.data = row.content;
-        obj.backgroundColor = bg_list[idx % 6];
-        barChartData.datasets.push(obj);
+      console.log('barChartData : ', barChartData);
+      let ctx = document.getElementById('chart');
+      let chart = new Chart(ctx, {
+        type: chart_type,
+        data: barChartData,
+        options: {
+          scales: {
+            xAxes: [{
+              stacked: true
+            }],
+            yAxes: [
+              {
+                // ticks: {
+                //   beginAtZero: true, callback: function (value, index, values) {
+                //     // console.log(value, index, values);
+                //   }
+                // },
+                stacked: true
+              }]
+          }
+        }
       });
     }
-    console.log('barChartData : ', barChartData);
-    let ctx = document.getElementById('chart');
-    let chart = new Chart(ctx, {
-      type: chart_type,
-      data: barChartData,
-      options: {
-        scales: {
-          xAxes: [{
-            stacked: true
-          }],
-          yAxes: [
-            {
-              // ticks: {
-              //   beginAtZero: true, callback: function (value, index, values) {
-              //     // console.log(value, index, values);
-              //   }
-              // },
-              stacked: true
-            }]
-        }
-      }
-    });
