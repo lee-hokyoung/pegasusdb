@@ -4,3 +4,5 @@ ul.nav.justify-content-end.text-white
 			.py-2 #{user.manager_name}님 안녕하세요
 		li.nav-item
 			a.nav-link.py-2(href='/auth/logout') logout
+	if(user.lv === 9)
+		a.nav-link.py-2.float-right(href='/admin/data/list') 관리자모드

@@ -1,42 +1,68 @@
 extends admin_layout
 block content
-	style.
-		#data_list li .text-normal{white-space:normal !important;}
-		#data_list .btn{font-size:11px !important;}
-	ul.list-group.list-group-flush.text-center#data_list
-		li.list-group-item.list-group-item-dark
-			.row.small.text-nowrap
-				.col-1 자료번호
-				.col-2 제목
-				.col-1 단위
-				.col-1 Category
-				.col-1 Region
-				.col-1 Object
-				.col-2 업데이트/삭제
-				.col-1 상태
-				.col-2 업데이트 일자
-		each item in list
-			- var date = new Date(item.updated);
-			li.list-group-item(about=item._id)
-				.row.small.text-nowrap
-					.col-1 #{item.data_no}
-					.col-2.text-normal #{item.data_title}
-					.col-1 #{item.data_unit}
-					.col-1.text-normal
-						each category in item.category_obj
-							each item in category
-								p.m-0 #{item[Object.keys(item)]}
-					.col-1
-						- var region_items = item.region_array.concat(item.city_array)
-						each region in region_items
-							p #{region}
-					.col-1
-						each obj in item.object
-							p.m-0 #{obj}
-					.col-2.text-center
-						a(href='/admin/data/read/' + item._id).btn.btn-primary.btn-sm.my-1.mx-auto 업데이트
-						button.btn.btn-danger.d-block.my-1.mx-auto.btn-sm(onclick='fnDeleteData("' + item._id + '")') 삭제
-					.col-1 #{item.status === 1 ? '제공' : item.status === 2 ? '중지' : '삭제'}
-					.col-2 #{date.toLocaleDateString('ko')}
-	block append_Js
-		script(src='/assets/js/admin.js', type='text/javascript')
+  style.
+    #data_list li .text-normal {
+      white-space: normal !important;
+    }
+
+    #data_list .btn {
+      font-size: 11px !important;
+    }
+  ul.list-group.list-group-flush.text-center#data_list
+    li.list-group-item.list-group-item-dark
+      .row.small.text-nowrap
+        .col-1 자료번호
+        .col-2 제목
+        .col-1 단위
+        .col-1 Category
+        .col-1 Region
+        .col-1 Object
+        .col-2 업데이트/삭제
+        .col-1 상태
+        .col-2 업데이트 일자
+    each item in list
+      - var date = new Date(item.updated);
+      li.list-group-item(about=item._id)
+        .row.small.text-nowrap
+          .col-1 #{item.data_no}
+          .col-2.text-normal #{item.data_title}
+          .col-1 #{item.data_unit}
+          .col-1.text-normal
+            - var cate_arr = [];
+            each category in item.category_obj
+              each cate in category
+                - cate_arr.push(cate[Object.keys(cate)])
+            - var n = 0;
+            while n < (cate_arr.length < 4 ? cate_arr.length : 4)
+              | #{cate_arr[n++]}
+              br
+            if(cate_arr.length > 4)
+              .overflow-hidden.collapse(style='line-height:1.3em;', id='cate_' + item._id)
+                while n < cate_arr.length
+                  | #{cate_arr[n++]}
+                  br
+              a.hidden-wrap(href='#', data-toggle='collapse', data-target='#cate_' + item._id)
+          .col-1
+            - var region_items = item.region_array.concat(item.city_array)
+            - var n = 0;
+            while n < (region_items.length < 4 ? region_items.length : 4)
+              | #{region_items[n++]}
+              br
+            if(region_items.length > 4)
+              .overflow-hidden.collapse(style='line-height:1.3em;', id='region_' + item._id)
+                while n < region_items.length
+                  | #{region_items[n++]}
+                  br
+              a.hidden-wrap(href='#', data-toggle='collapse', data-target='#region_' + item._id)
+          .col-1
+            each obj in item.object
+              p.m-0 #{obj}
+          .col-2.text-center
+            a(href='/admin/data/read/' + item._id).btn.btn-primary.btn-sm.my-1.mx-auto 업데이트
+            button.btn.btn-danger.d-block.my-1.mx-auto.btn-sm(onclick='fnDeleteData("' + item._id + '")') 삭제
+          .col-1 #{item.status === 1 ? '제공' : item.status === 2 ? '중지' : '삭제'}
+          .col-2 #{date.toLocaleDateString('ko')}
+  block append_Js
+    script(src='/assets/js/admin.js', type='text/javascript')
+    script.
+      console.log(!{JSON.stringify(list)})

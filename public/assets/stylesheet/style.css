@@ -11,8 +11,10 @@
 
 ul#data_list li .text-normal{white-space: normal !important;}
 ul#user_list li .col-1, ul#user_list li .col {padding: 0 .25rem;}
-ul#user_list li a:after {content: '더보기'}
-ul#user_list li a[aria-expanded=true]:after {content: '접기'}
+ul#user_list li a:after, a.hidden-wrap:after {content: '더보기'}
+ul#user_list li a[aria-expanded=true]:after, a.hidden-wrap[aria-expanded=true]:after, a.hidden-wrap[data-expanded=true]:after {content: '접기'}
+.showMore{height:60px;}
+
 #register-list-warp .input-group input,
 #config-wrap .input-group input{color:black; font-weight:700;}
 

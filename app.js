@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
+const connectRedis = require('connect-redis');
 const passport = require('passport');
 require('dotenv').config();
 // const passportConfig = require('./config/passport');
@@ -30,6 +31,7 @@ app.use(cookieParser());
 app.use('/chart.js', express.static(path.join(__dirname, 'node_modules/chart.js/dist')));
 app.use('/bootstrap-select', express.static(path.join(__dirname, 'node_modules/bootstrap-select/dist')));
 app.use('/downloads', express.static(path.join(__dirname, 'downloads')));
+
 app.use(session({
   secret: process.env.COOKIE_SECRET,
   resave: false,
