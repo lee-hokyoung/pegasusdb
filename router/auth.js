@@ -2,8 +2,7 @@ const express = require('express');
 const router = express.Router();
 const passport = require('passport');
 const middle = require('./middlewares');
-const jwt = require('jsonwebtoken');
-const userModel = require('../model/userModel');
+const sessionModel = require('../model/sessionModel');
 
 router.get('/login', middle.isNotLoggedIn, (req, res) => {
   res.render('login');
@@ -20,18 +19,38 @@ router.post('/login', middle.isNotLoggedIn, (req, res, next) => {
     if (!user) {
       return res.redirect('/auth/login');
     }
-    return req.login(user, (loginError) => {
+    return req.login(user, async (loginError) => {
       if (loginError) {
         console.error(loginError);
         return next(loginError);
       }
-      console.log('user : ', user);
       if(user.status !== 1){
         req.logout();
         req.session.destroy();
         res.send('<script>alert("로그인 권한이 없는 ID 입니다."); location.href = "/auth/login";</script>');
       }
-      return res.redirect('/');
+      let session_id = req.session.id;
+      let user_id = req.session.passport.user;
+      // session 에 로그인 된 id 가 있는지 먼저 확인
+      let sessions = await sessionModel.find({});
+      console.log('sessions : ', sessions);
+      let connected_users = sessions.map((v) => {
+        let obj = {};
+        obj['session_id'] = v._id;
+        let passport = JSON.parse(v.session).passport;
+        obj['user_id'] = (passport?passport.user:'');
+        return obj;
+      });
+      let isAnotherSession = false;
+      console.log('session : ', session_id);
+      console.log('connected_users : ', connected_users);
+      connected_users.forEach((v)=>{
+        // 세션 아이디는 다르지만 사용자가 같을 때, 다른 기기에서 접속한 것으로 간주
+        if(v.session_id !== session_id && v.user_id === user_id) isAnotherSession = true;
+      });
+      console.log('is other : ', isAnotherSession);
+      if(isAnotherSession) res.redirect('/session/confirm');
+      else res.redirect('/');
     });
   })(req, res, next);
 });
