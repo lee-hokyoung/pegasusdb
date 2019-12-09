@@ -33,7 +33,6 @@ router.post('/login', middle.isNotLoggedIn, (req, res, next) => {
       let user_id = req.session.passport.user;
       // session 에 로그인 된 id 가 있는지 먼저 확인
       let sessions = await sessionModel.find({});
-      console.log('sessions : ', sessions);
       let connected_users = sessions.map((v) => {
         let obj = {};
         obj['session_id'] = v._id;
@@ -42,69 +41,15 @@ router.post('/login', middle.isNotLoggedIn, (req, res, next) => {
         return obj;
       });
       let isAnotherSession = false;
-      console.log('session : ', session_id);
-      console.log('connected_users : ', connected_users);
       connected_users.forEach((v)=>{
         // 세션 아이디는 다르지만 사용자가 같을 때, 다른 기기에서 접속한 것으로 간주
         if(v.session_id !== session_id && v.user_id === user_id) isAnotherSession = true;
       });
-      console.log('is other : ', isAnotherSession);
       if(isAnotherSession) res.redirect('/session/confirm');
       else res.redirect('/');
     });
   })(req, res, next);
 });
-// router.post('/login', passport.authenticate('local'), async(req, res) => {
-//     res.end();
-// });
-// router.post('/login', (req, res, next) => {
-//     passport.authenticate('local',  (authError, user, info)=>{
-//         console.log('info : ', info);
-//         console.log('user : ', user);
-//         // if(info){
-//         //     return res.send('<script>alert("' + info.message + '"); location.href = "/auth/login";</script>');
-//         // }
-//         if(authError){
-//             console.error(authError);
-//             return next(authError);
-//         }
-//         if(!user){
-//             console.log('not user');
-//             return res.redirect('/auth/login');
-//         }
-//         return req.login(user, {session:false}, async (loginError) => {
-//             if(loginError){
-//                 console.error(loginError);
-//                 return next(loginError);
-//             }
-//             let payload = {
-//                 user_state:user.user_state,
-//                 user_id:user.user_id,
-//                 user_lv:user.lv,
-//             };
-//             const token = jwt.sign(payload, process.env.JWT_SECRET,
-//               {expiresIn:'60m', issuer:'pegasusdb.link', subject:'userInfo'});
-//             await userModel.updateOne({user_id:user.user_id}, {tokens:token});
-//             // console.log('token : ', token);
-//             res.cookie('access_token', token, {
-//                 maxAge:1000*60*60,
-//                 httpOnly:true
-//             });
-//             res.redirect('/');
-//             // req.headers.authorization = token;
-//             // res.set('Authorization', token);
-//             // res.cookie('x-auth-token', token);
-//             // console.log('result : ', result);
-//             // res.cookie('x-auth-token', token).json({token});
-//             // res.header("x-auth-token", token).send({
-//             //     user_id: user.user_id,
-//             //     user_lv: user.lv,
-//             //     user_state: user.user_state
-//             // });
-//             // return res.cookie('x-auth-token', token);
-//         });
-//     })(req, res, next);
-// });
 router.get('/logout', function (req, res, next) {
   req.logout();
   req.session.destroy();
