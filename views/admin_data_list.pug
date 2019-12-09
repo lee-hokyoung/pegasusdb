@@ -8,6 +8,11 @@ block content
     #data_list .btn {
       font-size: 11px !important;
     }
+  form(onsubmit='fnSearchData(); return false;')
+    .input-group.my-3.w-50
+      input.form-control(placeholder='검색어를 입력해주세요', name='searchText')
+      .input-group-append
+        button.btn.btn-primary(type='submit') 검색
   ul.list-group.list-group-flush.text-center#data_list
     li.list-group-item.list-group-item-dark
       .row.small.text-nowrap

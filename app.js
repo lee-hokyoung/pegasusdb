@@ -41,19 +41,6 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-// app.use(session({
-//   resave:true,
-//   saveUninitialized:false,
-//   secret:process.env.COOKIE_SECRET,
-//   cookie:{
-//     httpOnly:true,
-//     secure:false
-//   }
-// }));
-// app.use(passport.initialize());
-// app.use(passport.session());
-
-// app.use('/', passport.authenticate('jwt', {session:false}), homeRoute);
 app.use('/', homeRoute);
 app.use('/auth', authRoute);
 app.use('/detail', detailRoute);
