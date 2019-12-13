@@ -108,7 +108,7 @@ router.get('/user/register', async (req, res) => {
   res.render('admin_user_register', {
     category: category,
     active: 'user_register',
-    user:user
+    user: user
   });
 });
 // 사용자 등록
@@ -128,7 +128,7 @@ router.post('/user/register', async (req, res) => {
 router.get('/user/list', async (req, res) => {
   let user = req.user;
   let users = await userModel.aggregate([
-    {$match:{lv:1}},
+    {$match: {lv: 1}},
     {
       $lookup: {
         from: 'categories',
@@ -141,14 +141,12 @@ router.get('/user/list', async (req, res) => {
   res.render('admin_user_list', {
     users: users,
     active: 'user_list',
-    user:user
+    user: user
   })
 });
 // 사용자 조회
 router.post('/user/search', async (req, res) => {
-  console.log('body : ', req.body);
   let regex = {$regex: '.*' + req.body.searchText + '.*'};
-  console.log('regex : ', regex);
   let list = await userModel.aggregate([
     {
       $match: {
@@ -199,32 +197,32 @@ router.get('/data/register', async (req, res) => {
     region: region,
     city: city,
     obj: obj,
-    user:user
+    user: user
   });
 });
 // 데이터 등록
 router.post('/data/register', async (req, res) => {
   // temp 폴더 내에 모든 파일을 삭제
-  if(typeof req.body.files !== 'undefined'){
+  if (typeof req.body.files !== 'undefined') {
     // path 에 올라온 파일들을 downloads 파일로 복사
     let uploaded_files = req.body.files.path;
-    uploaded_files.forEach(function(v){
+    uploaded_files.forEach(function (v) {
       fs.createReadStream('./' + v)
-        .pipe(fs.createWriteStream('./downloads' + v.replace('temps','')));
+        .pipe(fs.createWriteStream('./downloads' + v.replace('temps', '')));
     });
     console.log('files : ', req.body.files);
     let directory = './temps';
     fs.readdir(directory, (err, files) => {
-      if(!err){
-        try{
+      if (!err) {
+        try {
           console.log('files : ', files);
-          for(let file of files){
-            if(uploaded_files.indexOf(file) === -1)
+          for (let file of files) {
+            if (uploaded_files.indexOf(file) === -1)
               fs.unlink(path.join(directory, file), err => {
-                if(err) throw err;
+                if (err) throw err;
               });
           }
-        }catch(e){
+        } catch (e) {
           console.error(e);
         }
       }
@@ -256,18 +254,28 @@ router.get('/data/list', async (req, res) => {
     active: 'data_list',
     data: data,
     list: list,
-    user:user
+    user: user
   });
 });
 // 데이터 삭제
 router.delete('/data/:id', async (req, res) => {
   // 데이터 내에 첨부 파일 경로 찾아서 삭제하기
   let data = await dataModel.findOne({_id: req.params.id});
-  if(data.add_img_graph) fs.unlink('./downloads/' + data.add_img_graph, err => {if(err) throw err;});
-  if(data.add_pdf) fs.unlink('./downloads/' + data.add_pdf, err => {if(err) throw err;});
-  if(data.add_png) fs.unlink('./downloads/' + data.add_png, err => {if(err) throw err;});
-  if(data.add_ppt) fs.unlink('./downloads/' + data.add_ppt, err => {if(err) throw err;});
-  if(data.add_xls) fs.unlink('./downloads/' + data.add_xls, err => {if(err) throw err;});
+  if (data.add_img_graph) fs.unlink('./downloads/' + data.add_img_graph, err => {
+    if (err) throw err;
+  });
+  if (data.add_pdf) fs.unlink('./downloads/' + data.add_pdf, err => {
+    if (err) throw err;
+  });
+  if (data.add_png) fs.unlink('./downloads/' + data.add_png, err => {
+    if (err) throw err;
+  });
+  if (data.add_ppt) fs.unlink('./downloads/' + data.add_ppt, err => {
+    if (err) throw err;
+  });
+  if (data.add_xls) fs.unlink('./downloads/' + data.add_xls, err => {
+    if (err) throw err;
+  });
 
   let result = await dataModel.deleteOne({_id: req.params.id});
   res.json(result);
@@ -294,13 +302,27 @@ router.get('/data/read/:id', async (req, res) => {
     region: region,
     city: city,
     obj: obj,
-    user:user
+    user: user
   });
 });
 // 데이터 update
 router.put('/data/update/:id', async (req, res) => {
   let result = await dataModel.updateMany({_id: req.params.id}, req.body);
   res.json(result);
+});
+router.post('/data/search', async (req, res) => {
+  let regex = {$regex: '.*' + req.body.searchText + '.*'};
+  let list = await dataModel.aggregate([
+    {
+      $match: {
+        $or: [
+          {data_no:regex},
+          {data_title:regex}
+        ]
+      }
+    }
+  ]);
+  res.json(list);
 });
 // 파일 upload
 const upload = multer({
@@ -313,9 +335,9 @@ const upload = multer({
       cb(null, path.basename(file.originalname, ext) + new Date().valueOf() + ext);
     }
   }),
-  limits:{fileSize:2*1024*1024}
+  limits: {fileSize: 2 * 1024 * 1024}
 });
-router.post('/data/file_upload', upload.array('file', 10), async(req, res) => {
+router.post('/data/file_upload', upload.array('file', 10), async (req, res) => {
   let files = await req.files;
   res.json(files);
 });
@@ -326,7 +348,7 @@ router.get('/config', async (req, res) => {
   res.render('admin_config', {
     active: 'config',
     data: data,
-    user:user
+    user: user
   });
 });
 router.post('/config', async (req, res) => {
