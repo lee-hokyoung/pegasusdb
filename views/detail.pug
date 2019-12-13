@@ -5,6 +5,7 @@ block content
       max-width: 30px;
       width: 100%;
     }
+    .bg-disable{background-color:#ccc;}
   - var sub_cate = [];
   each key in Object.keys(data.category_obj)
     if(data.category_obj[key].length > 0)
@@ -39,19 +40,19 @@ block content
           span.px-3.py-2(style='flex:1; border-bottom:4px solid #007bff') DOWNLOAD
           div.border-bottom(style='flex:2')
         .d-flex
-          .border
+          .border(class=data.add_png?'':'bg-disable')
             a.btn.d-flex.justify-content-between.p-2(href=(data.add_png?'/downloads/' + data.add_png:'javascript:void(0);'), target='_blank', class=data.add_png?'':'disabled')
               img.icon-img(src='/assets/svgs/png.svg')
               span PNG
-          .border.ml-2
+          .border.ml-2(class=data.add_png?'':'bg-disable')
             a.btn.d-flex.justify-content-between.p-2(href=(data.add_ppt?'/downloads/' + data.add_ppt:'javascript:void(0);'), target='_blank', class=data.add_ppt?'':'disabled')
               img.icon-img(src='/assets/svgs/ppt.svg')
               span PPT
-          .border.ml-2
+          .border.ml-2(class=data.add_png?'':'bg-disable')
             a.btn.d-flex.justify-content-between.p-2(href=(data.add_xls?'/downloads/' + data.add_xls:'javascript:void(0);'), target='_blank', class=data.add_xls?'':'disabled')
               img.icon-img(src='/assets/svgs/xls.svg')
               span XLS
-          .border.ml-2
+          .border.ml-2(class=data.add_png?'':'bg-disable')
             a.btn.d-flex.justify-content-between.p-2(href=(data.add_pdf?'/downloads/' + data.add_pdf:'javascript:void(0);'), target='_blank', class=data.add_pdf?'':'disabled')
               img.icon-img(src='/assets/svgs/pdf.svg')
               span PDF
@@ -63,10 +64,10 @@ block content
         #pills-tabContent.tab-content
           #pills-home.tab-pane.fade.show.active(role="tabpanel" aria-labelledby="pills-home-tab") #{data.description}
           #pills-profile.tab-pane.fade(role="tabpanel" aria-labelledby="pills-profile-tab") #{data.source}
-        .d-flex.justify-content-between
-          a(href='' + config.request_report, target='_blank')
+        .d-flex.justify-content-center
+          a(href='' + config.request_report, target='_blank', style='width:35%;')
             img(src='/assets/images/RequestReport.JPG', width='100%')
-          a(href='' + config.request_data, target='_blank')
+          a(href='' + config.request_data, target='_blank', style='width:35%;')
             img(src='/assets/images/RequestData.JPG', width='100%')
 block append_js
   script(src='/bootstrap/js/dist/util.js', type='text/javascript')
@@ -79,7 +80,7 @@ block append_js
     }else{
       // 차트 색 설정
       let bg_list = [
-        'rgba(255, 99, 132, 0.4)', 'rgba(54, 162, 235, 0.4)', 'rgba(255, 206, 86, 0.4)', 'rgba(75, 192, 192, 0.4)', 'rgba(153, 102, 255, 0.4)', 'rgba(255, 159, 64, 0.4)'
+        'rgba(255, 99, 132, 0.8)', 'rgba(54, 162, 235, 0.8)', 'rgba(255, 206, 86, 0.8)', 'rgba(75, 192, 192, 0.8)', 'rgba(153, 102, 255, 0.8)', 'rgba(255, 159, 64, 0.8)'
       ];
       // 차트 타입
       let chart_type = '';

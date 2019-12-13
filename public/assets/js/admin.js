@@ -68,7 +68,6 @@ function fnRegisterUser() {
   };
   xhr.send(JSON.stringify(data));
 }
-
 //  사용자 검색
 function fnSearch() {
   let searchText = document.querySelector('input[name="searchText"]');
@@ -212,7 +211,6 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
-
 // 데이터 테이블 컬럼 추가
 function fnAddCol() {
   document.querySelectorAll('tr').forEach(function (tr) {
@@ -228,7 +226,6 @@ function fnAddCol() {
     tr.dataset.idx = current_idx + 1;
   });
 }
-
 // 데이터 테이블 컬럼 제거
 function fnRemoveCol() {
   document.querySelectorAll('tr').forEach(function (tr) {
@@ -239,7 +236,6 @@ function fnRemoveCol() {
     }
   });
 }
-
 // 데이터 테이블 로우 추가
 function fnAddRow() {
   let tbody = document.querySelector('tbody');
@@ -272,7 +268,6 @@ function fnAddRow() {
   }
   tbody.appendChild(tr);
 }
-
 // 데이터 테이블 로우 제거
 function fnRemoveRow() {
   let tbody = document.querySelector('tbody');
@@ -282,8 +277,7 @@ function fnRemoveRow() {
   trs[tr_idx - 1].remove();
   tbody.dataset.row = tr_idx - 1;
 }
-
-// 제출하기
+// 데이터 제출하기
 function fnSubmit() {
   let post_data = fnGenerateFormData();
   // 데이터 등록
@@ -299,7 +293,6 @@ function fnSubmit() {
   };
   xhr.send(JSON.stringify(post_data));
 }
-
 // 폼 데이터 생성
 function fnGenerateFormData() {
   let data_title = document.querySelector('input[name="data_title"]');
@@ -386,13 +379,11 @@ function fnGenerateFormData() {
   console.log('post data : ', post_data);
   return post_data;
 }
-
 // 알람 띄우기 & 포커싱
 function fnAlertNFocus(obj) {
   alert(obj.title + '값을 입력해주세요.');
   obj.focus();
 }
-
 // 데이터 업데이트
 function fnUpdateData(id) {
   console.log('id : ', id);
