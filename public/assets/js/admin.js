@@ -132,19 +132,25 @@ function fnGenerateUserList(res) {
     // 여덟번째 컬럼(데이터 구매목록)
     let col8 = document.createElement('div');
     col8.classList.add('col-1');
-    console.log(v.cate_info.length);
     for (let i = 0; i < (v.cate_info.length < 4 ? v.cate_info.length : 4); i++) {
-      col8.append(v.cate_info[i].cate_name);
-      col8.appendChild(document.createElement('br'));
+      let p = document.createElement('p');
+      p.classList.add('m-0');
+      p.innertHTML = v.cate_info[i].cate_name;
+      col8.appendChild(p);
+      // col8.innertText = v.cate_info[i].cate_name;
+      // col8.appendChild(document.createElement('br'));
     }
     if (v.cate_info.length > 4) {
       let collapse = document.createElement('div');
       collapse.classList.add('overflow-hidden', 'collapse');
       collapse.setAttribute('style', 'line-height:1.3em;');
       collapse.id = 'cate_' + v._id;
-      for (let i = 3; i < v.cate_info.length; i++) {
-        collapse.append(v.cate_info[i].cate_name);
-        collapse.appendChild(document.createElement('br'));
+      for (let i = 4; i < v.cate_info.length; i++) {
+        let p = document.createElement('p');
+        p.innertHTML = v.cate_info[i].cate_name;
+        collapse.appendChild(p);
+        // collapse.appendChild(v.cate_info[i].cate_name);
+        // collapse.appendChild(document.createElement('br'));
       }
       col8.appendChild(collapse);
       let readMore = document.createElement('a');
@@ -422,6 +428,124 @@ function fnDeleteData(id) {
     xhr.send();
   }
 }
+// 데이터 검색
+function fnSearchData(){
+  let searchText = document.querySelector('#searchText').value;
+  let xhr = new XMLHttpRequest();
+  xhr.open('POST', '/admin/data/search');
+  xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.onreadystatechange = function(){
+    if(this.readyState === XMLHttpRequest.DONE && this.status === 200){
+      let res = JSON.parse(this.response);
+      console.log('res : ', res);
+      fnGenerateDataList(res);
+    }
+  };
+  xhr.send(JSON.stringify({searchText:searchText}));
+}
+// 검색된 데이터 html 생성
+function fnGenerateDataList(list){
+  let dataList = document.getElementById('data_item_list');
+  dataList.innerHTML = '';
+  list.forEach(function(v){
+    let date = new Date(v.updated);
+    let li = document.createElement('li');
+    li.classList.add('list-group-item');
+    li.setAttribute('about', v._id);
+    let row = document.createElement('div');
+    row.classList.add('row', 'small', 'text-normal');
+    let col_1 = document.createElement('div');
+    col_1.classList.add('col-1');
+    col_1.innerText = v.data_no;
+    let col_2 = document.createElement('div');
+    col_2.classList.add('col-2', 'text-normal');
+    col_2.innerText = v.data_title;
+    let col_3 = document.createElement('div');
+    col_3.classList.add('col-1');
+    col_3.innerText = v.data_unit;
+
+    // 카테고리 컬럼
+    let col_4 = document.createElement('div');
+    col_4.classList.add('col-1', 'text-normal');
+    let cate_arr = [];
+    for(let category in v.category_obj){
+      v.category_obj[category].forEach(function(cate){
+        cate_arr.push(cate[Object.keys(cate)]);
+      });
+    }
+    for(let n = 0; n < (cate_arr.length < 4 ? cate_arr.length: 4); n++){
+      let p = document.createElement('p');
+      p.classList.add('m-0');
+      p.innerText = cate_arr[n];
+      col_4.appendChild(p);
+    }
+    if(cate_arr.length > 4){
+      let collapse = document.createElement('div');
+      collapse.classList.add('collapse', 'overflow-hidden');
+      collapse.setAttribute('style', 'line-height:1.3em;');
+      collapse.setAttribute('id', 'cate_' + v._id);
+      for(let n = 4; n < cate_arr.length; n++){
+        let p = document.createElement('p');
+        p.classList.add('m-0');
+        p.innerText = cate_arr[n];
+        collapse.appendChild(p);
+      }
+      col_4.appendChild(collapse);
+      let a = document.createElement('a');
+      a.classList.add('hidden-wrap');
+      a.href = '#';
+      a.setAttribute('data-toggle', 'collapse');
+      a.setAttribute('data-target', '#cate_' + v._id);
+      col_4.appendChild(a);
+    }
+    // Region
+    let region_items = v.region_array.concat(v.city_array);
+    // for(){
+    //
+    // }
+    let col_5 = document.createElement('div');
+    col_5.classList.add('col-1');
+    col_5.innerText = v.region_array;
+    let col_6 = document.createElement('div');
+    col_6.classList.add('col-1');
+    v.object.forEach(function (obj) {
+      let p = document.createElement('p');
+      p.classList.add('m-0');
+      p.innerText = obj;
+      col_6.appendChild(p);
+    });
+    let col_7 = document.createElement('div');
+    col_7.classList.add('col-2', 'text-center');
+    let a = document.createElement('a');
+    a.classList.add('btn', 'btn-primary', 'btn-sm', 'my-1', 'mx-auto');
+    a.href = '/admin/data/read/' + v._id;
+    a.innerText = '업데이트';
+    let button = document.createElement('button');
+    button.classList.add('btn', 'btn-danger', 'd-block', 'my-1', 'mx-auto', 'btn-sm');
+    button.onclick = 'fnDeleteData("' + v._id + '")';
+    button.innerText = '삭제';
+    col_7.appendChild(a);
+    col_7.appendChild(button);
+    let col_8 = document.createElement('div');
+    col_8.classList.add('col-1');
+    col_8.innerText = (v.status === 1 ? '제공':v.status === 2 ? '중지':'삭제');
+    let col_9 = document.createElement('div');
+    col_9.classList.add('col-2');
+    col_9.innerText = date.toLocaleDateString('ko');
+    row.appendChild(col_1);
+    row.appendChild(col_2);
+    row.appendChild(col_3);
+    row.appendChild(col_4);
+    row.appendChild(col_5);
+    row.appendChild(col_6);
+    row.appendChild(col_7);
+    row.appendChild(col_8);
+    row.appendChild(col_9);
+    li.appendChild(row);
+    dataList.appendChild(li);
+  });
+}
+
 /*
 *   파일 업로드
 *   1. 각각의 파일 입력 폼에 파일이 등록되면 change 이벤트 발생

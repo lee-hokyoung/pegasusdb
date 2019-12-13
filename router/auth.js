@@ -24,7 +24,7 @@ router.post('/login', middle.isNotLoggedIn, (req, res, next) => {
         console.error(loginError);
         return next(loginError);
       }
-      if(user.status !== 1){
+      if (user.status !== 1) {
         req.logout();
         req.session.destroy();
         res.send('<script>alert("로그인 권한이 없는 ID 입니다."); location.href = "/auth/login";</script>');
@@ -37,20 +37,21 @@ router.post('/login', middle.isNotLoggedIn, (req, res, next) => {
         let obj = {};
         obj['session_id'] = v._id;
         let passport = JSON.parse(v.session).passport;
-        obj['user_id'] = (passport?passport.user:'');
+        obj['user_id'] = (passport ? passport.user : '');
         return obj;
       });
       let isAnotherSession = false;
-      connected_users.forEach((v)=>{
+      connected_users.forEach((v) => {
         // 세션 아이디는 다르지만 사용자가 같을 때, 다른 기기에서 접속한 것으로 간주
-        if(v.session_id !== session_id && v.user_id === user_id) isAnotherSession = true;
+        if (v.session_id !== session_id && v.user_id === user_id) isAnotherSession = true;
       });
-      if(isAnotherSession) res.redirect('/session/confirm');
+      if (isAnotherSession) res.redirect('/session/confirm');
       else res.redirect('/');
     });
   })(req, res, next);
 });
-router.get('/logout', function (req, res, next) {
+router.get('/logout', async (req, res, next) => {
+  await sessionModel.deleteOne({_id:req.session.id});
   req.logout();
   req.session.destroy();
   res.render('login');
