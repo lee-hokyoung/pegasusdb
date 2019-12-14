@@ -29,7 +29,6 @@ exports.isAdmin = (req, res, next) => {
 };
 exports.checkAuth = async (req, res, next) => {
   let token = req.cookies.access_token;
-
   // console.log('cookie : ', req.cookies);
   if (!token) {
     console.log('토큰 없음');
