@@ -6,12 +6,10 @@ block content
       width: 100%;
     }
     .bg-disable{background-color:#ccc;}
-  - var sub_cate = [];
-  each key in Object.keys(data.category_obj)
-    if(data.category_obj[key].length > 0)
-      - var sub_list = data.category_obj[key]
-      each cate_item in sub_list
-        - sub_cate.push(cate_item);
+  - var sub_cate_name = '';
+  each item in cate_info
+    if(item.cate_id === cate_item)
+      - sub_cate_name = item.cate_name;
   .container
     .bg-gradient-zhupao
       .d-flex.justify-content-between
@@ -22,8 +20,8 @@ block content
       h5.m-0.text-white.p-2
         a.text-white(href='/') Home
         | &nbsp; > &nbsp;
-        a.text-white(href='/list/' + cate_info[0].group_id + '/' + Object.keys(sub_cate[0])) #{cate_info[0].group_name}
-        | &nbsp; > &nbsp; #{sub_cate[0][Object.keys(sub_cate[0])]}
+        a.text-white(href='/list/' + cate_info[0].group_id + '/' + cate_item) #{cate_info[0].group_name}
+        | &nbsp; > &nbsp; #{sub_cate_name}
     .row
       .col-8.text-zhupao
         h4.font-weight-bold #{data.data_title}
@@ -74,7 +72,6 @@ block append_js
   script(src='/chart.js/Chart.js')
   script.
     let d = !{JSON.stringify(data)};
-    console.log('d : ', d);
     if(d.add_img_graph){
 
     }else{

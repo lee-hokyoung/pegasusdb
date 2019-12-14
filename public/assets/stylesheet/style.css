@@ -37,3 +37,4 @@ ul#user_list li a[aria-expanded=true]:after, a.hidden-wrap[aria-expanded=true]:a
 .colorStatus[data-status='1']:before{content:'제공'; color:forestgreen;}
 .colorStatus[data-status='2']:before{content:'중지'; color:orange;}
 .colorStatus[data-status='3']:before{content:'삭제'; color:red}
+select.selectpicker[data-width='fix']{width:170px;}
