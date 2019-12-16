@@ -3,12 +3,12 @@ const Schema = mongoose.Schema;
 // 데이터 스키마
 const dataSchema = new Schema({
   id: mongoose.Schema.Types.ObjectId,
-  data_title:{type:String, required:true},
-  data_unit:{type:String, required:true},
-  chart_type:{type:String, required:true},
+  data_title:{type:String},
+  data_unit:{type:String},
+  chart_type:{type:String},
   table_x:{type:Object},
   table_y:{type:Object},
-  data_no:{type:String, required:true, unique:true},
+  data_no:{type:String, unique:true},
   category_obj:{type:Object, required:true},
   region_array:{type:Array, required:true},
   city_array:{type:Array, required:true},

@@ -312,6 +312,7 @@ function fnRemoveRow() {
 // 데이터 제출하기
 function fnSubmit() {
   let post_data = fnGenerateFormData();
+  if(!post_data) return false;
   // 데이터 등록
   let xhr = new XMLHttpRequest();
   xhr.open('POST', '/admin/data/register', true);
@@ -325,23 +326,32 @@ function fnSubmit() {
         alert('등록성공');
         location.href = '/admin/data/list';
       }
-
     }
   };
   xhr.send(JSON.stringify(post_data));
 }
 // 폼 데이터 생성
 function fnGenerateFormData() {
+  let isAddImage = document.querySelector('input[name="add_img_graph"]').value !== '';
   let data_title = document.querySelector('input[name="data_title"]');
-  if (data_title.value === '') fnAlertNFocus(data_title);
+  if (data_title.value === '') {
+    alert('제목을 입력해 주세요');
+    data_title.focus();
+    return false;
+  }
 
   let data_unit = document.querySelector('input[name="data_unit"]');
-  if (data_unit.value === '') fnAlertNFocus(data_unit);
+  if (data_unit.value === '' && !isAddImage) {
+    alert('단위를 입력해 주세요');
+    data_unit.focus();
+    return false;
+  }
 
   let chart_type = document.querySelector('input[type="radio"]:checked');
-  if (chart_type === null) {
+  if (chart_type === null && !isAddImage) {
     alert('차트타입을 선택해주세요.');
     document.querySelector('input[type="radio"]').focus();
+    return false;
   }
 
   // x축 데이터 생성
@@ -361,12 +371,15 @@ function fnGenerateFormData() {
     table_y.push(tr_obj);
   });
   let data_no = document.querySelector('input[name="data_no"]');
-  if (data_no.value === '') fnAlertNFocus(data_no);
+  if (data_no.value === '') {
+    alert('자료번호를 입력해 주세요');
+    data_no.focus();
+    return false;
+  }
 
   let category_obj = {};
   document.querySelectorAll('div.col-4.mb-3').forEach(function (div) {
     let cate_header = div.querySelector('h5').id;
-    console.log('h : ', cate_header);
     category_obj[cate_header] = [];
     div.querySelectorAll('input:checked').forEach(function (input) {
       let obj = {};
@@ -391,10 +404,10 @@ function fnGenerateFormData() {
 
   let post_data = {};
   post_data['data_title'] = data_title.value;
-  post_data['data_unit'] = data_unit.value;
-  post_data['chart_type'] = chart_type.value;
-  post_data['table_x'] = table_x;
-  post_data['table_y'] = table_y;
+  post_data['data_unit'] = (!isAddImage?data_unit.value:'');
+  post_data['chart_type'] = (!isAddImage?chart_type.value:'');
+  post_data['table_x'] = (!isAddImage?table_x:{});
+  post_data['table_y'] = (!isAddImage?table_y:{});
   post_data['data_no'] = data_no.value;
   post_data['category_obj'] = category_obj;
   post_data['region_array'] = region_array;
@@ -415,11 +428,6 @@ function fnGenerateFormData() {
   post_data['files'] = {'path':path_arr, 'originalname':originalname_arr};
   console.log('post data : ', post_data);
   return post_data;
-}
-// 알람 띄우기 & 포커싱
-function fnAlertNFocus(obj) {
-  alert(obj.title + '값을 입력해주세요.');
-  obj.focus();
 }
 // 데이터 업데이트
 function fnUpdateData(id) {
@@ -597,7 +605,38 @@ function fnGenerateDataList(list){
     dataList.appendChild(li);
   });
 }
-
+//  데이터 이미지 등록시 단위, 그래프 유형, 내용(데이터) 입력 차단 및 필수 항목 해제
+const fnInputImage = function(){
+  let input = document.querySelector('input[name="add_img_graph"]');
+  let data_unit = document.querySelector('input[name="data_unit"]');
+  let table_inputs = document.querySelectorAll('#table_content input');
+  let table_radio = document.querySelectorAll('input[type="radio"]');
+  let table_buttons = document.querySelectorAll('button.btn-sm');
+  console.log(input.value);
+  if(input.value !== ''){
+    data_unit.disabled = true;
+    table_inputs.forEach(function(inp){
+      inp.disabled = true;
+    });
+    table_radio.forEach(function(radio){
+      radio.disabled = true;
+    });
+    table_buttons.forEach(function(btn){
+      btn.disabled = true;
+    });
+  }else{
+    data_unit.disabled = false;
+    table_inputs.forEach(function(inp){
+      inp.disabled = false;
+    });
+    table_radio.forEach(function(radio){
+      radio.disabled = false;
+    });
+    table_buttons.forEach(function(btn){
+      btn.disabled = false;
+    });
+  }
+};
 /*
 *   파일 업로드
 *   1. 각각의 파일 입력 폼에 파일이 등록되면 change 이벤트 발생
