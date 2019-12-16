@@ -121,11 +121,10 @@ $(document).on('click', 'a[data-toggle="showMore"]', function (e) {
 function searchList(){
   let searchText = document.querySelector('#searchText').value;
   let xhr = new XMLHttpRequest();
-  xhr.open('POST', '/ajax' + location.pathname + strQuery, true);
+  xhr.open('GET', '/ajax' + location.pathname + '/' + searchText + '?' + location.search, true);
   xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
   xhr.onreadystatechange = function () {
     if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-      history.pushState(null, '', strQuery);
       fnGenerateHtmlResult(JSON.parse(this.response));
     }
   };

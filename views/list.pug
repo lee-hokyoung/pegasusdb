@@ -43,10 +43,11 @@ block content
 			.col-9
 				.p-2(style='border:3px solid #aaa;')
 					h5.mb-5.font-weight-bold Search Words
-					.input-group.mx-3.m-auto
-						input.form-control#searchText(type='text', name='searchText')
-						.input-group-prepend
-							button.btn.btn-primary(onclick='searchList()') Search
+					form(onsubmit='searchList(); return false;')
+						.input-group.mx-3.m-auto
+							input.form-control#searchText(type='text', name='searchText')
+							.input-group-prepend
+								button.btn.btn-primary(type='submit') Search
 					h5 Results
 					select.selectpicker
 						option(value=10) 10
