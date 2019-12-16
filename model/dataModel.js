@@ -17,11 +17,26 @@ const dataSchema = new Schema({
   source:{type:String},
   status:{type:Number, default:1}, // 1: 제공, 2: 중지, 9:삭제
   // files
-  add_img_graph:String,
-  add_pdf:String,
-  add_xls:String,
-  add_ppt:String,
-  add_png:String,
+  add_img_graph:{
+    original:String,
+    path:String
+  },
+  add_pdf:{
+    original:String,
+    path:String
+  },
+  add_xls:{
+    original:String,
+    path:String
+  },
+  add_ppt:{
+    original:String,
+    path:String
+  },
+  add_png:{
+    original:String,
+    path:String
+  },
   created:{type:Date, default:Date.now()},
   updated:{type:Date, default:Date.now()}
 });

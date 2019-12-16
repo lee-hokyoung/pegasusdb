@@ -221,27 +221,6 @@ $(document).on('click', '.status-btn-wrap button', function(){
   };
   xhr.send(JSON.stringify({id: id, status: status}));
 });
-document.addEventListener("DOMContentLoaded", function () {
-  document.querySelectorAll('.status-btn-wrap button111').forEach(function (btn) {
-    btn.addEventListener('click', function (e) {
-      console.log(btn);
-      let id = btn.parentElement.dataset.id;
-      let status = btn.dataset.status;
-      let xhr = new XMLHttpRequest();
-      let status_txt = document.querySelector('.colorStatus[data-id="' + id + '"]');
-      xhr.open('POST', '/admin/user/status', true);
-      xhr.setRequestHeader('Content-Type', 'application/json');
-      xhr.onreadystatechange = function () {
-        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-          let res = JSON.parse(this.response);
-          status_txt.dataset.status = status;
-          alert('변경되었습니다.');
-        }
-      };
-      xhr.send(JSON.stringify({id: id, status: status}));
-    });
-  });
-});
 
 // 데이터 테이블 컬럼 추가
 function fnAddCol() {
@@ -404,10 +383,10 @@ function fnGenerateFormData() {
 
   let post_data = {};
   post_data['data_title'] = data_title.value;
-  post_data['data_unit'] = (!isAddImage?data_unit.value:'');
-  post_data['chart_type'] = (!isAddImage?chart_type.value:'');
-  post_data['table_x'] = (!isAddImage?table_x:{});
-  post_data['table_y'] = (!isAddImage?table_y:{});
+  if(!isAddImage) post_data['data_unit'] = data_unit.value;
+  if(!isAddImage) post_data['chart_type'] = chart_type.value;
+  if(!isAddImage) post_data['table_x'] = table_x;
+  if(!isAddImage) post_data['table_y'] = table_y;
   post_data['data_no'] = data_no.value;
   post_data['category_obj'] = category_obj;
   post_data['region_array'] = region_array;
@@ -420,19 +399,21 @@ function fnGenerateFormData() {
   let path_arr = [], originalname_arr = [];
   document.querySelectorAll('input[type="file"]').forEach(function (file) {
     if (file.value) {
-      path_arr.push(file.dataset.path);
-      originalname_arr.push(file.dataset.originalname);
-      post_data[file.name] = file.dataset.path.replace('temps\/', '');
+      // path_arr.push(file.dataset.path);
+      // originalname_arr.push(file.dataset.originalname);
+      // post_data[file.name] = file.dataset.path.replace('temps\/', '');
+      post_data[file.name] = {original:file.dataset.originalname, path:file.dataset.path}
     }
   });
-  post_data['files'] = {'path':path_arr, 'originalname':originalname_arr};
+  // post_data['files'] = {'path':path_arr, 'originalname':originalname_arr};
   console.log('post data : ', post_data);
+  // return false;
   return post_data;
 }
 // 데이터 업데이트
 function fnUpdateData(id) {
-  console.log('id : ', id);
   let post_data = fnGenerateFormData();
+  if(!post_data) return false;
   // 데이터 등록
   let xhr = new XMLHttpRequest();
   xhr.open('PUT', '/admin/data/update/' + id, true);
@@ -612,7 +593,6 @@ const fnInputImage = function(){
   let table_inputs = document.querySelectorAll('#table_content input');
   let table_radio = document.querySelectorAll('input[type="radio"]');
   let table_buttons = document.querySelectorAll('button.btn-sm');
-  console.log(input.value);
   if(input.value !== ''){
     data_unit.disabled = true;
     table_inputs.forEach(function(inp){
@@ -666,6 +646,24 @@ document.querySelectorAll('input[type="file"]').forEach(function (file) {
     }
   })
 });
+// 업로드 된 파일 삭제
+function fnDeleteFile(id, file_name){
+  let xhr = new XMLHttpRequest();
+  xhr.open('DELETE', '/admin/data/file/' + id + '/' + file_name);
+  xhr.onreadystatechange = function(){
+    if(this.readyState === XMLHttpRequest.DONE && this.status === 200){
+      let res = JSON.parse(this.response);
+      console.log('res : ', res);
+      if(res.code !== 0){
+        alert(res.message);
+      }else{
+        let file_wrap = document.querySelector('div[about="' + file_name + '"]');
+        file_wrap.remove();
+      }
+    }
+  }
+  xhr.send();
+}
 
 // config update
 function fnUpdateConfig() {

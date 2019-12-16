@@ -34,16 +34,16 @@ block content
 				.table.table-responsive#table_content
 					table.table
 						thead
-							tr(data-type='x', data-idx=!isAddImageGraph?doc.table_x.content.length:'')
+							tr(data-type='x', data-idx=doc.table_x?doc.table_x.content.length:1)
 								th
-									input(type='text', name='chart_x', value=!isAddImageGraph?doc.table_x.title:'', data-title='true')
+									input(type='text', name='chart_x', value=doc.table_x?doc.table_x.title:'', data-title='true')
 								td.space_td
-								if(!isAddImageGraph)
+								if(doc.table_x)
 									each x, idx in doc.table_x.content
 										td
 											input(type='text', name='x_data_' + (idx + 1), value=x)
-						tbody(data-row=!isAddImageGraph?doc.table_y.length:'')
-							if(!isAddImageGraph)
+						tbody(data-row=doc.table_y?doc.table_y.length:1)
+							if(doc.table_y)
 								each tr, tr_idx in doc.table_y
 									tr(data-type='y', data-idx=tr.content.length, data-row_idx=(tr_idx + 1))
 										th
@@ -64,14 +64,21 @@ block content
 				.d-flex
 		.input-group.mt-3
 			label.text-zhupao.my-auto 자료번호
-			input.text-center.form-control(type='text', name='data_no', value=doc.data_no, disabled=isAddImageGraph)
+			input.text-center.form-control(type='text', name='data_no', value=doc.data_no)
 	.input-group.mt-3
 		label.text-zhupao.my-auto 이미지 입력
 		.border.d-flex.justify-content-between.mb-2
 			.d-flex.justify-content-center(style='flex:1')
 				img(src='/assets/svgs/png.svg', width='30%')
 				span PNG
-			input.form-control-file(type='file', name='add_img_graph', style='flex:4')
+			input.form-control-file(type='file', name='add_img_graph', style='flex:4', accept='.png', onchange='fnInputImage()')
+	if(doc.add_img_graph)
+		.input-group.mt-3
+			label.text-zhupao.my-auto
+			.d-flex.justify-content-between.mb-2(about=doc.add_img_graph.path.replace('temps/', ''))
+				a(href='/downloads/' + doc.add_img_graph.path.replace('temps/',''), target='_blank') #{doc.add_img_graph.original}
+				a.btn.btn-link.py-0(href='#', onclick='fnDeleteFile("' + doc._id + '", "' + doc.add_img_graph.path.replace('temps/', '') + '")') x
+
 	.input-group.mt-3
 		- var selected_category = [];
 		each obj in doc.category_obj
@@ -130,22 +137,22 @@ block content
 					.d-flex.justify-content-center(style='flex:1')
 						img(src='/assets/svgs/pdf.svg', width='30%')
 						span PDF
-					input.form-control-file(type='file', name='add_pdf', style="flex:4")
+					input.form-control-file(type='file', name='add_pdf', style="flex:4", accept='.pdf')
 				.border.d-flex.justify-content-between.mb-2
 					.d-flex.justify-content-center(style='flex:1')
 						img(src='/assets/svgs/xls.svg', width='30%')
 						span XLS
-					input.form-control-file(type='file', name='add_xls', style='flex:4')
+					input.form-control-file(type='file', name='add_xls', style='flex:4', accept='.xls, .xlsx')
 				.border.d-flex.justify-content-between.mb-2
 					.d-flex.justify-content-center(style='flex:1')
 						img(src='/assets/svgs/ppt.svg', width='30%')
 						span PPT
-					input.form-control-file(type='file', name='add_ppt', style='flex:4')
+					input.form-control-file(type='file', name='add_ppt', style='flex:4', accept='.ppt')
 				.border.d-flex.justify-content-between.mb-2
 					.d-flex.justify-content-center(style='flex:1')
 						img(src='/assets/svgs/png.svg', width='30%')
 						span PNG
-					input.form-control-file(type='file', name='add_png', style='flex:4')
+					input.form-control-file(type='file', name='add_png', style='flex:4', accept='.png')
 	.text-center.p-3(style='flex:1')
 		button.btn.btn-zhupao.mb-3.px-5(onclick='fnUpdateData("' + doc._id + '")') 업데이트
 	block append_Js
