@@ -207,37 +207,40 @@ router.get('/data/register', async (req, res) => {
 });
 // 데이터 등록
 router.post('/data/register', async (req, res) => {
-  // temp 폴더 내에 모든 파일을 삭제
-  if (typeof req.body.files !== 'undefined') {
-    // path 에 올라온 파일들을 downloads 파일로 복사
-    let uploaded_files = req.body.files.path;
-    uploaded_files.forEach(function (v) {
-      fs.createReadStream('./' + v)
-        .pipe(fs.createWriteStream('./downloads' + v.replace('temps', '')));
-    });
-    console.log('files : ', req.body.files);
-    let directory = './temps';
-    fs.readdir(directory, (err, files) => {
-      if (!err) {
-        try {
-          console.log('files : ', files);
-          for (let file of files) {
-            if (uploaded_files.indexOf(file) === -1)
-              fs.unlink(path.join(directory, file), err => {
-                if (err) throw err;
-              });
+  // 유효성 검증
+  let exDataNo = await dataModel.findOne({data_no:req.body.data_no});
+  if(exDataNo){
+    res.json({code:9, message:'중복된 자료번호 입니다.'});
+  }else{
+    // temp 폴더 내에 모든 파일을 삭제
+    if (typeof req.body.files !== 'undefined') {
+      // path 에 올라온 파일들을 downloads 파일로 복사
+      let uploaded_files = req.body.files.path;
+      uploaded_files.forEach(function (v) {
+        fs.createReadStream('./' + v)
+          .pipe(fs.createWriteStream('./downloads' + v.replace('temps', '')));
+      });
+      let directory = './temps';
+      fs.readdir(directory, (err, files) => {
+        if (!err) {
+          try {
+            for (let file of files) {
+              if (uploaded_files.indexOf(file) === -1)
+                fs.unlink(path.join(directory, file), err => {
+                  if (err) throw err;
+                });
+            }
+          } catch (e) {
+            console.error(e);
           }
-        } catch (e) {
-          console.error(e);
         }
-      }
-    });
+      });
+    }
+    let data = req.body;
+    console.log('data : ', data);
+    let result = await dataModel.create(data);
+    res.json({result:result, code:0});
   }
-
-  let data = req.body;
-  console.log('data : ', data);
-  let result = await dataModel.create(data);
-  res.json(result);
 });
 // 데이터 리스트
 router.get('/data/list', async (req, res) => {
@@ -266,22 +269,53 @@ router.get('/data/list', async (req, res) => {
 router.delete('/data/:id', async (req, res) => {
   // 데이터 내에 첨부 파일 경로 찾아서 삭제하기
   let data = await dataModel.findOne({_id: req.params.id});
-  if (data.add_img_graph) fs.unlink('./downloads/' + data.add_img_graph, err => {
-    if (err) throw err;
-  });
-  if (data.add_pdf) fs.unlink('./downloads/' + data.add_pdf, err => {
-    if (err) throw err;
-  });
-  if (data.add_png) fs.unlink('./downloads/' + data.add_png, err => {
-    if (err) throw err;
-  });
-  if (data.add_ppt) fs.unlink('./downloads/' + data.add_ppt, err => {
-    if (err) throw err;
-  });
-  if (data.add_xls) fs.unlink('./downloads/' + data.add_xls, err => {
-    if (err) throw err;
-  });
-
+  if(data){
+    if (data.add_img_graph) {
+      try{
+        fs.unlink('./downloads/' + data.add_img_graph, err => {
+          if (err) throw err;
+        });
+      }catch(e){
+        console.error(e);
+      }
+    }
+    if (data.add_pdf) {
+      try{
+        fs.unlink('./downloads/' + data.add_pdf, err => {
+          if (err) throw err;
+        });
+      }catch(e){
+        console.error(e);
+      }
+    }
+    if (data.add_png) {
+      try{
+        fs.unlink('./downloads/' + data.add_png, err => {
+          if (err) throw err;
+        });
+      }catch(e){
+        console.error(e);
+      }
+    }
+    if (data.add_ppt) {
+      try{
+        fs.unlink('./downloads/' + data.add_ppt, err => {
+          if (err) throw err;
+        });
+      }catch(e){
+        console.error(e);
+      }
+    }
+    if (data.add_xls) {
+      try{
+        fs.unlink('./downloads/' + data.add_xls, err => {
+          if (err) throw err;
+        });
+      }catch(e){
+        console.error(e);
+      }
+    }
+  }
   let result = await dataModel.deleteOne({_id: req.params.id});
   res.json(result);
 });

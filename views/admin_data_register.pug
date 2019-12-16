@@ -117,22 +117,22 @@ block content
 					.d-flex.justify-content-center(style='flex:1')
 						img(src='/assets/svgs/pdf.svg', width='30%')
 						span PDF
-					input.form-control-file(type='file', name='add_pdf', style="flex:4")
+					input.form-control-file(type='file', name='add_pdf', style="flex:4", accept='.pdf')
 				.border.d-flex.justify-content-between.mb-2
 					.d-flex.justify-content-center(style='flex:1')
 						img(src='/assets/svgs/xls.svg', width='30%')
 						span XLS
-					input.form-control-file(type='file', name='add_xls', style='flex:4')
+					input.form-control-file(type='file', name='add_xls', style='flex:4', accept='.xls, .xlsx')
 				.border.d-flex.justify-content-between.mb-2
 					.d-flex.justify-content-center(style='flex:1')
 						img(src='/assets/svgs/ppt.svg', width='30%')
 						span PPT
-					input.form-control-file(type='file', name='add_ppt', style='flex:4')
+					input.form-control-file(type='file', name='add_ppt', style='flex:4', accept='.ppt')
 				.border.d-flex.justify-content-between.mb-2
 					.d-flex.justify-content-center(style='flex:1')
 						img(src='/assets/svgs/png.svg', width='30%')
 						span PNG
-					input.form-control-file(type='file', name='add_png', style='flex:4')
+					input.form-control-file(type='file', name='add_png', style='flex:4', accept='.png')
 	.text-center.p-3(style='flex:1')
 		button.btn.btn-zhupao.mb-3.px-5(onclick='fnSubmit()') 등록
 	block append_Js

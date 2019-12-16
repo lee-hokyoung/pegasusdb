@@ -319,8 +319,13 @@ function fnSubmit() {
   xhr.onreadystatechange = function () {
     if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
       let res = JSON.parse(this.response);
-      alert('등록성공');
-      location.href = '/admin/data/list';
+      if(res.code !== 0){
+        alert(res.message);
+      }else{
+        alert('등록성공');
+        location.href = '/admin/data/list';
+      }
+
     }
   };
   xhr.send(JSON.stringify(post_data));

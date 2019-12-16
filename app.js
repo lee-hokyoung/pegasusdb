@@ -28,9 +28,9 @@ app.use(express.json());
 app.use(express.urlencoded({extended:false}));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cookieParser());
-app.use('/chart.js', express.static(path.join(__dirname, 'node_modules/chart.js/dist')));
-app.use('/bootstrap-select', express.static(path.join(__dirname, 'node_modules/bootstrap-select/dist')));
-app.use('/downloads', express.static(path.join(__dirname, 'downloads')));
+app.use('/chart.js', express.static(path.join(__dirname, 'node_modules/chart.js/dist'),{expires:'30d'}));
+// app.use('/bootstrap-select', express.static(path.join(__dirname, 'node_modules/bootstrap-select/dist'), {expires:'30d'}));
+app.use('/downloads', express.static(path.join(__dirname, 'downloads'), {expires:'30d'}));
 
 app.use(session({
   secret: process.env.COOKIE_SECRET,

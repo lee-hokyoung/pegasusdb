@@ -63,7 +63,7 @@ router.get('/list/:cate/:cate_item?', middle.isLoggedIn, async (req, res) => {
   });
 });
 // get by ajax
-router.get('/ajax/list/:cate/:cate_item?', middle.isLoggedIn, async (req, res) => {
+router.get('/ajax/list/:cate/:cate_item?/:searchText?', middle.isLoggedIn, async (req, res) => {
   let strQuery = req.query;
   let list = await fnGetList(strQuery, req.params);
   res.json({list: list, cate: req.params.cate, cate_item: req.params.cate_item});
