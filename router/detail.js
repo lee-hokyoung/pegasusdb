@@ -7,7 +7,7 @@ const categoryModel = require('../model/categoryModel');
 const configModel = require('../model/configModel');
 
 // main 화면
-router.get('/:cate_id/:id', async (req, res) => {
+router.get('/:cate_id/:cate_item/:id', async (req, res) => {
   let cate_info = await categoryModel.find({group_id:req.params.cate_id});
   let data = await dataModel.findOne({_id:new ObjectId(req.params.id)});
   let config = await configModel.findOne({});
@@ -16,7 +16,8 @@ router.get('/:cate_id/:id', async (req, res) => {
     data: data,
     cate_info:cate_info,
     config:config,
-    user:user
+    user:user,
+    cate_item:req.params.cate_item
   });
 });
 module.exports = router;

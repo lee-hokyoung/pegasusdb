@@ -41,10 +41,13 @@ router.post('/login', middle.isNotLoggedIn, (req, res, next) => {
         return obj;
       });
       let isAnotherSession = false;
-      connected_users.forEach((v) => {
+      if(user.lv !== 9){
         // 세션 아이디는 다르지만 사용자가 같을 때, 다른 기기에서 접속한 것으로 간주
-        if (v.session_id !== session_id && v.user_id === user_id) isAnotherSession = true;
-      });
+        // 단, 관리자 아이디는 중복 로그인 허용
+        connected_users.forEach((v) => {
+          if (v.session_id !== session_id && v.user_id === user_id) isAnotherSession = true;
+        });
+      }
       if (isAnotherSession) res.redirect('/session/confirm');
       else res.redirect('/');
     });

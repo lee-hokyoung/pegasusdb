@@ -25,7 +25,7 @@ block content
 					// Region
 					.form-group.d-flex.justify-content-between
 						label.font-weight-bold.text-primary.text-right Region
-						select.selectpicker.add_query(style='width:150px', name='region')
+						select.selectpicker.add_query(name='region', data-width='fix')
 							option Region Select
 							each region in region_list
 								option(value=region.name, selected=region.name===strQuery.region) #{region.name}
@@ -35,7 +35,7 @@ block content
 					// Object
 					.form-group.d-flex.justify-content-between
 						label.font-weight-bold.text-primary.text-right Object
-						select.selectpicker.add_query(style='width:150px', name='object')
+						select.selectpicker.add_query(name='object', data-width='fix')
 							option Object Select
 							each obj in object
 								option(value=obj._id, selected=obj.name===strQuery.object) #{obj.name}
@@ -44,9 +44,9 @@ block content
 				.p-2(style='border:3px solid #aaa;')
 					h5.mb-5.font-weight-bold Search Words
 					.input-group.mx-3.m-auto
-						input.form-control(type='text')
+						input.form-control#searchText(type='text', name='searchText')
 						.input-group-prepend
-							button.btn.btn-primary Search
+							button.btn.btn-primary(onclick='searchList()') Search
 					h5 Results
 					select.selectpicker
 						option(value=10) 10
@@ -61,7 +61,7 @@ block content
 						each obj in item.category_obj
 							each o in obj
 								- category.push(o[Object.keys(o)])
-						a.list-group.list-group-item-action.flex-row.my-1.py-2(href='/detail/'  + cate + '/' + item._id, style='min-height:1px;')
+						a.list-group.list-group-item-action.flex-row.my-1.py-2(href='/detail/'  + cate + '/' + cate_item + '/' + item._id, style='min-height:1px;')
 							.col-2.text-center
 								img.p-1(src='/assets/images/' + item.chart_type + '_user.JPG', alt='', style='width:70%;')
 							.col-10.d-flex.flex-column.justify-content-around
@@ -76,3 +76,5 @@ block content
 								a.hidden-wrap.text-right(href='#', data-toggle='showMore', data-target='#info_' + item._id, data-expanded='false')
 block append_js
 	script(src='/assets/js/list.js', type='text/javascript')
+	script.
+		console.log('list : ', !{JSON.stringify(list)});

@@ -95,59 +95,59 @@ function fnGenerateUserList(res) {
   res.forEach(function (v, idx) {
     // li Element
     let li = document.createElement('li');
-    li.classList.add('list-group-item');
-    if (idx % 2 === 1) li.classList.add('list-group-item-secondary');
+    li.className = 'list-group-item';
+    if (idx % 2 === 1) li.className += ' list-group-item-secondary';
     // 로우
     let row = document.createElement('div');
-    row.classList.add('row');
-    row.classList.add('small');
+    row.className = 'row small';
     // 첫번째 컬럼(고객번호)
     let col1 = document.createElement('div');
-    col1.classList.add('col-1');
+    col1.className = 'col-1';
     col1.innerText = v.user_no;
     // 두번째 컬럼(기업명)
     let col2 = document.createElement('div');
-    col2.classList.add('col-1');
+    col2.className = 'col-1';
     col2.innerText = v.user_corp;
     // 세번째 컬럼(담당자)
     let col3 = document.createElement('div');
-    col3.classList.add('col-1');
+    col3.className = 'col-1';
     col3.innerText = v.manager_name;
     // 네번째 컬럼(연락처)
     let col4 = document.createElement('div');
-    col4.classList.add('col-1');
+    col4.className = 'col-1';
     col4.innerText = v.manager_tel;
     // 다섯번째 컬럼(이메일)
     let col5 = document.createElement('div');
-    col5.classList.add('col-1');
+    col5.className = 'col-1';
     col5.innerText = v.email;
     // 여섯번째 컬럼(아이디)
     let col6 = document.createElement('div');
-    col6.classList.add('col', 'text-nowrap');
+    col6.className = 'col text-nowrap';
     col6.innerText = v.user_id;
     // 일곱번째 컬럼(비밀번호)
     let col7 = document.createElement('div');
-    col7.classList.add('col', 'text-nowrap');
+    col7.className = 'col text-nowrap';
     col7.innerText = v.user_pw;
     // 여덟번째 컬럼(데이터 구매목록)
     let col8 = document.createElement('div');
-    col8.classList.add('col-1');
+    col8.className = 'col-1';
     for (let i = 0; i < (v.cate_info.length < 4 ? v.cate_info.length : 4); i++) {
       let p = document.createElement('p');
-      p.classList.add('m-0');
-      p.innertHTML = v.cate_info[i].cate_name;
+      p.className = 'm-0';
+      p.innerHTML = v.cate_info[i].cate_name;
       col8.appendChild(p);
       // col8.innertText = v.cate_info[i].cate_name;
       // col8.appendChild(document.createElement('br'));
     }
     if (v.cate_info.length > 4) {
       let collapse = document.createElement('div');
-      collapse.classList.add('overflow-hidden', 'collapse');
+      collapse.className = 'overflow-hidden collapse';
       collapse.setAttribute('style', 'line-height:1.3em;');
       collapse.id = 'cate_' + v._id;
       for (let i = 4; i < v.cate_info.length; i++) {
         let p = document.createElement('p');
-        p.innertHTML = v.cate_info[i].cate_name;
+        p.className = 'm-0';
+        p.innerHTML = v.cate_info[i].cate_name;
         collapse.appendChild(p);
         // collapse.appendChild(v.cate_info[i].cate_name);
         // collapse.appendChild(document.createElement('br'));
@@ -162,23 +162,31 @@ function fnGenerateUserList(res) {
 
     // 아홉번째 컬럼(중지/삭제 버튼)
     let col9 = document.createElement('div');
-    col9.classList.add('col-1');
+    col9.className = 'col-1';
+    let wrap = document.createElement('div');
+    wrap.className = 'status-btn-wrap';
+    wrap.setAttribute('data-id', v._id);
     let btn1 = document.createElement('button');
-    btn1.classList.add('btn', 'btn-primary', 'btn-sm', 'p-1', 'mb-1');
+    btn1.className = 'btn btn-primary btn-sm p-1 mb-1';
+    btn1.setAttribute('data-status', '1');
     btn1.innerText = '제공';
     let btn2 = document.createElement('button');
-    btn2.classList.add('btn', 'btn-warning', 'btn-sm', 'p-1', 'mb-1');
+    btn2.className = 'btn btn-warning btn-sm p-1 mb-1';
+    btn2.setAttribute('data-status', '2');
     btn2.innerText = '중지';
     let btn3 = document.createElement('button');
-    btn3.classList.add('btn', 'btn-danger', 'btn-sm', 'p-1', 'mb-1');
+    btn3.className = 'btn btn-danger btn-sm p-1 mb-1';
+    btn3.setAttribute('data-status', '3');
     btn3.innerText = '삭제';
-    col9.appendChild(btn1);
-    col9.appendChild(btn2);
-    col9.appendChild(btn3);
+    wrap.appendChild(btn1);
+    wrap.appendChild(btn2);
+    wrap.appendChild(btn3);
+    col9.appendChild(wrap);
     // 열번째 컬럼(상태)
     let col10 = document.createElement('div');
-    col10.classList.add('col-1');
-    col10.innerText = v.status === 1 ? '제공' : v.status === 2 ? '중지' : '삭제';
+    col10.className = 'col-1 colorStatus';
+    col10.setAttribute('data-id', v._id);
+    col10.setAttribute('data-status', v.status);
     row.appendChild(col1);
     row.appendChild(col2);
     row.appendChild(col3);
@@ -195,8 +203,26 @@ function fnGenerateUserList(res) {
 }
 
 // 사용자 상태 변경 버튼 클릭 이벤트
+$(document).on('click', '.status-btn-wrap button', function(){
+  console.log($(this));
+  let btn = $(this)[0];
+  let id = btn.parentElement.dataset.id;
+  let status = btn.dataset.status;
+  let xhr = new XMLHttpRequest();
+  let status_txt = document.querySelector('.colorStatus[data-id="' + id + '"]');
+  xhr.open('POST', '/admin/user/status', true);
+  xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.onreadystatechange = function () {
+    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+      let res = JSON.parse(this.response);
+      status_txt.dataset.status = status;
+      alert('변경되었습니다.');
+    }
+  };
+  xhr.send(JSON.stringify({id: id, status: status}));
+});
 document.addEventListener("DOMContentLoaded", function () {
-  document.querySelectorAll('.status-btn-wrap button').forEach(function (btn) {
+  document.querySelectorAll('.status-btn-wrap button111').forEach(function (btn) {
     btn.addEventListener('click', function (e) {
       console.log(btn);
       let id = btn.parentElement.dataset.id;
@@ -450,23 +476,23 @@ function fnGenerateDataList(list){
   list.forEach(function(v){
     let date = new Date(v.updated);
     let li = document.createElement('li');
-    li.classList.add('list-group-item');
+    li.className = 'list-group-item';
     li.setAttribute('about', v._id);
     let row = document.createElement('div');
-    row.classList.add('row', 'small', 'text-normal');
+    row.className = 'row small text-nowrap';
     let col_1 = document.createElement('div');
-    col_1.classList.add('col-1');
+    col_1.className = 'col-1';
     col_1.innerText = v.data_no;
     let col_2 = document.createElement('div');
-    col_2.classList.add('col-2', 'text-normal');
+    col_2.className = 'col-2 text-normal';
     col_2.innerText = v.data_title;
     let col_3 = document.createElement('div');
-    col_3.classList.add('col-1');
+    col_3.className ='col-1';
     col_3.innerText = v.data_unit;
 
     // 카테고리 컬럼
     let col_4 = document.createElement('div');
-    col_4.classList.add('col-1', 'text-normal');
+    col_4.className = 'col-1 text-normal';
     let cate_arr = [];
     for(let category in v.category_obj){
       v.category_obj[category].forEach(function(cate){
@@ -475,24 +501,24 @@ function fnGenerateDataList(list){
     }
     for(let n = 0; n < (cate_arr.length < 4 ? cate_arr.length: 4); n++){
       let p = document.createElement('p');
-      p.classList.add('m-0');
+      p.className = 'm-0';
       p.innerText = cate_arr[n];
       col_4.appendChild(p);
     }
     if(cate_arr.length > 4){
       let collapse = document.createElement('div');
-      collapse.classList.add('collapse', 'overflow-hidden');
+      collapse.className = 'collapse overflow-hidden';
       collapse.setAttribute('style', 'line-height:1.3em;');
       collapse.setAttribute('id', 'cate_' + v._id);
       for(let n = 4; n < cate_arr.length; n++){
         let p = document.createElement('p');
-        p.classList.add('m-0');
+        p.className = 'm-0';
         p.innerText = cate_arr[n];
         collapse.appendChild(p);
       }
       col_4.appendChild(collapse);
       let a = document.createElement('a');
-      a.classList.add('hidden-wrap');
+      a.className = 'hidden-wrap';
       a.href = '#';
       a.setAttribute('data-toggle', 'collapse');
       a.setAttribute('data-target', '#cate_' + v._id);
@@ -500,29 +526,50 @@ function fnGenerateDataList(list){
     }
     // Region
     let region_items = v.region_array.concat(v.city_array);
-    // for(){
-    //
-    // }
     let col_5 = document.createElement('div');
-    col_5.classList.add('col-1');
-    col_5.innerText = v.region_array;
+    col_5.className = 'col-1';
+    for(let n = 0; n < (region_items.length < 4 ? region_items.length : 4); n++){
+      let p = document.createElement('p');
+      p.className = 'm-0';
+      p.innerText = region_items[n];
+      col_5.appendChild(p);
+    }
+    if(region_items.length > 4){
+      let collapse = document.createElement('div');
+      collapse.className = 'overflow-hidden collapse';
+      collapse.setAttribute('style', 'line-height:1.3rem;');
+      collapse.setAttribute('id', 'region_' + v._id);
+      for(let n = 4; n < region_items.length; n++){
+        let p = document.createElement('p');
+        p.className = 'm-0';
+        p.innerText = region_items[n];
+        collapse.appendChild(p);
+      }
+      let a = document.createElement('a');
+      a.className = 'hidden-wrap';
+      a.href = '#';
+      a.setAttribute('data-toggle', 'collapse');
+      a.setAttribute('data-target', '#region_' + v._id);
+      col_5.appendChild(collapse);
+      col_5.appendChild(a);
+    }
     let col_6 = document.createElement('div');
-    col_6.classList.add('col-1');
+    col_6.className = 'col-1';
     v.object.forEach(function (obj) {
       let p = document.createElement('p');
-      p.classList.add('m-0');
+      p.className = 'm-0';
       p.innerText = obj;
       col_6.appendChild(p);
     });
     let col_7 = document.createElement('div');
-    col_7.classList.add('col-2', 'text-center');
+    col_7.className = 'col-2 text-center';
     let a = document.createElement('a');
-    a.classList.add('btn', 'btn-primary', 'btn-sm', 'my-1', 'mx-auto');
+    a.className = 'btn btn-primary btn-sm my-1 mx-auto';
     a.href = '/admin/data/read/' + v._id;
     a.innerText = '업데이트';
     let button = document.createElement('button');
-    button.classList.add('btn', 'btn-danger', 'd-block', 'my-1', 'mx-auto', 'btn-sm');
-    button.onclick = 'fnDeleteData("' + v._id + '")';
+    button.className = 'btn btn-danger d-block my-1 mx-auto btn-sm';
+    button.addEventListener('click', function(){fnDeleteData(v._id)});
     button.innerText = '삭제';
     col_7.appendChild(a);
     col_7.appendChild(button);

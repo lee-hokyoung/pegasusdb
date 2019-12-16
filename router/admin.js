@@ -150,12 +150,17 @@ router.post('/user/search', async (req, res) => {
   let list = await userModel.aggregate([
     {
       $match: {
-        $or: [
-          {user_id: regex},
-          {user_corp: regex},
-          {manager_name: regex},
-          {manager_tel: regex}
-        ]
+        $and:[
+          {lv:1},
+          {
+            $or: [
+              {user_id: regex},
+              {user_corp: regex},
+              {manager_name: regex},
+              {manager_tel: regex}
+            ]
+          }
+        ],
       }
     },
     {
@@ -310,6 +315,7 @@ router.put('/data/update/:id', async (req, res) => {
   let result = await dataModel.updateMany({_id: req.params.id}, req.body);
   res.json(result);
 });
+// 데이터 검색
 router.post('/data/search', async (req, res) => {
   let regex = {$regex: '.*' + req.body.searchText + '.*'};
   let list = await dataModel.aggregate([

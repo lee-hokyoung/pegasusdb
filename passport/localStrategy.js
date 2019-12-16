@@ -22,15 +22,4 @@ module.exports = (passport) => {
       done(error);
     }
   }));
-  // passport.use(new JWTStrategy({
-  //     jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
-  //     secretOrKey   : process.env.JWT_SECRET
-  //   },
-  //   async (jwtPayload, cb) => {
-  //     console.log('secret : ', process.env.JWT_SECRET);
-  //     console.log('payload : ', jwtPayload);
-  //     //find the user in db if needed. This functionality may be omitted if you store everything you'll need in JWT payload.
-  //     return await User.findOne({user_id:jwtPayload.id});
-  //   }
-  // ));
 };
