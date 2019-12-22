@@ -205,6 +205,48 @@ router.get('/data/register', async (req, res) => {
     user: user
   });
 });
+function fnMoveFileTempToDownload(req){
+  if(typeof req.body.add_img_graph !== 'undefined' && req.body.add_img_graph !== ""){
+    let path = req.body.add_img_graph.path;
+    fs.createReadStream('./' + path)
+      .pipe(fs.createWriteStream('./downloads' + path.replace('temps', '')));
+  }
+  if(typeof req.body.add_pdf !== 'undefined' && req.body.add_pdf !== ""){
+    let path = req.body.add_pdf.path;
+    fs.createReadStream('./' + path)
+      .pipe(fs.createWriteStream('./downloads' + path.replace('temps', '')));
+  }
+  if(typeof req.body.add_xls !== 'undefined' && req.body.add_xls !== ""){
+    let path = req.body.add_xls.path;
+    fs.createReadStream('./' + path)
+      .pipe(fs.createWriteStream('./downloads' + path.replace('temps', '')));
+  }
+  if(typeof req.body.add_ppt !== 'undefined' && req.body.add_ppt !== ""){
+    let path = req.body.add_ppt.path;
+    fs.createReadStream('./' + path)
+      .pipe(fs.createWriteStream('./downloads' + path.replace('temps', '')));
+  }
+  if(typeof req.body.add_png !== 'undefined' && req.body.add_png !== ""){
+    let path = req.body.add_png.path;
+    fs.createReadStream('./' + path)
+      .pipe(fs.createWriteStream('./downloads' + path.replace('temps', '')));
+  }
+  // temp 폴더 내에 모든 파일을 삭제
+  let directory = './temps';
+  fs.readdir(directory, (err, files) => {
+    if (!err) {
+      try {
+        for (let file of files) {
+          fs.unlink(path.join(directory, file), err => {
+            if (err) throw err;
+          });
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  });
+}
 // 데이터 등록
 router.post('/data/register', async (req, res) => {
   // 유효성 검증
@@ -212,46 +254,7 @@ router.post('/data/register', async (req, res) => {
   if (exDataNo) {
     res.json({code: 9, message: '중복된 자료번호 입니다.'});
   } else {
-    if(typeof req.body.add_img_graph !== 'undefined'){
-      let path = req.body.add_img_graph.path;
-      fs.createReadStream('./' + path)
-        .pipe(fs.createWriteStream('./downloads' + path.replace('temps', '')));
-    }
-    if(typeof req.body.add_pdf !== 'undefined'){
-      let path = req.body.add_pdf.path;
-      fs.createReadStream('./' + path)
-        .pipe(fs.createWriteStream('./downloads' + path.replace('temps', '')));
-    }
-    if(typeof req.body.add_xls !== 'undefined'){
-      let path = req.body.add_xls.path;
-      fs.createReadStream('./' + path)
-        .pipe(fs.createWriteStream('./downloads' + path.replace('temps', '')));
-    }
-    if(typeof req.body.add_ppt !== 'undefined'){
-      let path = req.body.add_ppt.path;
-      fs.createReadStream('./' + path)
-        .pipe(fs.createWriteStream('./downloads' + path.replace('temps', '')));
-    }
-    if(typeof req.body.add_png !== 'undefined'){
-      let path = req.body.add_png.path;
-      fs.createReadStream('./' + path)
-        .pipe(fs.createWriteStream('./downloads' + path.replace('temps', '')));
-    }
-    // temp 폴더 내에 모든 파일을 삭제
-    let directory = './temps';
-    fs.readdir(directory, (err, files) => {
-      if (!err) {
-        try {
-          for (let file of files) {
-            fs.unlink(path.join(directory, file), err => {
-              if (err) throw err;
-            });
-          }
-        } catch (e) {
-          console.error(e);
-        }
-      }
-    });
+    fnMoveFileTempToDownload(req);
     let data = req.body;
     console.log('data : ', data);
     let result = await dataModel.create(data);
@@ -286,9 +289,9 @@ router.delete('/data/:id', async (req, res) => {
   // 데이터 내에 첨부 파일 경로 찾아서 삭제하기
   let data = await dataModel.findOne({_id: req.params.id});
   if (data) {
-    if (data.add_img_graph) {
+    if (data.add_img_graph.path) {
       try {
-        let path = './downloads/' + data.add_img_graph;
+        let path = './downloads/' + data.add_img_graph.path.replace('temps/', '');
         if(fs.existsSync(path)){
           fs.unlink(path, err => {
             if (err) throw err;
@@ -298,9 +301,9 @@ router.delete('/data/:id', async (req, res) => {
         console.error(e);
       }
     }
-    if (data.add_pdf) {
+    if (data.add_pdf.path) {
       try {
-        let path = './downloads/' + data.add_pdf;
+        let path = './downloads/' + data.add_pdf.path.replace('temps/','');
         if(fs.existsSync(path)){
           fs.unlink(path, err => {
             if (err) throw err;
@@ -310,9 +313,9 @@ router.delete('/data/:id', async (req, res) => {
         console.error(e);
       }
     }
-    if (data.add_png) {
+    if (data.add_png.path) {
       try {
-        let path = './downloads/' + data.add_png;
+        let path = './downloads/' + data.add_png.path.replace('temps/', '');
         if(fs.existsSync(path)){
           fs.unlink(path, err => {
             if (err) throw err;
@@ -322,9 +325,9 @@ router.delete('/data/:id', async (req, res) => {
         console.error(e);
       }
     }
-    if (data.add_ppt) {
+    if (data.add_ppt.path) {
       try {
-        let path = './downloads/' + data.add_ppt;
+        let path = './downloads/' + data.add_ppt.path.replcae('temps/', '');
         if(fs.existsSync(path)){
           fs.unlink(path, err => {
             if (err) throw err;
@@ -334,9 +337,9 @@ router.delete('/data/:id', async (req, res) => {
         console.error(e);
       }
     }
-    if (data.add_xls) {
+    if (data.add_xls.path) {
       try {
-        let path = './downloads/' + data.add_xls;
+        let path = './downloads/' + data.add_xls.path.replace('temps/', '');
         if(fs.existsSync(path)){
           fs.unlink(path, err => {
             if (err) throw err;
@@ -377,6 +380,7 @@ router.get('/data/read/:id', async (req, res) => {
 });
 // 데이터 update
 router.put('/data/update/:id', async (req, res) => {
+  fnMoveFileTempToDownload(req);
   let result = await dataModel.updateMany({_id: req.params.id}, req.body);
   res.json(result);
 });
@@ -415,15 +419,17 @@ router.post('/data/file_upload', upload.array('file', 10), async (req, res) => {
 //  파일 삭제
 router.delete('/data/file/:id/:fileName', async (req, res) => {
   let id = req.params.id;
+  let updateObj = {};
+  updateObj[req.query.input_name] = '';
   let fileName = req.params.fileName;
   try {
     let path = './downloads/' + fileName;
     if(fs.existsSync(path)){
-      fs.unlink(path, err => {``
+      fs.unlink(path, err => {
         if (err) throw err;
       });
     }
-    let result = await dataModel.updateOne({_id:id}, {$set:{add_img_graph:''}});
+    let result = await dataModel.updateOne({_id:id}, {$set:updateObj});
     res.json({code:0, message:'삭제 성공'});
   } catch (e) {
     console.error(e);

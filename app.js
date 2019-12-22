@@ -35,7 +35,7 @@ app.use('/downloads', express.static(path.join(__dirname, 'downloads'), {expires
 app.use(session({
   secret: process.env.COOKIE_SECRET,
   resave: true,
-  saveUninitialized: true,
+  saveUninitialized: false,
   store:new MongoStore({
     url:process.env.MONGO_URI,
     collection:'session'

@@ -68,6 +68,7 @@ function fnRegisterUser() {
   };
   xhr.send(JSON.stringify(data));
 }
+
 //  사용자 검색
 function fnSearch() {
   let searchText = document.querySelector('input[name="searchText"]');
@@ -203,7 +204,7 @@ function fnGenerateUserList(res) {
 }
 
 // 사용자 상태 변경 버튼 클릭 이벤트
-$(document).on('click', '.status-btn-wrap button', function(){
+$(document).on('click', '.status-btn-wrap button', function () {
   console.log($(this));
   let btn = $(this)[0];
   let id = btn.parentElement.dataset.id;
@@ -237,6 +238,7 @@ function fnAddCol() {
     tr.dataset.idx = current_idx + 1;
   });
 }
+
 // 데이터 테이블 컬럼 제거
 function fnRemoveCol() {
   document.querySelectorAll('tr').forEach(function (tr) {
@@ -247,6 +249,7 @@ function fnRemoveCol() {
     }
   });
 }
+
 // 데이터 테이블 로우 추가
 function fnAddRow() {
   let tbody = document.querySelector('tbody');
@@ -279,6 +282,7 @@ function fnAddRow() {
   }
   tbody.appendChild(tr);
 }
+
 // 데이터 테이블 로우 제거
 function fnRemoveRow() {
   let tbody = document.querySelector('tbody');
@@ -288,10 +292,11 @@ function fnRemoveRow() {
   trs[tr_idx - 1].remove();
   tbody.dataset.row = tr_idx - 1;
 }
+
 // 데이터 제출하기
 function fnSubmit() {
   let post_data = fnGenerateFormData();
-  if(!post_data) return false;
+  if (!post_data) return false;
   // 데이터 등록
   let xhr = new XMLHttpRequest();
   xhr.open('POST', '/admin/data/register', true);
@@ -299,9 +304,9 @@ function fnSubmit() {
   xhr.onreadystatechange = function () {
     if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
       let res = JSON.parse(this.response);
-      if(res.code !== 0){
+      if (res.code !== 0) {
         alert(res.message);
-      }else{
+      } else {
         alert('등록성공');
         location.href = '/admin/data/list';
       }
@@ -309,6 +314,7 @@ function fnSubmit() {
   };
   xhr.send(JSON.stringify(post_data));
 }
+
 // 폼 데이터 생성
 function fnGenerateFormData() {
   let isAddImage = document.querySelector('input[name="add_img_graph"]').value !== '';
@@ -383,10 +389,10 @@ function fnGenerateFormData() {
 
   let post_data = {};
   post_data['data_title'] = data_title.value;
-  if(!isAddImage) post_data['data_unit'] = data_unit.value;
-  if(!isAddImage) post_data['chart_type'] = chart_type.value;
-  if(!isAddImage) post_data['table_x'] = table_x;
-  if(!isAddImage) post_data['table_y'] = table_y;
+  if (!isAddImage) post_data['data_unit'] = data_unit.value;
+  if (!isAddImage) post_data['chart_type'] = chart_type.value;
+  if (!isAddImage) post_data['table_x'] = table_x;
+  if (!isAddImage) post_data['table_y'] = table_y;
   post_data['data_no'] = data_no.value;
   post_data['category_obj'] = category_obj;
   post_data['region_array'] = region_array;
@@ -402,18 +408,19 @@ function fnGenerateFormData() {
       // path_arr.push(file.dataset.path);
       // originalname_arr.push(file.dataset.originalname);
       // post_data[file.name] = file.dataset.path.replace('temps\/', '');
-      post_data[file.name] = {original:file.dataset.originalname, path:file.dataset.path}
+      post_data[file.name] = {original: file.dataset.originalname, path: file.dataset.path}
     }
   });
   // post_data['files'] = {'path':path_arr, 'originalname':originalname_arr};
-  console.log('post data : ', post_data);
+  // console.log('post data : ', post_data);
   // return false;
   return post_data;
 }
+
 // 데이터 업데이트
 function fnUpdateData(id) {
   let post_data = fnGenerateFormData();
-  if(!post_data) return false;
+  if (!post_data) return false;
   // 데이터 등록
   let xhr = new XMLHttpRequest();
   xhr.open('PUT', '/admin/data/update/' + id, true);
@@ -429,6 +436,7 @@ function fnUpdateData(id) {
   };
   xhr.send(JSON.stringify(post_data));
 }
+
 // 데이터 삭제
 function fnDeleteData(id) {
   if (confirm('정말 삭제시겠습니까?')) {
@@ -448,26 +456,28 @@ function fnDeleteData(id) {
     xhr.send();
   }
 }
+
 // 데이터 검색
-function fnSearchData(){
+function fnSearchData() {
   let searchText = document.querySelector('#searchText').value;
   let xhr = new XMLHttpRequest();
   xhr.open('POST', '/admin/data/search');
   xhr.setRequestHeader('Content-Type', 'application/json');
-  xhr.onreadystatechange = function(){
-    if(this.readyState === XMLHttpRequest.DONE && this.status === 200){
+  xhr.onreadystatechange = function () {
+    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
       let res = JSON.parse(this.response);
       console.log('res : ', res);
       fnGenerateDataList(res);
     }
   };
-  xhr.send(JSON.stringify({searchText:searchText}));
+  xhr.send(JSON.stringify({searchText: searchText}));
 }
+
 // 검색된 데이터 html 생성
-function fnGenerateDataList(list){
+function fnGenerateDataList(list) {
   let dataList = document.getElementById('data_item_list');
   dataList.innerHTML = '';
-  list.forEach(function(v){
+  list.forEach(function (v) {
     let date = new Date(v.updated);
     let li = document.createElement('li');
     li.className = 'list-group-item';
@@ -481,30 +491,30 @@ function fnGenerateDataList(list){
     col_2.className = 'col-2 text-normal';
     col_2.innerText = v.data_title;
     let col_3 = document.createElement('div');
-    col_3.className ='col-1';
+    col_3.className = 'col-1';
     col_3.innerText = v.data_unit;
 
     // 카테고리 컬럼
     let col_4 = document.createElement('div');
     col_4.className = 'col-1 text-normal';
     let cate_arr = [];
-    for(let category in v.category_obj){
-      v.category_obj[category].forEach(function(cate){
+    for (let category in v.category_obj) {
+      v.category_obj[category].forEach(function (cate) {
         cate_arr.push(cate[Object.keys(cate)]);
       });
     }
-    for(let n = 0; n < (cate_arr.length < 4 ? cate_arr.length: 4); n++){
+    for (let n = 0; n < (cate_arr.length < 4 ? cate_arr.length : 4); n++) {
       let p = document.createElement('p');
       p.className = 'm-0';
       p.innerText = cate_arr[n];
       col_4.appendChild(p);
     }
-    if(cate_arr.length > 4){
+    if (cate_arr.length > 4) {
       let collapse = document.createElement('div');
       collapse.className = 'collapse overflow-hidden';
       collapse.setAttribute('style', 'line-height:1.3em;');
       collapse.setAttribute('id', 'cate_' + v._id);
-      for(let n = 4; n < cate_arr.length; n++){
+      for (let n = 4; n < cate_arr.length; n++) {
         let p = document.createElement('p');
         p.className = 'm-0';
         p.innerText = cate_arr[n];
@@ -522,18 +532,18 @@ function fnGenerateDataList(list){
     let region_items = v.region_array.concat(v.city_array);
     let col_5 = document.createElement('div');
     col_5.className = 'col-1';
-    for(let n = 0; n < (region_items.length < 4 ? region_items.length : 4); n++){
+    for (let n = 0; n < (region_items.length < 4 ? region_items.length : 4); n++) {
       let p = document.createElement('p');
       p.className = 'm-0';
       p.innerText = region_items[n];
       col_5.appendChild(p);
     }
-    if(region_items.length > 4){
+    if (region_items.length > 4) {
       let collapse = document.createElement('div');
       collapse.className = 'overflow-hidden collapse';
       collapse.setAttribute('style', 'line-height:1.3rem;');
       collapse.setAttribute('id', 'region_' + v._id);
-      for(let n = 4; n < region_items.length; n++){
+      for (let n = 4; n < region_items.length; n++) {
         let p = document.createElement('p');
         p.className = 'm-0';
         p.innerText = region_items[n];
@@ -563,13 +573,15 @@ function fnGenerateDataList(list){
     a.innerText = '업데이트';
     let button = document.createElement('button');
     button.className = 'btn btn-danger d-block my-1 mx-auto btn-sm';
-    button.addEventListener('click', function(){fnDeleteData(v._id)});
+    button.addEventListener('click', function () {
+      fnDeleteData(v._id)
+    });
     button.innerText = '삭제';
     col_7.appendChild(a);
     col_7.appendChild(button);
     let col_8 = document.createElement('div');
     col_8.classList.add('col-1');
-    col_8.innerText = (v.status === 1 ? '제공':v.status === 2 ? '중지':'삭제');
+    col_8.innerText = (v.status === 1 ? '제공' : v.status === 2 ? '중지' : '삭제');
     let col_9 = document.createElement('div');
     col_9.classList.add('col-2');
     col_9.innerText = date.toLocaleDateString('ko');
@@ -586,33 +598,34 @@ function fnGenerateDataList(list){
     dataList.appendChild(li);
   });
 }
+
 //  데이터 이미지 등록시 단위, 그래프 유형, 내용(데이터) 입력 차단 및 필수 항목 해제
-const fnInputImage = function(){
+const fnInputImage = function () {
   let input = document.querySelector('input[name="add_img_graph"]');
   let data_unit = document.querySelector('input[name="data_unit"]');
   let table_inputs = document.querySelectorAll('#table_content input');
   let table_radio = document.querySelectorAll('input[type="radio"]');
   let table_buttons = document.querySelectorAll('button.btn-sm');
-  if(input.value !== ''){
+  if (input.value !== '') {
     data_unit.disabled = true;
-    table_inputs.forEach(function(inp){
+    table_inputs.forEach(function (inp) {
       inp.disabled = true;
     });
-    table_radio.forEach(function(radio){
+    table_radio.forEach(function (radio) {
       radio.disabled = true;
     });
-    table_buttons.forEach(function(btn){
+    table_buttons.forEach(function (btn) {
       btn.disabled = true;
     });
-  }else{
+  } else {
     data_unit.disabled = false;
-    table_inputs.forEach(function(inp){
+    table_inputs.forEach(function (inp) {
       inp.disabled = false;
     });
-    table_radio.forEach(function(radio){
+    table_radio.forEach(function (radio) {
       radio.disabled = false;
     });
-    table_buttons.forEach(function(btn){
+    table_buttons.forEach(function (btn) {
       btn.disabled = false;
     });
   }
@@ -646,23 +659,34 @@ document.querySelectorAll('input[type="file"]').forEach(function (file) {
     }
   })
 });
+
 // 업로드 된 파일 삭제
-function fnDeleteFile(id, file_name){
+function fnDeleteFile(id, file_name, input_name, opt) {
+  if (!confirm('파일을 삭제하시겠습니까?')) return false;
   let xhr = new XMLHttpRequest();
-  xhr.open('DELETE', '/admin/data/file/' + id + '/' + file_name);
-  xhr.onreadystatechange = function(){
-    if(this.readyState === XMLHttpRequest.DONE && this.status === 200){
+  xhr.open('DELETE', '/admin/data/file/' + id + '/' + file_name + '?input_name=' + input_name);
+  xhr.onreadystatechange = function () {
+    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
       let res = JSON.parse(this.response);
       console.log('res : ', res);
-      if(res.code !== 0){
+      if (res.code !== 0) {
         alert(res.message);
-      }else{
+      } else {
         let file_wrap = document.querySelector('div[about="' + file_name + '"]');
         file_wrap.remove();
+        if (opt) fnChangeAbleInput();
+        document.querySelector('input[name="' + input_name + '"]').disabled = false;
       }
     }
-  }
+  };
   xhr.send();
+}
+
+// disabled 해제
+function fnChangeAbleInput() {
+  document.querySelectorAll('input[disabled]:not(.form-control-file)').forEach(function (inp) {
+    inp.disabled = false;
+  });
 }
 
 // config update

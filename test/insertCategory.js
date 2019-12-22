@@ -7,6 +7,7 @@ mongoose.connect(process.env.MONGO_URI, {useNewUrlParser: true}, (error) => {
     else console.log('몽고디비 연결 성공');
 });
 (async function main() {
+    await Category.deleteMane({});
     let query = [
         {
             cate_id: 'hair_salon',

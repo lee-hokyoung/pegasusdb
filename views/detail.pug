@@ -26,10 +26,10 @@ block content
       .col-8.text-zhupao
         h4.font-weight-bold #{data.data_title}
         h5.text-right 단위 : #{data.data_unit}
-        .card
+        .card.d-block
           .card-body.shadow
-            if(data.add_img_graph)
-              img(src='/downloads/' + data.add_img_graph)
+            if(data.add_img_graph.path)
+              img(src='/downloads/' + data.add_img_graph.path.replace('temps/',''), width='100%')
             else
               canvas#chart(width='100%', height='50')
         h6.text-right.text-zhupao.mt-3 Data No. #{data.data_no}
@@ -38,20 +38,20 @@ block content
           span.px-3.py-2(style='flex:1; border-bottom:4px solid #007bff') DOWNLOAD
           div.border-bottom(style='flex:2')
         .d-flex
-          .border(class=data.add_png?'':'bg-disable')
-            a.btn.d-flex.justify-content-between.p-2(href=(data.add_png?'/downloads/' + data.add_png:'javascript:void(0);'), target='_blank', class=data.add_png?'':'disabled')
+          .border(class=data.add_png.path?'':'bg-disable')
+            a.btn.d-flex.justify-content-between.p-2(href=(data.add_png.path?'/downloads/' + data.add_png.path.replace('temps/',''):'javascript:void(0);'), target='_blank', class=data.add_png.path?'':'disabled')
               img.icon-img(src='/assets/svgs/png.svg')
               span PNG
-          .border.ml-2(class=data.add_png?'':'bg-disable')
-            a.btn.d-flex.justify-content-between.p-2(href=(data.add_ppt?'/downloads/' + data.add_ppt:'javascript:void(0);'), target='_blank', class=data.add_ppt?'':'disabled')
+          .border.ml-2(class=data.add_ppt.path?'':'bg-disable')
+            a.btn.d-flex.justify-content-between.p-2(href=(data.add_ppt.path?'/downloads/' + data.add_ppt.path.replace('temps/',''):'javascript:void(0);'), target='_blank', class=data.add_ppt.path?'':'disabled')
               img.icon-img(src='/assets/svgs/ppt.svg')
               span PPT
-          .border.ml-2(class=data.add_png?'':'bg-disable')
-            a.btn.d-flex.justify-content-between.p-2(href=(data.add_xls?'/downloads/' + data.add_xls:'javascript:void(0);'), target='_blank', class=data.add_xls?'':'disabled')
+          .border.ml-2(class=data.add_xls.path?'':'bg-disable')
+            a.btn.d-flex.justify-content-between.p-2(href=(data.add_xls.path?'/downloads/' + data.add_xls.path.replace('temps/', ''):'javascript:void(0);'), target='_blank', class=data.add_xls.path?'':'disabled')
               img.icon-img(src='/assets/svgs/xls.svg')
               span XLS
-          .border.ml-2(class=data.add_png?'':'bg-disable')
-            a.btn.d-flex.justify-content-between.p-2(href=(data.add_pdf?'/downloads/' + data.add_pdf:'javascript:void(0);'), target='_blank', class=data.add_pdf?'':'disabled')
+          .border.ml-2(class=data.add_pdf.path?'':'bg-disable')
+            a.btn.d-flex.justify-content-between.p-2(href=(data.add_pdf.path?'/downloads/' + data.add_pdf.path.replace('temps/', ''):'javascript:void(0);'), target='_blank', class=data.add_pdf.path?'':'disabled')
               img.icon-img(src='/assets/svgs/pdf.svg')
               span PDF
         ul#pills-tab.nav.nav-pills.mt-4.mb-3.pb-2.border-bottom(role="tablist")
@@ -72,6 +72,7 @@ block append_js
   script(src='/chart.js/Chart.js')
   script.
     let d = !{JSON.stringify(data)};
+    console.log('data : ', d);
     if(d.add_img_graph){
 
     }else{
