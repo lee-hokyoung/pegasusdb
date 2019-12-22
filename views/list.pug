@@ -39,7 +39,8 @@ block content
 							option Object Select
 							each obj in object
 								option(value=obj._id, selected=obj.name===strQuery.object) #{obj.name}
-					button.btn.btn-primary(type='button', onclick='fnSearchDetail()') DETAILED SEARCH
+					.text-center
+						button.btn.btn-primary(type='button', onclick='fnSearchDetail()') DETAILED SEARCH
 			.col-9
 				.p-2(style='border:3px solid #aaa;')
 					h5.mb-5.font-weight-bold Search Words

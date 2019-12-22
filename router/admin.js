@@ -18,24 +18,24 @@ let category = [
     sub_cate: ['Hair Salon', 'SPA', 'Nail Shop']
   },
   {
-    cate: 'O2O',
-    sub_cate: ['Hotel', 'Delivery', 'Sharing']
+    cate: 'Living',
+    sub_cate: ['Infortainment', 'Home appliances', 'Interior']
   },
   {
     cate: 'Health',
-    sub_cate: ['Health care & Support', 'Silver care & Support', 'Baby care & Support']
+    sub_cate: ['Adult care & Support', 'Silver care & Support', 'Baby care & Support']
   },
   {
     cate: 'Transport',
-    sub_cate: ['Electronic Vehicles', 'Drone', 'Smart Mobility']
+    sub_cate: ['Smart Mobility', 'Drone', 'Public Transportation']
   },
   {
     cate: 'Food & Beverage',
-    sub_cate: ['Restaurant', 'Cafe', 'Franchise']
+    sub_cate: ['Restaurant & Cafe', 'Delivery', 'Franchise']
   },
   {
     cate: 'E-Commerce',
-    sub_cate: ['B2B Commerce', 'B2C Commerce', 'C2C Commerce']
+    sub_cate: ['PC & Mobile shopping', 'Consumer', 'Producer']
   }
 ];
 let province = [
@@ -256,7 +256,6 @@ router.post('/data/register', async (req, res) => {
   } else {
     fnMoveFileTempToDownload(req);
     let data = req.body;
-    console.log('data : ', data);
     let result = await dataModel.create(data);
     res.json({result: result, code: 0});
   }

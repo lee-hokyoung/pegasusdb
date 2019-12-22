@@ -27,9 +27,9 @@ block content
         h4.font-weight-bold #{data.data_title}
         h5.text-right 단위 : #{data.data_unit}
         .card.d-block
-          .card-body.shadow
+          .card-body.shadow.text-center
             if(data.add_img_graph.path)
-              img(src='/downloads/' + data.add_img_graph.path.replace('temps/',''), width='100%')
+              img(src='/downloads/' + data.add_img_graph.path.replace('temps/',''), width='50%')
             else
               canvas#chart(width='100%', height='50')
         h6.text-right.text-zhupao.mt-3 Data No. #{data.data_no}

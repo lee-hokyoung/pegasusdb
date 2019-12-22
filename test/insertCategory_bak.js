@@ -7,7 +7,7 @@ mongoose.connect(process.env.MONGO_URI, {useNewUrlParser: true}, (error) => {
     else console.log('몽고디비 연결 성공');
 });
 (async function main() {
-    await Category.deleteMany({});
+    await Category.deleteMane({});
     let query = [
         {
             cate_id: 'hair_salon',
@@ -34,32 +34,32 @@ mongoose.connect(process.env.MONGO_URI, {useNewUrlParser: true}, (error) => {
             group_order:1
         },
         {
-            cate_id: 'infortainment',
-            cate_name: 'Infortainment',
+            cate_id: 'hotel',
+            cate_name: 'Hotel',
             cate_order:1,
-            group_id: 'living',
-            group_name: 'Living',
+            group_id: 'o2o',
+            group_name: 'O2O',
             group_order:2
         },
         {
-            cate_id: 'home_appliances',
-            cate_name: 'Home appliances',
+            cate_id: 'delivery',
+            cate_name: 'Delivery',
             cate_order:2,
-            group_id: 'living',
-            group_name: 'Living',
+            group_id: 'o2o',
+            group_name: 'O2O',
             group_order:2
         },
         {
-            cate_id: 'interior',
-            cate_name: 'Interior',
+            cate_id: 'sharing',
+            cate_name: 'Sharing',
             cate_order:3,
-            group_id: 'living',
-            group_name: 'Living',
+            group_id: 'o2o',
+            group_name: 'O2O',
             group_order:2
         },
         {
-            cate_id: 'adult_care_support',
-            cate_name: 'Adult care & Support',
+            cate_id: 'health_care_support',
+            cate_name: 'Health care & Support',
             cate_order:1,
             group_id: 'health',
             group_name: 'Health',
@@ -82,8 +82,8 @@ mongoose.connect(process.env.MONGO_URI, {useNewUrlParser: true}, (error) => {
             group_order:3
         },
         {
-            cate_id: 'smart_mobility',
-            cate_name: 'Smart Mobility',
+            cate_id: 'electronic_vehicles',
+            cate_name: 'Electronic Vehicles',
             cate_order:1,
             group_id: 'transport',
             group_name: 'Transport',
@@ -98,24 +98,24 @@ mongoose.connect(process.env.MONGO_URI, {useNewUrlParser: true}, (error) => {
             group_order:4
         },
         {
-            cate_id: 'public_transportation',
-            cate_name: 'Public Transportation',
+            cate_id: 'smart_mobility',
+            cate_name: 'Smart Mobility',
             cate_order:3,
             group_id: 'transport',
             group_name: 'Transport',
             group_order:4
         },
         {
-            cate_id: 'restaurant_cafe',
-            cate_name: 'Restaurant & Cafe',
+            cate_id: 'restaurant',
+            cate_name: 'Restaurant',
             cate_order:1,
             group_id: 'food_beverage',
             group_name: 'Food & Beverage',
             group_order:5
         },
         {
-            cate_id: 'delivery',
-            cate_name: 'Delivery',
+            cate_id: 'cafe',
+            cate_name: 'Cafe',
             cate_order:2,
             group_id: 'food_beverage',
             group_name: 'Food & Beverage',
@@ -130,24 +130,24 @@ mongoose.connect(process.env.MONGO_URI, {useNewUrlParser: true}, (error) => {
             group_order:5
         },
         {
-            cate_id: 'pc_mobile_shopping',
-            cate_name: 'PC & Mobile shopping',
+            cate_id: 'b2b_commerce',
+            cate_name: 'B2B Commerce',
             cate_order:1,
             group_id: 'e_commerce',
             group_name: 'E-Commerce',
             group_order:6
         },
         {
-            cate_id: 'consumer',
-            cate_name: 'Consumer',
+            cate_id: 'b2c_commerce',
+            cate_name: 'B2C Commerce',
             cate_order:2,
             group_id: 'e_commerce',
             group_name: 'E-Commerce',
             group_order:6
         },
         {
-            cate_id: 'producer',
-            cate_name: 'Producer',
+            cate_id: 'c2c_commerce',
+            cate_name: 'C2C Commerce',
             cate_order:3,
             group_id: 'e_commerce',
             group_name: 'E-Commerce',
