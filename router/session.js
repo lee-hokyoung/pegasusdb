@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const sessionModel = require('../model/sessionModel');
+const userAgent = require('express-useragent');
+const requestIp = require('request-ip');
 
 router.get('/confirm', async(req, res) => {
   res.render('session_confirm');
@@ -23,11 +25,21 @@ router.get('/this', async(req, res) => {
       let result = await sessionModel.deleteOne({_id:v.session_id});
     }
   });
-  res.redirect('/');
 });
 // 기존 로그인 유지
 router.get('/original', async (req, res) => {
-  req.session.destroy();
+  // req.session.destroy();
+  console.log('passport  :', req.session.passport);
   res.redirect('/');
+});
+router.get('/list', async (req, res) => {
+  let ses_list = req.session;
+  let agent = req.headers['user-agent'];
+  let ua = userAgent.parse(agent);
+  let user_ip = requestIp.getClientIp(req);
+  console.log('user agent : ', ua);
+  console.log('public ip : ', user_ip);
+  console.log('session list : ', ses_list);
+  res.end();
 });
 module.exports = router;

@@ -26,7 +26,7 @@ router.post('/login', middle.isNotLoggedIn, (req, res, next) => {
       }
       if (user.status !== 1) {
         req.logout();
-        req.session.destroy();
+        // req.session.destroy();
         res.send('<script>alert("로그인 권한이 없는 ID 입니다."); location.href = "/auth/login";</script>');
       }
       let session_id = req.session.id;
@@ -56,7 +56,7 @@ router.post('/login', middle.isNotLoggedIn, (req, res, next) => {
 router.get('/logout', async (req, res, next) => {
   await sessionModel.deleteOne({_id:req.session.id});
   req.logout();
-  req.session.destroy();
+  // req.session.destroy();
   res.render('login');
 });
 module.exports = router;
