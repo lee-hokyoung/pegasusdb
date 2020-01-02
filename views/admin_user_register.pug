@@ -5,19 +5,19 @@ block content
 		#data-purchase-list input{width:15%;}
 	#register-list-warp
 		.input-group.mt-3
-			label.text-zhupao.my-auto 고객번호
+			label.text-zhupao.my-auto 고객번호 (会员号码)
 			input.text-center.form-control(type='text', name='user_no', placeholder='A0001')
 		.input-group.mt-3
-			label.text-zhupao.my-auto 기업명
+			label.text-zhupao.my-auto 기업명 (企业名称)
 			input.text-center.form-control(type='text', name='user_corp', placeholder='주파오컨설팅')
 		.input-group.mt-3
-			label.text-zhupao.my-auto 담당자
+			label.text-zhupao.my-auto 담당자 (负责人)
 			input.text-center.form-control(type='text', name='manager_name', placeholder='정우성')
 		.input-group.mt-3
-			label.text-zhupao.my-auto 연락처
+			label.text-zhupao.my-auto 연락처 (联系方式)
 			input.text-center.form-control(type='text', name='manager_tel', placeholder='010-5531-2559')
 		.input-group.mt-3
-			label.text-zhupao.my-auto 이메일
+			label.text-zhupao.my-auto 이메일 (邮箱)
 			input.text-center.form-control(type='text', name='email', placeholder='jws2559!@zhupao.co.kr')
 		.input-group.mt-3
 			label.text-zhupao.my-auto 아이디(ID)
@@ -27,6 +27,8 @@ block content
 			input.text-center.form-control(type='text', name='user_pw', placeholder='영어, 숫자, 특수문자 포함 5자리 이상')
 		.input-group.mt-3
 			label.text-zhupao.my-auto 데이터 구매 목록
+				br
+				| (数据购买目录)
 			.row(style='flex:1')
 				each item, idx in category
 					.col-4.mb-3(class=idx%3>0?'pl-0':'')

@@ -4,5 +4,6 @@ const Schema = mongoose.Schema;
 const regionSchema = new Schema({
   id: mongoose.Schema.Types.ObjectId,
   name:{type:String, required:true},
+  cn_name:{type:String}
 });
 module.exports = mongoose.model('Region', regionSchema);

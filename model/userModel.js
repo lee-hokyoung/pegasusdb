@@ -16,7 +16,11 @@ const userSchema = new Schema({
     created: {type: Date, default: Date.now},
     lv:{type:Number, default:1},
     admin:{typ:Boolean, default:false},
-    tokens: String
+    login_info:{
+        ip:String,
+        browser:String
+    },
+    sessionID: String
 });
 // User Id로 찾기
 userSchema.statics.findOneByUserId = function(userId){
