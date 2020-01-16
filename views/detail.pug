@@ -162,7 +162,6 @@ block append_js
           barChartData.datasets.push(obj);
         });
       }
-      console.log('barChartData : ', barChartData);
       let ctx = document.getElementById('chart');
       let chart = new Chart(ctx, {
         type: chart_type,
@@ -174,11 +173,6 @@ block append_js
             }],
             yAxes: [
               {
-                // ticks: {
-                //   beginAtZero: true, callback: function (value, index, values) {
-                //     // console.log(value, index, values);
-                //   }
-                // },
                 stacked: (d.chart_type === 'stackedArea_chart'?true:false)
               }]
           },
