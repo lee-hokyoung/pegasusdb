@@ -1,0 +1,12 @@
+extends admin_layout
+block content
+  h4 데이터 대량 등록
+  form(method='POST', action='/admin/data/register_all')
+    .form-group.d-flex.justify-content-start.text-nowrap
+      label(style='margin:auto 1rem auto 0;') 엑셀파일 선택
+      input.form-control(type='file', name='excelFile')
+    .row
+      .col
+        button.btn.btn-primary(type='button') 등록하기
+block append_js
+  script(src='/assets/js/admin.js', type='text/javascript')

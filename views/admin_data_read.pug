@@ -1,173 +1,213 @@
 extends admin_layout
 block content
-	link(rel='stylesheet', href='/assets/stylesheet/style.css')
-	- var isAddImageGraph = (doc.add_img_graph.path?true:false);
-	#register-list-warp
-		.input-group.mt-3
-			label.text-zhupao.my-auto 제목
-			input.text-center.form-control(type='text', title='제목', name='data_title', value=doc.data_title)
-		.input-group.mt-3
-			label.text-zhupao.my-auto 단위
-			input.text-center.form-control(type='text', title='단위', name='data_unit', value=doc.data_unit, disabled=isAddImageGraph)
-		.input-group.mt-3
-			label.text-zhupao.my-auto 그래프유형
-			.row(style='flex:1')
-				.col-3
-					.d-flex.justify-content-between
-						img(src='/assets/images/acc_vertical_admin.JPG', alt='세로 바차트', style='width:50%')
-						input.form-control(type='radio', name='chart_type', value='bar_chart_vertical', checked=doc.chart_type==='bar_chart_vertical', disabled=isAddImageGraph)
-				.col-3
-					.d-flex.justify-content-between
-						img(src='/assets/images/acc_horizontal_admin.JPG', alt='가로 바차트', style='width:50%')
-						input.form-control(type='radio', name='chart_type', value='bar_chart_horizontal', checked=doc.chart_type==='bar_chart_horizontal', disabled=isAddImageGraph)
-				.col-3
-					.d-flex.justify-content-between
-						img(src='/assets/images/pie_admin.JPG', alt='파이차트', style='width:50%')
-						input.form-control(type='radio', name='chart_type', value='pie_chart', checked=doc.chart_type==='pie_chart', disabled=isAddImageGraph)
-				.col-3
-					.d-flex.justify-content-between
-						img(src='/assets/images/line_admin.JPG', alt='선형그래프', style='width:50%')
-						input.form-control(type='radio', name='chart_type', value='line_chart', checked=doc.chart_type==='line_chart', disabled=isAddImageGraph)
-		.input-group.mt-3
-			label.text-zhupao.my-auto 내용(데이터)
-			.overflow-auto(style='flex:1')
-				.table.table-responsive#table_content
-					table.table
-						thead
-							tr(data-type='x', data-idx=doc.table_x?doc.table_x.content.length:1)
-								th
-									input(type='text', name='chart_x', value=doc.table_x?doc.table_x.title:'', data-title='true')
-								td.space_td
-								if(doc.table_x)
-									each x, idx in doc.table_x.content
-										td
-											input(type='text', name='x_data_' + (idx + 1), value=x, disabled=isAddImageGraph)
-						tbody(data-row=doc.table_y?doc.table_y.length:1)
-							if(doc.table_y)
-								each tr, tr_idx in doc.table_y
-									tr(data-type='y', data-idx=tr.content.length, data-row_idx=(tr_idx + 1))
-										th
-											input(type='text', name='chart_y', value=tr.title, data-title='true', disabled=isAddImageGraph)
-										td.space_td
-										each y, idx in tr.content
-											td
-												input(type='text', name='y_data_' + (idx + 1), value=y, disabled=isAddImageGraph)
-				.d-flex.justify-content-center
-					div.mr-3
-						span.mr-3 x 축
-						button.btn.btn-sm.btn-success.mr-2(onclick='fnAddCol()', disabled=isAddImageGraph) +
-						button.btn.btn-sm.btn-danger(onclick='fnRemoveCol()', disabled=isAddImageGraph) -
-					div
-						span.mr-3 y 축
-						button.btn.btn-sm.btn-success.mr-2(onclick='fnAddRow()', disabled=isAddImageGraph) +
-						button.btn.btn-sm.btn-danger(onclick='fnRemoveRow()', disabled=isAddImageGraph) -
-				.d-flex
-		.input-group.mt-3
-			label.text-zhupao.my-auto 자료번호
-			input.text-center.form-control(type='text', name='data_no', value=doc.data_no)
-	.input-group.mt-3
-		label.text-zhupao.my-auto 이미지 입력
-		.border.d-flex.justify-content-between.mb-2(style='width:500px;')
-			.d-flex.justify-content-center(style='flex:1')
-				img(src='/assets/svgs/png.svg', width='30%')
-				span PNG
-			input.form-control-file(type='file', name='add_img_graph', style='flex:4', accept='.png, .jpg, .jpeg', onchange='fnInputImage()', disabled=isAddImageGraph)
-			if(doc.add_img_graph.path)
-				.d-flex.justify-content-between.mb-2(about=doc.add_img_graph.path.replace('temps/', ''))
-					a.my-auto(href='/downloads/' + doc.add_img_graph.path.replace('temps/',''), target='_blank') #{doc.add_img_graph.original}
-					button.btn.btn-link.py-0(type='button', onclick='fnDeleteFile("' + doc._id + '", "' + doc.add_img_graph.path.replace('temps/', '') + '", "add_img_graph", true)') x
+  link(rel='stylesheet', href='/assets/stylesheet/style.css')
+  - var isAddImageGraph = (doc.add_img_graph.path?true:false);
+  #register-list-warp
+    .input-group.mt-3
+      label.text-zhupao.my-auto 제목
+      input.text-center.form-control(type='text', title='제목', name='data_title', value=doc.data_title)
+    .input-group.mt-3
+      label.text-zhupao.my-auto 단위
+      input.text-center.form-control(type='text', title='단위', name='data_unit', value=doc.data_unit, disabled=isAddImageGraph)
+    .input-group.mt-3
+      label.text-zhupao.my-auto 그래프유형
+      .row(style='flex:1')
+        .col-3
+          .d-flex.justify-content-between
+            label(for='bar_chart_vertical')
+              img(src='/assets/images/acc_vertical_admin.JPG', alt='세로 바차트', style='width:100%')
+            input.form-control#bar_chart_vertical(type='radio', name='chart_type', value='bar_chart_vertical', checked=doc.chart_type==='bar_chart_vertical', disabled=isAddImageGraph)
+        .col-3
+          .d-flex.justify-content-between
+            label(for='bar_chart_horizontal')
+              img(src='/assets/images/acc_horizontal_admin.JPG', alt='가로 바차트', style='width:100%')
+            input.form-control#bar_chart_horizontal(type='radio', name='chart_type', value='bar_chart_horizontal', checked=doc.chart_type==='bar_chart_horizontal', disabled=isAddImageGraph)
+        .col-3
+          .d-flex.justify-content-between
+            label(for='pie_chart')
+              img(src='/assets/images/pie_admin.JPG', alt='파이차트', style='width:100%')
+            input.form-control#pie_chart(type='radio', name='chart_type', value='pie_chart', checked=doc.chart_type==='pie_chart', disabled=isAddImageGraph)
+        .col-3
+          .d-flex.justify-content-between
+            label(for='line_chart')
+              img(src='/assets/images/line_admin.JPG', alt='선형그래프', style='width:100%')
+            input.form-control#line_chart(type='radio', name='chart_type', value='line_chart', checked=doc.chart_type==='line_chart', disabled=isAddImageGraph)
 
-	.input-group.mt-3
-		- var selected_category = [];
-		each obj in doc.category_obj
-			each item in obj
-				- selected_category.push(Object.keys(item)[0])
-		label.text-zhupao.mb-auto Category
-		.row(style='flex:1')
-			each item, idx in category
-				.col-4.mb-3(class=idx % 3 > 0 ? 'pl-0' : '')
-					#data-purchase-list.border.p-1
-						h5.mb-3(id=item._id.id) #{item._id.name}
-						each sub in item.list
-							.d-flex.justify-content-between
-								label(for=sub.cate_id).my-auto #{sub.cate_name}
-								input.form-control(id=sub.cate_id, type='checkbox', name=sub.cate_id, style='width:30px;', value=sub.cate_name, checked=selected_category.indexOf(sub.cate_id)>-1)
-	- var selected_region = [];
-	each val in doc.region_array
-		- selected_region.push(val)
-	.input-group.mt-3
-		label.text-zhupao.mb-auto Region
-		.row.border.m-0#region(style='flex:1')
-			each item in region
-				.col-4
-					.d-flex.justify-content-between
-						label.my-auto(for=item._id) #{item.name}
-						input.form-control(id=item._id, value=item.name, type='checkbox', style='width:30px;', checked=selected_region.indexOf(item.name.toString()) > -1)
-	- var selected_city = [];
-	each val in doc.city_array
-		- selected_city.push(val)
-	.input-group.mt-3
-		label.text-zhupao.my-auto
-		.row.m-0.border#city(style='flex:1')
-			each item, idx in city
-				.col-4
-					.d-flex.justify-content-between
-						label.my-auto(for=item._id) #{item.name}
-						input.form-control(id=item._id, value=item.name, type='checkbox', style='width:30px;', checked=selected_city.indexOf(item.name.toString()) > -1)
-	.input-group.mt-3
-		label.text-zhupao.my-auto Object
-		.row.m-0.border(style='flex:1')
-			each item, idx in obj
-				.col-3
-					label.my-auto(for='object_' + idx) #{item.name}
-					input.form-control(id='object_' + idx, name='obj', value=item.name, type='checkbox', style='width:30px;', checked=doc.object.indexOf(item.name) > -1)
-	.input-group.mt-3
-		label.text-zhupao.my-auto DESCRIPTION
-		textarea.form-control(name='description', rows=3, style='resize:none;') #{doc.description}
-	.input-group.mt-3
-		label.text-zhupao.my-auto SOURCE
-		input.form-control(type='text', name='source', value=doc.source)
-	.input-group.mt-3
-		label.text-zhupao.my-auto ADD
-		.d-flex.justify-content-between(style='flex:1')
-			div(style='flex:1')
-				.border.d-flex.justify-content-between.mb-2
-					.d-flex.justify-content-start(style='width:70px;')
-						img(src='/assets/svgs/pdf.svg', width='50%')
-						span PDF
-					input.form-control-file(type='file', name='add_pdf', style="flex:4", accept='.pdf', disabled=doc.add_pdf.path)
-					if(doc.add_pdf.path)
-						.d-flex.justify-content-between.mb-2(about=doc.add_pdf.path.replace('temps/', ''))
-							a.my-auto(href='/downloads/' + doc.add_pdf.path.replace('temps/', ''), target='_blank') #{doc.add_pdf.original}
-							a.btn.btn-link.py-0(href='#', onclick='fnDeleteFile("' + doc._id + '", "' + doc.add_pdf.path.replace('temps/', '') + '", "add_pdf", true)') x
-				.border.d-flex.justify-content-between.mb-2
-					.d-flex.justify-content-start(style='width:70px;')
-						img(src='/assets/svgs/xls.svg', width='50%')
-						span XLS
-					input.form-control-file(type='file', name='add_xls', style='flex:4', accept='.xls, .xlsx', disabled=doc.add_xls.path)
-					if(doc.add_xls.path)
-						.d-flex.justify-content-between(about=doc.add_xls.path.replace('temps/', ''))
-							a(href='/downloads/' + doc.add_xls.path.replace('temps/', ''), target='_blank' style='line-height:35px;') #{doc.add_xls.original}
-							button.btn.btn-link.py-0(type='button', onclick='fnDeleteFile("' + doc._id + '", "' + doc.add_xls.path.replace('temps/', '') + '", "add_xls", false)') x
-				.border.d-flex.justify-content-between.mb-2
-					.d-flex.justify-content-start(style='width:70px;')
-						img(src='/assets/svgs/ppt.svg', width='50%')
-						span PPT
-					input.form-control-file(type='file', name='add_ppt', style='flex:4', accept='.ppt', disabled=doc.add_ppt.path)
-					if(doc.add_ppt.path)
-						.d-flex.justify-content-between(about=doc.add_ppt.path.replace('temps/', ''))
-							a(href='/downloads/' + doc.add_ppt.path.replace('temps/', ''), target='_blank' style='line-height:35px;') #{doc.add_ppt.original}
-							button.btn.btn-link.py-0(type='button', onclick='fnDeleteFile("' + doc._id + '", "' + doc.add_ppt.path.replace('temps/', '') + '", "add_ppt", false)') x
-				.border.d-flex.justify-content-between.mb-2
-					.d-flex.justify-content-start(style='width:70px')
-						img(src='/assets/svgs/png.svg', width='50%')
-						span PNG
-					input.form-control-file(type='file', name='add_png', style='flex:4', accept='.png', disabled=doc.add_png.path)
-					if(doc.add_png.path)
-						.d-flex.justify-content-between(about=doc.add_png.path.replace('temps/', ''))
-							a(href='/downloads/' + doc.add_png.path.replace('temps/', ''), target='_blank' style='line-height:35px;') #{doc.add_png.original}
-							button.btn.btn-link.py-0(type='button', onclick='fnDeleteFile("' + doc._id + '", "' + doc.add_png.path.replace('temps/', '') + '", "add_png", false)') x
-	.text-center.p-3(style='flex:1')
-		button.btn.btn-zhupao.mb-3.px-5(onclick='fnUpdateData("' + doc._id + '")') 업데이트
-	block append_Js
-		script(src='/assets/js/admin.js', type='text/javascript')
+        .col-3
+          .d-flex.justify-content-between
+            label(for='radar_chart') radar chart
+            //- img(src='/assets/images/line_admin.JPG', alt='radar chart', style='width:100%')
+            input.form-control#radar_chart(type='radio', name='chart_type', value='radar_chart', checked=doc.chart_type==='radar_chart', disabled=isAddImageGraph)
+        .col-3
+          .d-flex.justify-content-between
+            label(for='multiline_chart') multiline chart
+            //- img(src='/assets/images/line_admin.JPG', alt='multiline chart', style='width:50%')
+            input.form-control#multiline_chart(type='radio', name='chart_type', value='multiline_chart', checked=doc.chart_type==='multiline_chart', disabled=isAddImageGraph)
+        .col-3
+          .d-flex.justify-content-between
+            label(for='diffPoint_chart') different point chart
+            //- img(src='/assets/images/line_admin.JPG', alt='different point chart', style='width:50%')
+            input.form-control#diffPoint_chart(type='radio', name='chart_type', value='diffPoint_chart', checked=doc.chart_type==='diffPoint_chart', disabled=isAddImageGraph)
+        .col-3
+          .d-flex.justify-content-between
+            label(for='stackedArea_chart') stacked area chart
+            //- img(src='/assets/images/line_admin.JPG', alt='stacked area chart', style='width:50%')
+            input.form-control#stackedArea_chart(type='radio', name='chart_type', value='stackedArea_chart', checked=doc.chart_type==='stackedArea_chart', disabled=isAddImageGraph)
+        .col-3
+          .d-flex.justify-content-between
+            label(for='comboBarLine_chart') combo bar line chart
+            //- img(src='/assets/images/line_admin.JPG', alt='combo bar line chart', style='width:50%')
+            input.form-control#comboBarLine_chart(type='radio', name='chart_type', value='comboBarLine_chart', checked=doc.chart_type==='comboBarLine_chart', disabled=isAddImageGraph)
+        .col-3
+          .d-flex.justify-content-between
+            label(for='stepLine_chart') step line chart
+            //- img(src='/assets/images/line_admin.JPG', alt='step line chart', style='width:50%')
+            input.form-control#stepLine_chart(type='radio', name='chart_type', value='stepLine_chart', checked=doc.chart_type==='stepLine_chart', disabled=isAddImageGraph)
+        .col-3
+          .d-flex.justify-content-between
+            label(for='polarArea_chart') polar area chart
+            //- img(src='/assets/images/line_admin.JPG', alt='polar area chart', style='width:50%')
+            input.form-control#polarArea_chart(type='radio', name='chart_type', value='polarArea_chart', checked=doc.chart_type==='polarArea_chart', disabled=isAddImageGraph)
+    .input-group.mt-3
+      label.text-zhupao.my-auto 내용(데이터)
+      .overflow-auto(style='flex:1')
+        .table.table-responsive#table_content
+          table.table
+            thead
+              tr(data-type='x', data-idx=doc.table_x?doc.table_x.content.length:1)
+                th
+                  input(type='text', name='chart_x', value=doc.table_x?doc.table_x.title:'', data-title='true')
+                td.space_td
+                if(doc.table_x)
+                  each x, idx in doc.table_x.content
+                    td
+                      input(type='text', name='x_data_' + (idx + 1), value=x, disabled=isAddImageGraph)
+            tbody(data-row=doc.table_y?doc.table_y.length:1)
+              if(doc.table_y)
+                each tr, tr_idx in doc.table_y
+                  tr(data-type='y', data-idx=tr.content.length, data-row_idx=(tr_idx + 1))
+                    th
+                      input(type='text', name='chart_y', value=tr.title, data-title='true', disabled=isAddImageGraph)
+                    td.space_td
+                    each y, idx in tr.content
+                      td
+                        input(type='text', name='y_data_' + (idx + 1), value=y, disabled=isAddImageGraph)
+        .d-flex.justify-content-center
+          div.mr-3
+            span.mr-3 x 축
+            button.btn.btn-sm.btn-success.mr-2(onclick='fnAddCol()', disabled=isAddImageGraph) +
+            button.btn.btn-sm.btn-danger(onclick='fnRemoveCol()', disabled=isAddImageGraph) -
+          div
+            span.mr-3 y 축
+            button.btn.btn-sm.btn-success.mr-2(onclick='fnAddRow()', disabled=isAddImageGraph) +
+            button.btn.btn-sm.btn-danger(onclick='fnRemoveRow()', disabled=isAddImageGraph) -
+        .d-flex
+    .input-group.mt-3
+      label.text-zhupao.my-auto 자료번호
+      input.text-center.form-control(type='text', name='data_no', value=doc.data_no)
+  .input-group.mt-3
+    label.text-zhupao.my-auto 이미지 입력
+    .border.d-flex.justify-content-between.mb-2(style='width:500px;')
+      .d-flex.justify-content-center(style='flex:1')
+        img(src='/assets/svgs/png.svg', width='30%')
+        span PNG
+      input.form-control-file(type='file', name='add_img_graph', style='flex:4', accept='.png, .jpg, .jpeg', onchange='fnInputImage()', disabled=isAddImageGraph)
+      if(doc.add_img_graph.path)
+        .d-flex.justify-content-between.mb-2(about=doc.add_img_graph.path.replace('temps/', ''))
+          a.my-auto(href='/downloads/' + doc.add_img_graph.path.replace('temps/',''), target='_blank') #{doc.add_img_graph.original}
+          button.btn.btn-link.py-0(type='button', onclick='fnDeleteFile("' + doc._id + '", "' + doc.add_img_graph.path.replace('temps/', '') + '", "add_img_graph", true)') x
+
+  .input-group.mt-3
+    - var selected_category = [];
+    each obj in doc.category_obj
+      each item in obj
+        - selected_category.push(Object.keys(item)[0])
+    label.text-zhupao.mb-auto Category
+    .row(style='flex:1')
+      each item, idx in category
+        .col-4.mb-3(class=idx % 3 > 0 ? 'pl-0' : '')
+          #data-purchase-list.border.p-1
+            h5.mb-3(id=item._id.id) #{item._id.name}
+            each sub in item.list
+              .d-flex.justify-content-between
+                label(for=sub.cate_id).my-auto #{sub.cate_name}
+                input.form-control(id=sub.cate_id, type='checkbox', name=sub.cate_id, style='width:30px;', value=sub.cate_name, checked=selected_category.indexOf(sub.cate_id)>-1)
+  - var selected_region = [];
+  each val in doc.region_array
+    - selected_region.push(val)
+  .input-group.mt-3
+    label.text-zhupao.mb-auto Region
+    .row.border.m-0#region(style='flex:1')
+      each item in region
+        .col-4
+          .d-flex.justify-content-between
+            label.my-auto(for=item._id) #{item.name}
+            input.form-control(id=item._id, value=item.name, type='checkbox', style='width:30px;', checked=selected_region.indexOf(item.name.toString()) > -1)
+  - var selected_city = [];
+  each val in doc.city_array
+    - selected_city.push(val)
+  .input-group.mt-3
+    label.text-zhupao.my-auto
+    .row.m-0.border#city(style='flex:1')
+      each item, idx in city
+        .col-4
+          .d-flex.justify-content-between
+            label.my-auto(for=item._id) #{item.name}
+            input.form-control(id=item._id, value=item.name, type='checkbox', style='width:30px;', checked=selected_city.indexOf(item.name.toString()) > -1)
+  .input-group.mt-3
+    label.text-zhupao.my-auto Object
+    .row.m-0.border(style='flex:1')
+      each item, idx in obj
+        .col-3
+          label.my-auto(for='object_' + idx) #{item.name}
+          input.form-control(id='object_' + idx, name='obj', value=item.name, type='checkbox', style='width:30px;', checked=doc.object.indexOf(item.name) > -1)
+  .input-group.mt-3
+    label.text-zhupao.my-auto DESCRIPTION
+    textarea.form-control(name='description', rows=3, style='resize:none;') #{doc.description}
+  .input-group.mt-3
+    label.text-zhupao.my-auto SOURCE
+    input.form-control(type='text', name='source', value=doc.source)
+  .input-group.mt-3
+    label.text-zhupao.my-auto ADD
+    .d-flex.justify-content-between(style='flex:1')
+      div(style='flex:1')
+        .border.d-flex.justify-content-between.mb-2
+          .d-flex.justify-content-start(style='width:70px;')
+            img(src='/assets/svgs/pdf.svg', width='50%')
+            span PDF
+          input.form-control-file(type='file', name='add_pdf', style="flex:4", accept='.pdf', disabled=doc.add_pdf.path)
+          if(doc.add_pdf.path)
+            .d-flex.justify-content-between.mb-2(about=doc.add_pdf.path.replace('temps/', ''))
+              a.my-auto(href='/downloads/' + doc.add_pdf.path.replace('temps/', ''), target='_blank') #{doc.add_pdf.original}
+              a.btn.btn-link.py-0(href='#', onclick='fnDeleteFile("' + doc._id + '", "' + doc.add_pdf.path.replace('temps/', '') + '", "add_pdf", true)') x
+        .border.d-flex.justify-content-between.mb-2
+          .d-flex.justify-content-start(style='width:70px;')
+            img(src='/assets/svgs/xls.svg', width='50%')
+            span XLS
+          input.form-control-file(type='file', name='add_xls', style='flex:4', accept='.xls, .xlsx', disabled=doc.add_xls.path)
+          if(doc.add_xls.path)
+            .d-flex.justify-content-between(about=doc.add_xls.path.replace('temps/', ''))
+              a(href='/downloads/' + doc.add_xls.path.replace('temps/', ''), target='_blank' style='line-height:35px;') #{doc.add_xls.original}
+              button.btn.btn-link.py-0(type='button', onclick='fnDeleteFile("' + doc._id + '", "' + doc.add_xls.path.replace('temps/', '') + '", "add_xls", false)') x
+        .border.d-flex.justify-content-between.mb-2
+          .d-flex.justify-content-start(style='width:70px;')
+            img(src='/assets/svgs/ppt.svg', width='50%')
+            span PPT
+          input.form-control-file(type='file', name='add_ppt', style='flex:4', accept='.ppt', disabled=doc.add_ppt.path)
+          if(doc.add_ppt.path)
+            .d-flex.justify-content-between(about=doc.add_ppt.path.replace('temps/', ''))
+              a(href='/downloads/' + doc.add_ppt.path.replace('temps/', ''), target='_blank' style='line-height:35px;') #{doc.add_ppt.original}
+              button.btn.btn-link.py-0(type='button', onclick='fnDeleteFile("' + doc._id + '", "' + doc.add_ppt.path.replace('temps/', '') + '", "add_ppt", false)') x
+        .border.d-flex.justify-content-between.mb-2
+          .d-flex.justify-content-start(style='width:70px')
+            img(src='/assets/svgs/png.svg', width='50%')
+            span PNG
+          input.form-control-file(type='file', name='add_png', style='flex:4', accept='.png', disabled=doc.add_png.path)
+          if(doc.add_png.path)
+            .d-flex.justify-content-between(about=doc.add_png.path.replace('temps/', ''))
+              a(href='/downloads/' + doc.add_png.path.replace('temps/', ''), target='_blank' style='line-height:35px;') #{doc.add_png.original}
+              button.btn.btn-link.py-0(type='button', onclick='fnDeleteFile("' + doc._id + '", "' + doc.add_png.path.replace('temps/', '') + '", "add_png", false)') x
+  .text-center.p-3(style='flex:1')
+    button.btn.btn-zhupao.mb-3.px-5(onclick='fnUpdateData("' + doc._id + '")') 업데이트
+  block append_Js
+    script(src='/assets/js/admin.js', type='text/javascript')

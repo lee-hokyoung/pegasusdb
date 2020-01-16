@@ -64,5 +64,7 @@ block content
               button.btn.btn-danger.d-block.my-1.mx-auto.btn-sm(onclick='fnDeleteData("' + item._id + '")') 삭제
             .col-1 #{item.status === 1 ? '제공' : item.status === 2 ? '중지' : '삭제'}
             .col-2 #{date.toLocaleDateString('ko')}
-  block append_Js
+  block append_js
     script(src='/assets/js/admin.js', type='text/javascript')
+    script.
+      console.log('list : ', !{JSON.stringify(list)})

@@ -98,7 +98,13 @@ block append_js
           chart_type = 'pie';
           break;
         case 'line_chart':
+        case 'multiline_chart':
+        case 'diffPoint_chart':
+        case 'stackedArea_chart':
           chart_type = 'line';
+          break;
+        case 'radar_chart':
+          chart_type = 'radar';
           break;
       }
       let x = d.table_x;
@@ -136,9 +142,23 @@ block append_js
         barChartData.datasets = [];
         d.table_y.forEach(function (row, idx) {
           let obj = {};
+          if(d.chart_type === 'comboBarLine_chart'){
+            if(idx === 0) obj.type = 'line';
+            else obj.type = 'bar';
+          }else{
+            obj.type = chart_type;
+          }
           obj.label = row.title;
           obj.data = row.content;
           obj.backgroundColor = bg_list[idx % 6];
+          obj.fill = false;
+          obj.borderColor = bg_list[idx % 6];
+          if(d.chart_type === 'radar_chart' || d.chart_type === 'stackedArea_chart'){
+            obj.fill = true;
+          }
+          if(d.chart_type === 'diffPoint_chart'){
+            obj.borderDash = [idx * 2, idx * 2];
+          }
           barChartData.datasets.push(obj);
         });
       }
@@ -159,9 +179,10 @@ block append_js
                 //     // console.log(value, index, values);
                 //   }
                 // },
-                stacked: true
+                stacked: (d.chart_type === 'stackedArea_chart'?true:false)
               }]
-          }
+          },
+          responsive:true,
         }
       });
     }
