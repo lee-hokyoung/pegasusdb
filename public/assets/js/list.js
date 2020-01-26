@@ -37,7 +37,10 @@ const fnGenerateHtmlResult = function (res) {
     div.className = 'col-2 text-center';
     let img = document.createElement('img');
     img.classList.add('p-1');
-    img.src = '/assets/images/' + v.chart_type + '_user.JPG';
+    if(v.chart_type)
+      img.src = '/assets/images/' + v.chart_type + '_user.JPG';
+    else
+      img.src = '/assets/images/slide6.jpg';
     img.alt = '';
     img.setAttribute('style', 'width:70%;');
     div.appendChild(img);
