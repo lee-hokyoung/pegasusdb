@@ -4,19 +4,6 @@ public/assets/svgs/
 public/bootstrap/
 .idea/
 .env
-<<<<<<< HEAD
-config/
-controller/
-docs/
-downloads/
-temps/
-test/
-memo.txt
-package-lock.json
-package.json
-yarn-error.log
-yarn.lock
-=======
 /docs/
 /downloads/
 /temps/
@@ -26,4 +13,3 @@ yarn.lock
 /yarn.lock
 /yarn-error.log
 /package-lock.json
->>>>>>> c6667e1a472287dd0b0e2be1d98a1d77cb79c28f
