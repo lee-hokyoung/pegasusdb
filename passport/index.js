@@ -16,14 +16,14 @@ module.exports = (passport) => {
     done(null, user.user_id);
   });
   // 세션에 저장한 아이디를 통해 사용자 정보 객체 불러오기
-  passport.deserializeUser(async (user_id, done) => {
+  passport.deserializeUser(async (user, done) => {
     // userModel.findOne({user_id:user_id})
     //   .then((user) => {console.log('user : ', user); done(null, user);})
     //   .catch(err => done(err));
-    let user = await userModel.findOne({user_id: user_id}, {user_id: 1, manager_name: 1, status: 1, lv: 1, category:1});
+    let _user = await userModel.findOne({user_id: user}, {user_id: 1, manager_name: 1, status: 1, lv: 1, category:1});
     // console.log('deserializeUser user : ', user);
     try {
-      done(null, user);
+      done(null, _user);
     } catch (e) {
       done(e);
     }

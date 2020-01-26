@@ -34,13 +34,13 @@ app.use('/downloads', express.static(path.join(__dirname, 'downloads'), {expires
 
 app.use(session({
   secret: process.env.COOKIE_SECRET,
-  resave: true,
-  saveUninitialized: false,
+  resave: false,
+  saveUninitialized: true,
   store:new MongoStore({
     url:process.env.MONGO_URI,
     collection:'session'
   }),
-  cookie: {secure: false, httpOnly: true}
+  cookie: {secure: false, httpOnly: true, expires:false}
 }));
 app.use(passport.initialize());
 app.use(passport.session());

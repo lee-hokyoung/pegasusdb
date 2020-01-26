@@ -10,7 +10,7 @@ module.exports = (passport) => {
       const exUser = await User.findOne({user_id:user_id});
       if(exUser){
         if(exUser.user_pw === password){
-          done(null, exUser);
+          done(null, {user:exUser, data:{}});
         }else{
           done(null, false, {result:0, message:'비밀번호가 일치하지 않습니다'});
         }

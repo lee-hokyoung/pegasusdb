@@ -3,13 +3,13 @@ block content
 	link(rel='stylesheet', href='/assets/stylesheet/style.css')
 	#register-list-warp
 		.input-group.mt-3
-			label.text-zhupao.my-auto 제목
+			label.text-zhupao.my-auto 제목 (题目)
 			input.text-center.form-control(type='text', title='제목', name='data_title', placeholder='중국 허난성 지역 내 헤어 미용실 수 2019')
 		.input-group.mt-3
-			label.text-zhupao.my-auto 단위
+			label.text-zhupao.my-auto 단위 (单位)
 			input.text-center.form-control(type='text', title='단위', name='data_unit', placeholder='%, 명, 개...')
 		.input-group.mt-3
-			label.text-zhupao.my-auto 그래프유형
+			label.text-zhupao.my-auto 그래프유형 (图案形状)
 			.row(style='flex:1')
 				.col-3
 					.d-flex.justify-content-between
@@ -29,6 +29,8 @@ block content
 						input.form-control(type='radio', name='chart_type', value='line_chart')
 		.input-group.mt-3
 			label.text-zhupao.my-auto 내용(데이터)
+				br
+				| 内容(数据)
 			.overflow-auto(style='flex:1')
 				.table.table-responsive#table_content
 					table.table
@@ -59,10 +61,10 @@ block content
 						button.btn.btn-sm.btn-danger(onclick='fnRemoveRow()') -
 				.d-flex
 		.input-group.mt-3
-			label.text-zhupao.my-auto 자료번호
+			label.text-zhupao.my-auto 자료번호 (资料号码)
 			input.text-center.form-control(type='text', name='data_no', placeholder='A-y03312')
 	.input-group.mt-3
-		label.text-zhupao.my-auto 이미지 입력
+		label.text-zhupao.my-auto 이미지 입력 (图案输入)
 		.border.d-flex.justify-content-between.mb-2(style='width:500px;')
 			.d-flex.justify-content-center(style='flex:1')
 				img(src='/assets/svgs/png.svg', width='30%')
@@ -85,7 +87,7 @@ block content
 			each item in region
 				.col-4
 					.d-flex.justify-content-between
-						label.my-auto(for=item._id) #{item.name}
+						label.my-auto(for=item._id) #{item.name} (#{item.cn_name})
 						input.form-control(id=item._id, value=item.name, type='checkbox', style='width:30px;')
 
 	.input-group.mt-3
@@ -94,7 +96,7 @@ block content
 			each item, idx in city
 				.col-4
 					.d-flex.justify-content-between
-						label.my-auto(for=item._id) #{item.name}
+						label.my-auto(for=item._id) #{item.name} (#{item.cn_name})
 						input.form-control(id=item._id, value=item.name, type='checkbox', style='width:30px;')
 	.input-group.mt-3
 		label.text-zhupao.my-auto Object

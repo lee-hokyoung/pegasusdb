@@ -4,3 +4,14 @@ public/assets/svgs/
 public/bootstrap/
 .idea/
 .env
+config/
+controller/
+docs/
+downloads/
+temps/
+test/
+memo.txt
+package-lock.json
+package.json
+yarn-error.log
+yarn.lock
