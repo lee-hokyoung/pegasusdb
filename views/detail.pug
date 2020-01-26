@@ -89,6 +89,7 @@ block append_js
       let chart_type = '';
       switch (d.chart_type) {
         case 'bar_chart_vertical':
+        case 'comboBarLine_chart':
           chart_type = 'bar';
           break;
         case 'bar_chart_horizontal':
@@ -101,20 +102,24 @@ block append_js
         case 'multiline_chart':
         case 'diffPoint_chart':
         case 'stackedArea_chart':
+        case 'stepLine_chart':
           chart_type = 'line';
           break;
         case 'radar_chart':
           chart_type = 'radar';
           break;
+        case 'polarArea_chart':
+          chart_type = 'polarArea';
+          break;
       }
       let x = d.table_x;
       let y = d.table_y;
-      let barChartData = {};
+      let ChartData = {};
 
       // 파이차트의 경우 좌표를 재배열해준다.
       if (chart_type === 'pie') {
-        barChartData.datasets = [];
-        barChartData.labels = y.map(function (v) {
+        ChartData.datasets = [];
+        ChartData.labels = y.map(function (v) {
           return v.title
         });
 
@@ -132,14 +137,27 @@ block append_js
           // new_y.label = x.content[i];
           new_y.label = x.content;
           new_y.backgroundColor = bg_arr;
-          barChartData.datasets.push(new_y);
+          ChartData.datasets.push(new_y);
         }
-        barChartData.datasets.sort(function (a, b) {
+        ChartData.datasets.sort(function (a, b) {
           return a.label < b.label ? 1 : -1
         });
+      }
+      // polarArea chart 의 경우, 각각의 x 항목마다 색을 다르게 표시한다
+      // 즉, 각각의 x 항목이 별개의 데이터 셋을 구성한다. 
+      else if(d.chart_type === 'polarArea_chart'){
+        let backgroundList = d.table_y[0].content.map(function(m, i){return bg_list[i % 6]});
+        console.log('bg list : ', backgroundList);
+        ChartData.labels = d.table_x.content;
+        ChartData.datasets = [
+          {data:d.table_y[0].content},
+          {backgroundColor:backgroundList},
+          {borderColor:backgroundList}
+        ];
+        console.log('chartData : ', ChartData);
       } else {
-        barChartData.labels = d.table_x.content;
-        barChartData.datasets = [];
+        ChartData.labels = d.table_x.content;
+        ChartData.datasets = [];
         d.table_y.forEach(function (row, idx) {
           let obj = {};
           if(d.chart_type === 'comboBarLine_chart'){
@@ -159,24 +177,29 @@ block append_js
           if(d.chart_type === 'diffPoint_chart'){
             obj.borderDash = [idx * 2, idx * 2];
           }
-          barChartData.datasets.push(obj);
+          if(d.chart_type === 'stepLine_chart'){
+            obj.steppedLine = 'middle';
+          }
+          ChartData.datasets.push(obj);
         });
       }
       let ctx = document.getElementById('chart');
       let chart = new Chart(ctx, {
         type: chart_type,
-        data: barChartData,
+        data: ChartData,
         options: {
           scales: {
             xAxes: [{
-              stacked: true
+              stacked: (d.chart_type === 'comboBarLine_chart'?false:true),
             }],
             yAxes: [
               {
-                stacked: (d.chart_type === 'stackedArea_chart'?true:false)
+                stacked: (d.chart_type === 'stackedArea_chart'?true:false),
+
               }]
           },
           responsive:true,
         }
       });
+      console.log('chart : ', chart);
     }
