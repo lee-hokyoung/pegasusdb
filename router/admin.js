@@ -419,6 +419,11 @@ router.delete("/data/file/:id/:fileName", async (req, res) => {
     res.json({ code: 9, message: "삭제 실패!" });
   }
 });
+// 엑셀 대량 업로드
+router.post("/data/excelUpload", async (req, res) => {
+  let result = await dataModel.insertMany(req.body);
+  res.json(result);
+});
 // 환경설정 (Set-up)
 router.get("/config", async (req, res) => {
   let data = await configModel.findOne({});
