@@ -116,9 +116,14 @@ function excelExport() {
     xhr.onreadystatechange = function() {
       if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
         let res = JSON.parse(this.response);
-        if (res.result === 1) {
-          console.log("res : ", res);
+        if (res.code === 1) {
+          alert("등록되었습니다.");
+        } else {
+          alert(res.message);
         }
+        document.querySelector("#status_wrap").classList.remove("d-block");
+      } else {
+        document.querySelector("#status_wrap").classList.add("d-block");
       }
     };
     xhr.send(JSON.stringify(list));

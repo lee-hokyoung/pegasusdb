@@ -8,22 +8,13 @@ block content
     .row
       .col
         button.btn.btn-primary(type='button', onclick='excelExport()') 등록하기
-    //- .table-responsive.mt-3
-    //-   table.table
-    //-     thead
-    //-       tr
-    //-         th(scope='col') #
-    //-         th(scope='col') 제목
-    //-         th(scope='col') 단위
-    //-         th(scope='col') 그래프유형
-    //-         th(scope='col') 자료번호
-    //-         th(scope='col') category
-    //-         th(scope='col') region
-    //-         th(scope='col') object
-    //-         th(scope='col') description
-    //-         th(scope='col') source
-    //-     tbody#resultHTML
-
+  #status_wrap.modal(style='background-color:rgba(0,0,0,0.5)')
+    .row
+      .col-3(style='margin:6rem auto;')
+        .card
+          .card-body
+            .text-center
+              p.m-0 Loading...
 block append_js
   script(src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.3/xlsx.full.min.js')
   script(src='/assets/js/comm_value.js')
