@@ -419,6 +419,16 @@ router.delete("/data/file/:id/:fileName", async (req, res) => {
     res.json({ code: 9, message: "삭제 실패!" });
   }
 });
+// 엑셀 대량 업로드
+router.post("/data/excelUpload", async (req, res) => {
+  try {
+    let result = await dataModel.insertMany(req.body);
+    res.json({ code: 1, result: result });
+  } catch (e) {
+    console.log(e);
+    res.json({ code: 0, message: "등록 실패! 중복된 자료번호가 있습니다." });
+  }
+});
 // 환경설정 (Set-up)
 router.get("/config", async (req, res) => {
   let data = await configModel.findOne({});
