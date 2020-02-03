@@ -42,9 +42,11 @@ function excelExport() {
           // category object 만들기
           let cateList = [];
           __category.forEach(function(item) {
+            console.log("category item : ", item);
             _cateObj = { cate: item.cate, sub_cate: [] };
             obj["category"].split(",").forEach(function(v) {
               if (item.sub_cate.indexOf(v.trim()) > -1) {
+                console.log("input item : ", item.sub_cate);
                 _cateObj.sub_cate.push(v.trim());
               }
             });
@@ -118,6 +120,7 @@ function excelExport() {
         let res = JSON.parse(this.response);
         if (res.code === 1) {
           alert("등록되었습니다.");
+          location.reload();
         } else {
           alert(res.message);
         }

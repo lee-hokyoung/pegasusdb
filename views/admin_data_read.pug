@@ -123,6 +123,7 @@ block content
     each obj in doc.category_obj
       each item in obj
         - selected_category.push(Object.keys(item)[0])
+        //- - selected_category.push(item.sub_cate[0])
     label.text-zhupao.mb-auto Category
     .row(style='flex:1')
       each item, idx in category
@@ -212,3 +213,5 @@ block content
     button.btn.btn-zhupao.mb-3.px-5(onclick='fnUpdateData("' + doc._id + '")') 업데이트
   block append_Js
     script(src='/assets/js/admin.js', type='text/javascript')
+    script.
+      console.log('doc : ', !{JSON.stringify(doc)})

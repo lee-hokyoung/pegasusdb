@@ -4,6 +4,7 @@ public/assets/svgs/
 public/bootstrap/
 .idea/
 .env
+.vscode
 /docs/
 /downloads/
 /temps/

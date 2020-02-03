@@ -422,7 +422,33 @@ router.delete("/data/file/:id/:fileName", async (req, res) => {
 // 엑셀 대량 업로드
 router.post("/data/excelUpload", async (req, res) => {
   try {
-    let result = await dataModel.insertMany(req.body);
+    // category object set-up
+    let category = await categoryModel.find({});
+
+    let req_list = req.body;
+    req_list.forEach(b => {
+      var cate_obj = {};
+      var req_cate = b.category_obj
+        .filter(cate => {
+          if (cate.sub_cate.length > 0) return cate;
+        })
+        .reduce((a, b) => {
+          return a.concat(b.sub_cate);
+        }, []);
+      category.forEach(v => {
+        if (req_cate.indexOf(v.cate_name) > -1) {
+          let obj = {};
+          obj[v.cate_id] = v.cate_name;
+          if (!cate_obj[v.group_id]) {
+            cate_obj[v.group_id] = [];
+          }
+          cate_obj[v.group_id].push(obj);
+        }
+      });
+      b.category_obj = cate_obj;
+    });
+
+    let result = await dataModel.insertMany(req_list);
     res.json({ code: 1, result: result });
   } catch (e) {
     console.log(e);
