@@ -5,6 +5,7 @@ public/bootstrap/
 .idea/
 .env
 .vscode
+.vsco
 /docs/
 /downloads/
 /temps/
