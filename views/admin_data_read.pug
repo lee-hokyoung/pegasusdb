@@ -32,42 +32,43 @@ block content
             label(for='line_chart')
               img(src='/assets/images/line_admin.JPG', alt='선형그래프', style='width:100%')
             input.form-control#line_chart(type='radio', name='chart_type', value='line_chart', checked=doc.chart_type==='line_chart', disabled=isAddImageGraph)
-
         .col-3
           .d-flex.justify-content-between
-            label(for='radar_chart') radar chart
-            //- img(src='/assets/images/line_admin.JPG', alt='radar chart', style='width:100%')
+            label(for='radar_chart')
+              img(src='/assets/images/radar_chart.JPG', alt='radar chart', style='width:100%')
             input.form-control#radar_chart(type='radio', name='chart_type', value='radar_chart', checked=doc.chart_type==='radar_chart', disabled=isAddImageGraph)
         .col-3
           .d-flex.justify-content-between
-            label(for='multiline_chart') multiline chart
-            //- img(src='/assets/images/line_admin.JPG', alt='multiline chart', style='width:50%')
+            label(for='multiline_chart') 
+              img(src='/assets/images/multiline_chart.JPG', alt='multiline chart', style='width:100%')
             input.form-control#multiline_chart(type='radio', name='chart_type', value='multiline_chart', checked=doc.chart_type==='multiline_chart', disabled=isAddImageGraph)
         .col-3
           .d-flex.justify-content-between
-            label(for='diffPoint_chart') different point chart
-            //- img(src='/assets/images/line_admin.JPG', alt='different point chart', style='width:50%')
+            label(for='diffPoint_chart')
+              img(src='/assets/images/diffPoint_chart.JPG', alt='different point chart', style='width:100%')
             input.form-control#diffPoint_chart(type='radio', name='chart_type', value='diffPoint_chart', checked=doc.chart_type==='diffPoint_chart', disabled=isAddImageGraph)
         .col-3
           .d-flex.justify-content-between
-            label(for='stackedArea_chart') stacked area chart
-            //- img(src='/assets/images/line_admin.JPG', alt='stacked area chart', style='width:50%')
+            label(for='stackedArea_chart')
+              img(src='/assets/images/stackedArea_chart.JPG', alt='stacked area chart', style='width:100%')
             input.form-control#stackedArea_chart(type='radio', name='chart_type', value='stackedArea_chart', checked=doc.chart_type==='stackedArea_chart', disabled=isAddImageGraph)
         .col-3
           .d-flex.justify-content-between
-            label(for='comboBarLine_chart') combo bar line chart
-            //- img(src='/assets/images/line_admin.JPG', alt='combo bar line chart', style='width:50%')
+            label(for='comboBarLine_chart')
+              img(src='/assets/images/comboBarLine_chart.JPG', alt='combo bar line chart', style='width:100%')
             input.form-control#comboBarLine_chart(type='radio', name='chart_type', value='comboBarLine_chart', checked=doc.chart_type==='comboBarLine_chart', disabled=isAddImageGraph)
         .col-3
           .d-flex.justify-content-between
-            label(for='stepLine_chart') step line chart
-            //- img(src='/assets/images/line_admin.JPG', alt='step line chart', style='width:50%')
+            label(for='stepLine_chart') 
+              img(src='/assets/images/stepLine_chart.JPG', alt='step line chart', style='width:100%')
             input.form-control#stepLine_chart(type='radio', name='chart_type', value='stepLine_chart', checked=doc.chart_type==='stepLine_chart', disabled=isAddImageGraph)
         .col-3
           .d-flex.justify-content-between
-            label(for='polarArea_chart') polar area chart
-            //- img(src='/assets/images/line_admin.JPG', alt='polar area chart', style='width:50%')
+            label(for='polarArea_chart')
+              img(src='/assets/images/polarArea_chart.JPG', alt='polarArea chart', style='width:100%')
             input.form-control#polarArea_chart(type='radio', name='chart_type', value='polarArea_chart', checked=doc.chart_type==='polarArea_chart', disabled=isAddImageGraph)
+
+      
     .input-group.mt-3
       label.text-zhupao.my-auto 내용(데이터)
       .overflow-auto(style='flex:1')

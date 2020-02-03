@@ -147,14 +147,12 @@ block append_js
       // 즉, 각각의 x 항목이 별개의 데이터 셋을 구성한다. 
       else if(d.chart_type === 'polarArea_chart'){
         let backgroundList = d.table_y[0].content.map(function(m, i){return bg_list[i % 6]});
-        console.log('bg list : ', backgroundList);
         ChartData.labels = d.table_x.content;
         ChartData.datasets = [
-          {data:d.table_y[0].content},
-          {backgroundColor:backgroundList},
-          {borderColor:backgroundList}
+          {data:d.table_y[0].content,
+          backgroundColor:backgroundList,
+          borderColor:backgroundList}
         ];
-        console.log('chartData : ', ChartData);
       } else {
         ChartData.labels = d.table_x.content;
         ChartData.datasets = [];
@@ -201,5 +199,4 @@ block append_js
           responsive:true,
         }
       });
-      console.log('chart : ', chart);
     }
