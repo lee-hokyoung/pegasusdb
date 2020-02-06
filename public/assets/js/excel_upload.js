@@ -7,6 +7,8 @@ function excelExport() {
   let reader = new FileReader();
   reader.onload = function() {
     let fileData = reader.result;
+    // IE 의 경우 reader.result 값이 null 나옴. 대신 reader.content 값을 넣어줌.
+    if (reader.result === null) fileData = reader.content;
     let wb = XLSX.read(fileData, { type: "binary" });
     let list = [];
     let graph_list = [
@@ -42,11 +44,9 @@ function excelExport() {
           // category object 만들기
           let cateList = [];
           __category.forEach(function(item) {
-            console.log("category item : ", item);
             _cateObj = { cate: item.cate, sub_cate: [] };
             obj["category"].split(",").forEach(function(v) {
               if (item.sub_cate.indexOf(v.trim()) > -1) {
-                console.log("input item : ", item.sub_cate);
                 _cateObj.sub_cate.push(v.trim());
               }
             });

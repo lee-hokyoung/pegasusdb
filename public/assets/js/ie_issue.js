@@ -19,8 +19,8 @@ if (!("remove" in Element.prototype)) {
 }
 // Call remove() according to your need
 
-// excel file Reader
-if (FileReader.prototype.readAsBinaryString === undefined) {
+//extend FileReader
+if (!FileReader.prototype.readAsBinaryString) {
   FileReader.prototype.readAsBinaryString = function(fileData) {
     var binary = "";
     var pt = this;
@@ -31,9 +31,9 @@ if (FileReader.prototype.readAsBinaryString === undefined) {
       for (var i = 0; i < length; i++) {
         binary += String.fromCharCode(bytes[i]);
       }
-      //pt.result  - readonly so assign content to another property
+      //pt.result  - readonly so assign binary
       pt.content = binary;
-      pt.onload(); // thanks to @Denis comment
+      $(pt).trigger("onload");
     };
     reader.readAsArrayBuffer(fileData);
   };
