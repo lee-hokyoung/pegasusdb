@@ -112,6 +112,7 @@ block append_js
           chart_type = 'polarArea';
           break;
       }
+      console.log('chart type : ', chart_type, ', d chart-type : ', d.chart_type);
       let x = d.table_x;
       let y = d.table_y;
       let ChartData = {};
@@ -181,6 +182,7 @@ block append_js
           ChartData.datasets.push(obj);
         });
       }
+      console.log('chart data : ', ChartData);
       let ctx = document.getElementById('chart');
       let chart = new Chart(ctx, {
         type: chart_type,
@@ -188,13 +190,11 @@ block append_js
         options: {
           scales: {
             xAxes: [{
-              stacked: (d.chart_type === 'comboBarLine_chart'?false:true),
+              stacked: (['comboBarLine_chart'].indexOf(d.chart_type) > -1?false:true),
             }],
-            yAxes: [
-              {
-                stacked: (d.chart_type === 'stackedArea_chart'?true:false),
-
-              }]
+            yAxes: [{
+              stacked: (['stackedArea_chart', 'bar_chart_horizontal', 'bar_chart_vertical'].indexOf(d.chart_type) > -1?true:false),
+            }]
           },
           responsive:true,
         }
