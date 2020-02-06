@@ -39,7 +39,7 @@ const fnGenerateHtmlResult = function(res) {
     let img = document.createElement("img");
     img.classList.add("p-1");
     if (v.chart_type) img.src = "/assets/images/" + v.chart_type + "_user.JPG";
-    else img.src = "/assets/images/slide6.jpg";
+    else img.src = "/assets/images/image_data.JPG";
     img.alt = "";
     img.setAttribute("style", "width:70%;");
     div.appendChild(img);
@@ -57,8 +57,12 @@ const fnGenerateHtmlResult = function(res) {
     Object.keys(v.category_obj).forEach(function(m) {
       if (v.category_obj[m].length > 0) {
         v.category_obj[m].forEach(function(w) {
-          if (w[Object.keys(w)]) category_arr.push(w[Object.keys(w)]);
+          category_arr.push(w[Object.keys(w)]);
         });
+      } else {
+        if (Object.keys(v.category_obj[m]).length === 1) {
+          category_arr.push(v.category_obj[m][Object.keys(v.category_obj[m])]);
+        }
       }
     });
     let span = document.createElement("span");
