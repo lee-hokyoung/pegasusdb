@@ -108,14 +108,14 @@ block content
       input.text-center.form-control(type='text', name='data_no', value=doc.data_no)
   .input-group.mt-3
     label.text-zhupao.my-auto 이미지 입력
-    .border.d-flex.justify-content-between.mb-2(style='width:500px;')
-      .d-flex.justify-content-center(style='flex:1')
+    .border.d-flex.justify-content-between.mb-2(style='width:800px;')
+      .d-flex.justify-content-center(style='flex:1; min-width:70px;')
         img(src='/assets/svgs/png.svg', width='30%')
         span PNG
-      input.form-control-file(type='file', name='add_img_graph', style='flex:4', accept='.png, .jpg, .jpeg', onchange='fnInputImage()', disabled=isAddImageGraph)
+      input.form-control-file(type='file', name='add_img_graph', data-file=doc.add_img_graph?doc.add_img_graph.path:'', style='flex:4', accept='.png, .jpg, .jpeg', onchange='fnInputImage()', disabled=isAddImageGraph)
       if(doc.add_img_graph.path)
-        .d-flex.justify-content-between.mb-2(about=doc.add_img_graph.path.replace('temps/', ''))
-          a.my-auto(href='/downloads/' + doc.add_img_graph.path.replace('temps/',''), target='_blank') #{doc.add_img_graph.original}
+        .d-flex.justify-content-between.mb-2(about=doc.add_img_graph.path.replace('temps/', ''), style='max-width:500px')
+          a.my-auto.text-truncate(href='/downloads/' + doc.add_img_graph.path.replace('temps/',''), target='_blank') #{doc.add_img_graph.original}
           button.btn.btn-link.py-0(type='button', onclick='fnDeleteFile("' + doc._id + '", "' + doc.add_img_graph.path.replace('temps/', '') + '", "add_img_graph", true)') x
 
   .input-group.mt-3

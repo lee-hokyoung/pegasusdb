@@ -84,3 +84,5 @@ block content
                 a.hidden-wrap.text-right(href='#', data-toggle='showMore', data-target='#info_' + item._id, data-expanded='false')
 block append_js
   script(src='/assets/js/list.js', type='text/javascript')
+  script.
+    console.log('list : ', !{JSON.stringify(list)})
