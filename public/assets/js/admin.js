@@ -333,18 +333,14 @@ function fnGenerateFormData() {
   }
 
   let data_unit = document.querySelector('input[name="data_unit"]');
-  if (
-    data_unit.value === "" &&
-    !isAddImage &&
-    add_img_graph.dataset.file === ""
-  ) {
+  if (data_unit.value === "" && !isAddImage) {
     alert("단위를 입력해 주세요");
     data_unit.focus();
     return false;
   }
 
   let chart_type = document.querySelector('input[type="radio"]:checked');
-  if (chart_type === null && !isAddImage && add_img_graph.dataset.file === "") {
+  if (chart_type === null && !isAddImage) {
     alert("차트타입을 선택해주세요.");
     document.querySelector('input[type="radio"]').focus();
     return false;
@@ -402,14 +398,10 @@ function fnGenerateFormData() {
 
   let post_data = {};
   post_data["data_title"] = data_title.value;
-  if (!isAddImage && add_img_graph.dataset.file === "")
-    post_data["data_unit"] = data_unit.value;
-  if (!isAddImage && add_img_graph.dataset.file === "")
-    post_data["chart_type"] = chart_type.value;
-  if (!isAddImage && add_img_graph.dataset.file === "")
-    post_data["table_x"] = table_x;
-  if (!isAddImage && add_img_graph.dataset.file === "")
-    post_data["table_y"] = table_y;
+  if (!isAddImage) post_data["data_unit"] = data_unit.value;
+  if (!isAddImage) post_data["chart_type"] = chart_type.value;
+  if (!isAddImage) post_data["table_x"] = table_x;
+  if (!isAddImage) post_data["table_y"] = table_y;
   post_data["data_no"] = data_no.value;
   post_data["category_obj"] = category_obj;
   post_data["region_array"] = region_array;
@@ -626,7 +618,7 @@ function fnGenerateDataList(list) {
 }
 
 //  데이터 이미지 등록시 단위, 그래프 유형, 내용(데이터) 입력 차단 및 필수 항목 해제
-const fnInputImage = function() {
+var fnInputImage = function() {
   let input = document.querySelector('input[name="add_img_graph"]');
   let data_unit = document.querySelector('input[name="data_unit"]');
   let table_inputs = document.querySelectorAll("#table_content input");
