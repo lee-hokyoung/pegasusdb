@@ -110,7 +110,7 @@ const fnGenerateHtmlResult = function(res) {
 const fnGetQuery = function() {
   let query = [];
   document.querySelectorAll("select.add_query").forEach(function(s) {
-    if (s.selectedIndex > 0) query.push(s.name + "=" + s.value);
+    if (s.selectedIndex > 0) query.push(s.name + "=" + encodeURI(s.value));
   });
   return "?" + query.join("&");
 };
