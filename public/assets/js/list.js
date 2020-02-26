@@ -13,7 +13,11 @@ $(document).ready(function() {
 const fnSearchDetail = function() {
   let strQuery = fnGetQuery();
   let xhr = new XMLHttpRequest();
-  xhr.open("GET", "/ajax" + location.pathname + strQuery, true);
+  let searchText = $("#searchText").val();
+  let uri = "/ajax" + location.pathname + strQuery;
+  if (searchText !== "")
+    uri = "/ajax" + location.pathname + "/" + searchText + strQuery;
+  xhr.open("GET", uri, true);
   xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
   xhr.onreadystatechange = function() {
     if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
@@ -112,6 +116,11 @@ const fnGetQuery = function() {
   document.querySelectorAll("select.add_query").forEach(function(s) {
     if (s.selectedIndex > 0) query.push(s.name + "=" + encodeURI(s.value));
   });
+  // if (location.search.indexOf("list_size") > -1) {
+  // let start = location.search.indexOf("list_size");
+  let list_size = parseInt($("#list_size").val());
+  query.push("list_size=" + list_size);
+  // }
   return "?" + query.join("&");
 };
 // 긴 문장 토글
@@ -129,7 +138,7 @@ function searchList() {
   let xhr = new XMLHttpRequest();
   xhr.open(
     "GET",
-    "/ajax" + location.pathname + "/" + searchText + "?" + location.search,
+    "/ajax" + location.pathname + "/" + searchText + location.search,
     true
   );
   xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -140,3 +149,14 @@ function searchList() {
   };
   xhr.send();
 }
+//  리스트의 수량이 변동될 때
+// $("#list_size").on("change", function(val) {
+//   let list_size = $(this).val();
+//   let new_uri = updateQueryStringParameter(
+//     location.href,
+//     "list_size",
+//     list_size
+//   );
+//   history.pushState(null, "", new_uri);
+//   console.log("new uri : ", new_uri);
+// });
