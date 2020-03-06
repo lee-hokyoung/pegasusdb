@@ -84,7 +84,7 @@ const fnGetList = async (strQuery, params) => {
   let cate = params.cate;
   let cate_item = params.cate_item;
   let searchText = params.searchText || "";
-  let searchRegex = { $regex: ".*" + searchText + ".*" };
+  let searchRegex = { $regex: ".*" + searchText + ".*", $options: "i" };
   let cate_info = await categoryModel.findOne({ cate_id: cate_item });
   let cate_obj = {};
   cate_obj["category_obj." + cate + "." + cate_item] = cate_info.cate_name;

@@ -4,6 +4,9 @@ $(document).ready(function() {
     let path_obj = location.pathname.split("/");
     let path_len = path_obj.length;
     path_obj[path_len - 1] = o.currentTarget.value;
+    let target = $(this)[0];
+    document.querySelector("#cate_info").innerText =
+      target.options[target.selectedIndex].text;
     let pathname = path_obj.join("/");
     let strQuery = fnGetQuery();
     history.pushState(null, "", pathname + strQuery);
