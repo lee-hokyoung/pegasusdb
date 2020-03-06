@@ -39,7 +39,10 @@ router.get("/list/:cate/:cate_item?", middle.isLoggedIn, async (req, res) => {
   let strQuery = req.query;
   let cate = req.params.cate;
   let cate_item = req.params.cate_item;
-  let cate_list = await categoryModel.find({ group_id: cate });
+  let cate_list = await categoryModel.find({
+    group_id: cate,
+    cate_id: cate_item
+  });
   let region_list = await regionModel.find({});
   let city_list = await cityModel.find({});
   let list = await fnGetList(strQuery, req.params);

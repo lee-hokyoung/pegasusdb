@@ -10,7 +10,7 @@ block content
     .w-100.bg-gradient-primary.mb-3
       h5.m-0.text-white.p-2
         a.text-white(href='/') Home
-        | &nbsp; > &nbsp; #{group_info.group_name}
+        | &nbsp; > &nbsp; #{group_info.group_name} &nbsp; > &nbsp; #{group_info.cate_name}
     .row
       .col-3
         .p-2(style='border:3px solid #aaa;')
@@ -86,4 +86,4 @@ block append_js
   script(src='/assets/js/list.js', type='text/javascript')
   script.
     console.log('list : ', !{JSON.stringify(list)})
-    console.log('region list : ', !{JSON.stringify(region_list)});
+    console.log('group info : ', !{JSON.stringify(group_info)});

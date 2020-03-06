@@ -150,13 +150,18 @@ function searchList() {
   xhr.send();
 }
 //  리스트의 수량이 변동될 때
-// $("#list_size").on("change", function(val) {
-//   let list_size = $(this).val();
-//   let new_uri = updateQueryStringParameter(
-//     location.href,
-//     "list_size",
-//     list_size
-//   );
-//   history.pushState(null, "", new_uri);
-//   console.log("new uri : ", new_uri);
-// });
+document.querySelector("#list_size").addEventListener("change", function() {
+  let strQuery = fnGetQuery();
+  let uri = "/ajax" + location.pathname + strQuery;
+  console.log("uri : ", uri);
+  let xhr = new XMLHttpRequest();
+  xhr.open("GET", uri, true);
+  xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+  xhr.onreadystatechange = function() {
+    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+      history.pushState(null, "", strQuery);
+      fnGenerateHtmlResult(JSON.parse(this.response));
+    }
+  };
+  xhr.send();
+});
