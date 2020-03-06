@@ -1,6 +1,16 @@
 extends layout
 block content
-  - var group_info = cate_list[0];
+  //  page 관련 변수
+  - var metadata = list[0].metadata[0];
+  - var total = parseInt(metadata.total);
+  - var page = parseInt(metadata.page);
+  - var limit = parseInt(metadata.limit);
+  - var max_page = Math.ceil(total / limit);
+  //  카테고리 관련 변수
+  - var group_info = {}
+  each item in cate_list
+    if(item.cate_id === cate_item)
+      - group_info = item;
   .container
     .bg-gradient-zhupao
       .d-flex.justify-content-between
@@ -51,13 +61,13 @@ block content
                 button.btn.btn-primary(type='submit') Search
           h5 Results
           select#list_size.selectpicker
-            option(value=10) 10
-            option(value=20 selected=true) 20
-            option(value=30) 30
-            option(value=50) 50
-            option(value=100) 100
+            option(value=10, selected=limit===10) 10
+            option(value=20, selected=limit===20) 20
+            option(value=30, selected=limit===30) 30
+            option(value=50, selected=limit===50) 50
+            option(value=100, selected=limit===100) 100
         .list-group
-          each item in list
+          each item in list[0].data
             - var region = item.region_array.concat(item.city_array);
             - var category = [];
             each obj in item.category_obj
@@ -82,8 +92,21 @@ block content
                   span.font-weight-bold.text-secondary #{item.object}
               if((category.length + region.length) > 10)
                 a.hidden-wrap.text-right(href='#', data-toggle='showMore', data-target='#info_' + item._id, data-expanded='false')
+    .row
+      .col-12
+        - var n = 0;
+        nav
+          ul.pagination.justify-content-center
+            //- li.page-item
+            //-   a.page-link(href="#" aria-label="Previous")
+            //-     span(aria-hidden="true") «
+            //-     span.sr-only Previous
+            while n < max_page
+              li.page-item(class=++n===parseInt(page)?'active':'')
+                button.btn.btn-link.page-link(type='button', data-page=n) #{n}
+            //-   a.page-link(href="#" aria-label="Next")
+            //-     span(aria-hidden="true") »
+            //-     span.sr-only Next
+
 block append_js
   script(src='/assets/js/list.js', type='text/javascript')
-  script.
-    console.log('list : ', !{JSON.stringify(list)})
-    console.log('group info : ', !{JSON.stringify(group_info)});
