@@ -35,17 +35,18 @@ block content
             .col-1 #{item.data_unit}
             .col-1.text-normal
               - var cate_arr = [];
-              each category in item.category_obj
-                each cate in category
-                  - cate_arr.push(cate[Object.keys(cate)])
-              - var n = 0;
-              while n < (cate_arr.length < 4 ? cate_arr.length : 4)
-                p.m-0 #{cate_arr[n++]}
-              if(cate_arr.length > 4)
-                .overflow-hidden.collapse(style='line-height:1.3em;', id='cate_' + item._id)
-                  while n < cate_arr.length
-                    p.m-0 #{cate_arr[n++]}
-                a.hidden-wrap(href='#', data-toggle='collapse', data-target='#cate_' + item._id)
+              if(item.category_obj)
+                each category in item.category_obj
+                  each cate in category
+                    - cate_arr.push(cate[Object.keys(cate)])
+                - var n = 0;
+                while n < (cate_arr.length < 4 ? cate_arr.length : 4)
+                  p.m-0 #{cate_arr[n++]}
+                if(cate_arr.length > 4)
+                  .overflow-hidden.collapse(style='line-height:1.3em;', id='cate_' + item._id)
+                    while n < cate_arr.length
+                      p.m-0 #{cate_arr[n++]}
+                  a.hidden-wrap(href='#', data-toggle='collapse', data-target='#cate_' + item._id)
             .col-1
               - var region_items = item.region_array.concat(item.city_array)
               - var n = 0;
@@ -64,5 +65,7 @@ block content
               button.btn.btn-danger.d-block.my-1.mx-auto.btn-sm(onclick='fnDeleteData("' + item._id + '")') 삭제
             .col-1 #{item.status === 1 ? '제공' : item.status === 2 ? '중지' : '삭제'}
             .col-2 #{date.toLocaleDateString('ko')}
-  block append_js
-    script(src='/assets/js/admin.js', type='text/javascript')
+block append_js
+  script(src='/assets/js/admin.js', type='text/javascript')
+  script.
+    console.log('list : ', !{JSON.stringify(list)})

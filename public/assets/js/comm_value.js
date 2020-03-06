@@ -5,7 +5,7 @@ const __category = [
   },
   {
     cate: "Living",
-    sub_cate: ["Infortainment", "Home appliances", "Interior"]
+    sub_cate: ["Infortainment", "Home appliances", "Daily supplies"]
   },
   {
     cate: "Health",
@@ -25,7 +25,7 @@ const __category = [
   },
   {
     cate: "E-Commerce",
-    sub_cate: ["PC & Mobile shopping", "Consumer", "Producer"]
+    sub_cate: ["PC & Mobile shopping", "Digital Payments", "Agency Service"]
   }
 ];
 const __cities = [
