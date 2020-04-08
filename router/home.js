@@ -39,7 +39,9 @@ router.get("/list/:cate/:cate_item?", middle.isLoggedIn, async (req, res) => {
   let strQuery = req.query;
   let cate = req.params.cate;
   let cate_item = req.params.cate_item;
-  let cate_list = await categoryModel.find({ group_id: cate });
+  let cate_list = await categoryModel.find({
+    group_id: cate
+  });
   let region_list = await regionModel.find({});
   let city_list = await cityModel.find({});
   let list = await fnGetList(strQuery, req.params);
@@ -82,7 +84,7 @@ const fnGetList = async (strQuery, params) => {
   let cate = params.cate;
   let cate_item = params.cate_item;
   let searchText = params.searchText || "";
-  let searchRegex = { $regex: ".*" + searchText + ".*" };
+  let searchRegex = { $regex: ".*" + searchText + ".*", $options: "i" };
   let cate_info = await categoryModel.findOne({ cate_id: cate_item });
   let cate_obj = {};
   cate_obj["category_obj." + cate + "." + cate_item] = cate_info.cate_name;
@@ -91,7 +93,7 @@ const fnGetList = async (strQuery, params) => {
   if (Object.keys(strQuery).length > 0) {
     query_match = Object.keys(strQuery)
       .filter(function(key) {
-        if (key !== "list_size") return key;
+        if (key !== "list_size" && key !== "page") return key;
       })
       .map(function(key) {
         if (key === "region") {
@@ -117,7 +119,11 @@ const fnGetList = async (strQuery, params) => {
       });
   }
   if (query_match.length === 0) query_match = [{}];
-  let limit = { $limit: 20 };
+  const page = strQuery.page || 1;
+  let size = parseInt(strQuery.list_size) || 20;
+  const limit = size;
+  const skip = size * (page - 1);
+  // let limit = { $limit: 20 };
   if (strQuery.list_size) {
     limit["$limit"] = parseInt(strQuery.list_size);
   }
@@ -130,7 +136,15 @@ const fnGetList = async (strQuery, params) => {
         $and: query_match
       }
     },
-    limit
+    {
+      $facet: {
+        metadata: [
+          { $count: "total" },
+          { $addFields: { page: page, limit: limit } }
+        ],
+        data: [{ $skip: skip }, { $limit: limit }]
+      }
+    }
   ]);
 };
 

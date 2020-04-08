@@ -1,10 +1,12 @@
 $(document).ready(function() {
   // Category 선택시
   $('select[name="category"]').on("change", function(o) {
-    console.log("option : ", o.currentTarget);
     let path_obj = location.pathname.split("/");
     let path_len = path_obj.length;
     path_obj[path_len - 1] = o.currentTarget.value;
+    let target = $(this)[0];
+    document.querySelector("#cate_info").innerText =
+      target.options[target.selectedIndex].text;
     let pathname = path_obj.join("/");
     let strQuery = fnGetQuery();
     history.pushState(null, "", pathname + strQuery);
@@ -33,7 +35,7 @@ const fnGenerateHtmlResult = function(res) {
     cate_item = res.cate_item;
   let list = document.querySelector(".list-group");
   list.innerHTML = "";
-  res.list.forEach(function(v) {
+  res.list[0].data.forEach(function(v) {
     let a = document.createElement("a");
     a.className = "list-group list-group-item-action flex-row my-1 py-2";
     a.href = "/detail/" + cate + "/" + cate_item + "/" + v._id;
@@ -109,6 +111,25 @@ const fnGenerateHtmlResult = function(res) {
       list.appendChild(showMore);
     }
   });
+  let metadata = res.list[0].metadata[0];
+  let total = parseInt(metadata.total);
+  let page = parseInt(metadata.page);
+  let limit = parseInt(metadata.limit);
+  let max_page = Math.ceil(total / limit);
+  let ul = document.querySelector("ul.pagination");
+  ul.innerHTML = "";
+  for (var i = 1; i <= max_page; i++) {
+    let li = document.createElement("li");
+    if (page === i) li.className = "page-item active";
+    else li.className = "page-item";
+    let button = document.createElement("button");
+    button.className = "btn btn-link page-link";
+    button.type = "button";
+    button.dataset.page = i;
+    button.innerHTML = i;
+    li.appendChild(button);
+    ul.appendChild(li);
+  }
 };
 // 쿼리 스트링 파싱 함수
 const fnGetQuery = function() {
@@ -116,11 +137,11 @@ const fnGetQuery = function() {
   document.querySelectorAll("select.add_query").forEach(function(s) {
     if (s.selectedIndex > 0) query.push(s.name + "=" + encodeURI(s.value));
   });
-  // if (location.search.indexOf("list_size") > -1) {
-  // let start = location.search.indexOf("list_size");
   let list_size = parseInt($("#list_size").val());
   query.push("list_size=" + list_size);
-  // }
+  let page =
+    document.querySelector(".page-item.active button").dataset.page || 1;
+  query.push("page=" + page);
   return "?" + query.join("&");
 };
 // 긴 문장 토글
@@ -150,13 +171,37 @@ function searchList() {
   xhr.send();
 }
 //  리스트의 수량이 변동될 때
-// $("#list_size").on("change", function(val) {
-//   let list_size = $(this).val();
-//   let new_uri = updateQueryStringParameter(
-//     location.href,
-//     "list_size",
-//     list_size
-//   );
-//   history.pushState(null, "", new_uri);
-//   console.log("new uri : ", new_uri);
-// });
+document.querySelector("#list_size").addEventListener("change", function() {
+  let strQuery = fnGetQuery();
+  let uri = "/ajax" + location.pathname + strQuery;
+  history.pushState(null, "", strQuery);
+  let xhr = new XMLHttpRequest();
+  xhr.open("GET", uri, true);
+  xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+  xhr.onreadystatechange = function() {
+    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+      fnGenerateHtmlResult(JSON.parse(this.response));
+    }
+  };
+  xhr.send();
+});
+//  페이징
+$(document).on("click", "button.page-link", function() {
+  document.querySelectorAll("li.page-item").forEach(function(v) {
+    v.className = "page-item";
+  });
+  $(this)[0].parentElement.className = "page-item active";
+  //  ajax
+  let strQuery = fnGetQuery();
+  let uri = "/ajax" + location.pathname + strQuery;
+  history.pushState(null, "", strQuery);
+  let xhr = new XMLHttpRequest();
+  xhr.open("GET", uri, true);
+  xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+  xhr.onreadystatechange = function() {
+    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+      fnGenerateHtmlResult(JSON.parse(this.response));
+    }
+  };
+  xhr.send();
+});
