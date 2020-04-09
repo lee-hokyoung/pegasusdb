@@ -1,40 +1,135 @@
-.container{width:1240px; max-width:none !important;}
-.input-group label {width: 200px;font-weight: bold;}
-#data-purchase-list input {width: 15%;font-size: 12px;}
-#table_content th, #table_content td {padding: .05rem;border: none;}
-#table_content th {max-width: 100px;}
-#table_content td {min-width: 30px;}
-#table_content input {width: 100%;min-width: 50px;text-align: center;}
-#table_content thead input{background-color:lightblue}
-#table_content .space_td {width: 30px;}
-#table_content th input {min-width: 130px;}
+.container {
+  width: 1240px;
+  max-width: none !important;
+}
+.input-group label {
+  width: 200px;
+  font-weight: bold;
+}
+#data-purchase-list input {
+  width: 15%;
+  font-size: 12px;
+}
+#table_content th,
+#table_content td {
+  padding: 0.05rem;
+  border: none;
+}
+#table_content th {
+  max-width: 100px;
+}
+#table_content td {
+  min-width: 30px;
+}
+#table_content input {
+  width: 100%;
+  min-width: 50px;
+  text-align: center;
+}
+#table_content thead input {
+  background-color: lightblue;
+}
+#table_content .space_td {
+  width: 30px;
+}
+#table_content th input {
+  min-width: 130px;
+}
 
-ul#data_list li .text-normal{white-space: normal !important;}
-ul#user_list li .col-1, ul#user_list li .col {padding: 0 .25rem;}
-ul#user_list li a:after, a.hidden-wrap:after {content: '더보기'}
-ul#user_list li a[aria-expanded=true]:after, a.hidden-wrap[aria-expanded=true]:after, a.hidden-wrap[data-expanded=true]:after {content: '접기'}
-.showMore{height:60px;}
+ul#data_list li .text-normal {
+  white-space: normal !important;
+}
+ul#user_list li .col-1,
+ul#user_list li .col {
+  padding: 0 0.25rem;
+}
+ul#user_list li a:after,
+a.hidden-wrap:after {
+  content: "더보기";
+}
+ul#user_list li a[aria-expanded="true"]:after,
+a.hidden-wrap[aria-expanded="true"]:after,
+a.hidden-wrap[data-expanded="true"]:after {
+  content: "접기";
+}
+.showMore {
+  height: 60px;
+}
 
 #register-list-warp .input-group input,
-#config-wrap .input-group input{color:black; font-weight:700;}
+#config-wrap .input-group input {
+  color: black;
+  font-weight: 700;
+}
 
-#register-list-warp .input-group input::placeholder{font-style:italic; font-weight:normal;}
-#register-list-warp .input-group input:-ms-input-placeholder{font-style:italic; font-weight:normal;}
-#register-list-warp .input-group input::-webkit-input-placeholder{font-style:italic; font-weight:normal;}
-#config-wrap .input-group input::placeholder{font-style:italic; font-weight:normal;}
-#config-wrap .input-group input:-ms-input-placeholder{font-style:italic; font-weight:normal;}
-#config-wrap .input-group input::-webkit-input-placeholder{font-style:italic; font-weight:normal;}
+#register-list-warp .input-group input::placeholder {
+  font-style: italic;
+  font-weight: normal;
+}
+#register-list-warp .input-group input:-ms-input-placeholder {
+  font-style: italic;
+  font-weight: normal;
+}
+#register-list-warp .input-group input::-webkit-input-placeholder {
+  font-style: italic;
+  font-weight: normal;
+}
+#config-wrap .input-group input::placeholder {
+  font-style: italic;
+  font-weight: normal;
+}
+#config-wrap .input-group input:-ms-input-placeholder {
+  font-style: italic;
+  font-weight: normal;
+}
+#config-wrap .input-group input::-webkit-input-placeholder {
+  font-style: italic;
+  font-weight: normal;
+}
 
-
-#pills-tabContent{height:130px; overflow:auto;}
-#user_table table td, #user_table table th {text-align: center;font-size: 13.5px;padding: 0.35rem;}
+#pills-tabContent {
+  height: 130px;
+  overflow: auto;
+}
+#user_table table td,
+#user_table table th {
+  text-align: center;
+  font-size: 13.5px;
+  padding: 0.35rem;
+}
 
 /*  status 상태에 따라 글자색 변경  */
-.colorStatus:before{
-    font-size:13px;
-    font-weight:bold;
+.colorStatus:before {
+  font-size: 13px;
+  font-weight: bold;
 }
-.colorStatus[data-status='1']:before{content:'제공'; color:forestgreen;}
-.colorStatus[data-status='2']:before{content:'중지'; color:orange;}
-.colorStatus[data-status='3']:before{content:'삭제'; color:red}
-select.selectpicker[data-width='fix']{width:170px;}
+.colorStatus[data-status="1"]:before {
+  content: "제공";
+  color: forestgreen;
+}
+.colorStatus[data-status="2"]:before {
+  content: "중지";
+  color: orange;
+}
+.colorStatus[data-status="3"]:before {
+  content: "삭제";
+  color: red;
+}
+select.selectpicker[data-width="fix"] {
+  width: 170px;
+}
+#loading_page {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  background: rgba(0, 0, 0, 0.5);
+}
+#loading_page img {
+  position: relative;
+  top: 50%;
+  left: 50%;
+  width: 100px;
+}

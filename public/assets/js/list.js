@@ -1,6 +1,14 @@
-$(document).ready(function() {
-  // Category 선택시
-  $('select[name="category"]').on("change", function(o) {
+$(document).ready(function () {
+  //  loading 페이지 숨김 처리
+  let page_out_time = 1000;
+  let list_group = document.querySelector(".list-group");
+  list_group.style.visibility = "collapse";
+  setTimeout(function () {
+    document.querySelector("#loading_page").style.display = "none";
+    list_group.style.visibility = "visible";
+  }, page_out_time);
+  //  Category 선택시
+  $('select[name="category"]').on("change", function (o) {
     let path_obj = location.pathname.split("/");
     let path_len = path_obj.length;
     path_obj[path_len - 1] = o.currentTarget.value;
@@ -12,30 +20,45 @@ $(document).ready(function() {
     history.pushState(null, "", pathname + strQuery);
   });
 });
-const fnSearchDetail = function() {
+const fnSearchDetail = function () {
   let strQuery = fnGetQuery();
-  let xhr = new XMLHttpRequest();
-  let searchText = $("#searchText").val();
-  let uri = "/ajax" + location.pathname + strQuery;
-  if (searchText !== "")
-    uri = "/ajax" + location.pathname + "/" + searchText + strQuery;
-  xhr.open("GET", uri, true);
-  xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-  xhr.onreadystatechange = function() {
-    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-      history.pushState(null, "", strQuery);
-      fnGenerateHtmlResult(JSON.parse(this.response));
+  let new_url = "";
+  if (strQuery.indexOf("page") > -1) {
+    let str_arr = strQuery.split("&");
+    if (str_arr.length > 1) {
+      new_url = str_arr
+        .map(function (v) {
+          if (v.indexOf("page") > -1) {
+            return "page=1";
+          }
+          return v;
+        })
+        .join("&");
     }
-  };
-  xhr.send();
+  }
+  location.href = location.pathname + new_url;
+  // let xhr = new XMLHttpRequest();
+  // let searchText = $("#searchText").val();
+  // let uri = "/ajax" + location.pathname + strQuery;
+  // if (searchText !== "")
+  //   uri = "/ajax" + location.pathname + "/" + searchText + strQuery;
+  // xhr.open("GET", uri, true);
+  // xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+  // xhr.onreadystatechange = function () {
+  //   if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+  //     history.pushState(null, "", strQuery);
+  //     fnGenerateHtmlResult(JSON.parse(this.response));
+  //   }
+  // };
+  // xhr.send();
 };
 // list 결과 HTML 생성하는 함수
-const fnGenerateHtmlResult = function(res) {
+const fnGenerateHtmlResult = function (res) {
   let cate = res.cate,
     cate_item = res.cate_item;
   let list = document.querySelector(".list-group");
   list.innerHTML = "";
-  res.list[0].data.forEach(function(v) {
+  res.list[0].data.forEach(function (v) {
     let a = document.createElement("a");
     a.className = "list-group list-group-item-action flex-row my-1 py-2";
     a.href = "/detail/" + cate + "/" + cate_item + "/" + v._id;
@@ -60,9 +83,9 @@ const fnGenerateHtmlResult = function(res) {
     div_1.id = "info_" + v._id;
     // category array
     let category_arr = [];
-    Object.keys(v.category_obj).forEach(function(m) {
+    Object.keys(v.category_obj).forEach(function (m) {
       if (v.category_obj[m].length > 0) {
-        v.category_obj[m].forEach(function(w) {
+        v.category_obj[m].forEach(function (w) {
           category_arr.push(w[Object.keys(w)]);
         });
       } else {
@@ -132,9 +155,9 @@ const fnGenerateHtmlResult = function(res) {
   }
 };
 // 쿼리 스트링 파싱 함수
-const fnGetQuery = function() {
+const fnGetQuery = function () {
   let query = [];
-  document.querySelectorAll("select.add_query").forEach(function(s) {
+  document.querySelectorAll("select.add_query").forEach(function (s) {
     if (s.selectedIndex > 0) query.push(s.name + "=" + encodeURI(s.value));
   });
   let list_size = parseInt($("#list_size").val());
@@ -145,7 +168,7 @@ const fnGetQuery = function() {
   return "?" + query.join("&");
 };
 // 긴 문장 토글
-$(document).on("click", 'a[data-toggle="showMore"]', function(e) {
+$(document).on("click", 'a[data-toggle="showMore"]', function (e) {
   let target_id = e.currentTarget.dataset.target.toString();
   let target = document.querySelector(target_id);
   let toggle = e.currentTarget.dataset.expanded;
@@ -155,53 +178,113 @@ $(document).on("click", 'a[data-toggle="showMore"]', function(e) {
 });
 // Search Words
 function searchList() {
-  let searchText = document.querySelector("#searchText").value;
-  let xhr = new XMLHttpRequest();
-  xhr.open(
-    "GET",
-    "/ajax" + location.pathname + "/" + searchText + location.search,
-    true
-  );
-  xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-  xhr.onreadystatechange = function() {
-    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-      fnGenerateHtmlResult(JSON.parse(this.response));
+  let searchText = "searchText=" + document.querySelector("#searchText").value,
+    url = "";
+  console.log("search text : ", searchText);
+  if (location.search.indexOf("?") > -1) {
+    url =
+      location.pathname +
+      location.search
+        .split("&")
+        .map(function (v) {
+          console.log("v : ", v);
+          if (v.indexOf("searchText") > -1) {
+            return searchText;
+          } else {
+            return v;
+          }
+        })
+        .join("&");
+    if (url.indexOf("searchText") === -1) {
+      url = url + "&" + searchText;
     }
-  };
-  xhr.send();
+  } else {
+    url = location.pathname + "?" + searchText;
+  }
+  // console.log(url);
+  location.href = url;
+
+  // let xhr = new XMLHttpRequest();
+  // xhr.open(
+  //   "GET",
+  //   "/ajax" + location.pathname + "/" + searchText + location.search,
+  //   true
+  // );
+  // xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+  // xhr.onreadystatechange = function () {
+  //   if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+  //     fnGenerateHtmlResult(JSON.parse(this.response));
+  //   }
+  // };
+  // xhr.send();
 }
 //  리스트의 수량이 변동될 때
-document.querySelector("#list_size").addEventListener("change", function() {
+document.querySelector("#list_size").addEventListener("change", function () {
   let strQuery = fnGetQuery();
-  let uri = "/ajax" + location.pathname + strQuery;
-  history.pushState(null, "", strQuery);
-  let xhr = new XMLHttpRequest();
-  xhr.open("GET", uri, true);
-  xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-  xhr.onreadystatechange = function() {
-    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-      fnGenerateHtmlResult(JSON.parse(this.response));
+  // let uri = "/ajax" + location.pathname + strQuery;
+
+  if (strQuery.indexOf("page") > -1) {
+    let str_arr = strQuery.split("&");
+    if (str_arr.length > 1) {
+      new_url = str_arr
+        .map(function (v) {
+          if (v.indexOf("page") > -1) {
+            return "page=1";
+          }
+          return v;
+        })
+        .join("&");
     }
-  };
-  xhr.send();
+  }
+  location.href = location.pathname + new_url;
+
+  // console.log("uri : , ", uri);
+  // history.pushState(null, "", strQuery);
+  // let xhr = new XMLHttpRequest();
+  // xhr.open("GET", uri, true);
+  // xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+  // xhr.onreadystatechange = function () {
+  //   if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+  //     fnGenerateHtmlResult(JSON.parse(this.response));
+  //   }
+  // };
+  // xhr.send();
 });
 //  페이징
-$(document).on("click", "button.page-link", function() {
-  document.querySelectorAll("li.page-item").forEach(function(v) {
+$(document).on("click", "button.page-link", function () {
+  document.querySelectorAll("li.page-item").forEach(function (v) {
     v.className = "page-item";
   });
   $(this)[0].parentElement.className = "page-item active";
-  //  ajax
-  let strQuery = fnGetQuery();
-  let uri = "/ajax" + location.pathname + strQuery;
-  history.pushState(null, "", strQuery);
-  let xhr = new XMLHttpRequest();
-  xhr.open("GET", uri, true);
-  xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-  xhr.onreadystatechange = function() {
-    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-      fnGenerateHtmlResult(JSON.parse(this.response));
+
+  let search = location.search;
+  let arr_search = search.split("&");
+  let new_arr = [];
+  let page_num = $(this).data("page");
+  arr_search.forEach(function (v) {
+    if (v.indexOf("page") > -1) {
+      new_arr.push("page=" + page_num);
+    } else {
+      new_arr.push(v);
     }
-  };
-  xhr.send();
+  });
+  let new_search = new_arr.join("&");
+  if (new_search === "" || arr_search.length === 1)
+    new_search = "?page=" + page_num;
+  console.log("new search : ", location.pathname + new_search);
+  location.href = location.pathname + new_search;
+
+  //  ajax
+  // let strQuery = fnGetQuery();
+  // let uri = "/ajax" + location.pathname + strQuery;
+  // history.pushState(null, "", strQuery);
+  // let xhr = new XMLHttpRequest();
+  // xhr.open("GET", uri, true);
+  // xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+  // xhr.onreadystatechange = function () {
+  //   if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+  //     fnGenerateHtmlResult(JSON.parse(this.response));
+  //   }
+  // };
+  // xhr.send();
 });

@@ -44,12 +44,12 @@ function fnRegisterUser() {
   }
   let data = {},
     category = [];
-  document.querySelectorAll('input[type="text"]').forEach(function(v) {
+  document.querySelectorAll('input[type="text"]').forEach(function (v) {
     data[v.name] = v.value;
   });
   document
     .querySelectorAll('input[type="checkbox"]:checked')
-    .forEach(function(v) {
+    .forEach(function (v) {
       category.push(v.name);
     });
   data["category"] = category;
@@ -58,7 +58,7 @@ function fnRegisterUser() {
   let xhr = new XMLHttpRequest();
   xhr.open("POST", "/admin/user/register", true);
   xhr.setRequestHeader("Content-Type", "application/json");
-  xhr.onreadystatechange = function() {
+  xhr.onreadystatechange = function () {
     if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
       let res = JSON.parse(this.response);
       if (res.result === 1) {
@@ -83,7 +83,7 @@ function fnSearch() {
   let xhr = new XMLHttpRequest();
   xhr.open("POST", "/admin/user/search", true);
   xhr.setRequestHeader("Content-Type", "application/json");
-  xhr.onreadystatechange = function() {
+  xhr.onreadystatechange = function () {
     if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
       let res = JSON.parse(this.response);
       fnGenerateUserList(res);
@@ -95,7 +95,7 @@ function fnSearch() {
 function fnGenerateUserList(res) {
   let list_wrap = document.querySelector(".user-list-wrap");
   list_wrap.innerHTML = "";
-  res.forEach(function(v, idx) {
+  res.forEach(function (v, idx) {
     // li Element
     let li = document.createElement("li");
     li.className = "list-group-item";
@@ -210,7 +210,7 @@ function fnGenerateUserList(res) {
 }
 
 // 사용자 상태 변경 버튼 클릭 이벤트
-$(document).on("click", ".status-btn-wrap button", function() {
+$(document).on("click", ".status-btn-wrap button", function () {
   console.log($(this));
   let btn = $(this)[0];
   let id = btn.parentElement.dataset.id;
@@ -219,7 +219,7 @@ $(document).on("click", ".status-btn-wrap button", function() {
   let status_txt = document.querySelector('.colorStatus[data-id="' + id + '"]');
   xhr.open("POST", "/admin/user/status", true);
   xhr.setRequestHeader("Content-Type", "application/json");
-  xhr.onreadystatechange = function() {
+  xhr.onreadystatechange = function () {
     if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
       let res = JSON.parse(this.response);
       status_txt.dataset.status = status;
@@ -231,7 +231,7 @@ $(document).on("click", ".status-btn-wrap button", function() {
 
 // 데이터 테이블 컬럼 추가
 function fnAddCol() {
-  document.querySelectorAll("tr").forEach(function(tr) {
+  document.querySelectorAll("tr").forEach(function (tr) {
     let data_type = tr.dataset.type;
     let current_idx = parseInt(tr.dataset.idx);
     let td = document.createElement("td");
@@ -247,7 +247,7 @@ function fnAddCol() {
 
 // 데이터 테이블 컬럼 제거
 function fnRemoveCol() {
-  document.querySelectorAll("tr").forEach(function(tr) {
+  document.querySelectorAll("tr").forEach(function (tr) {
     let target_idx = tr.dataset.idx;
     if (target_idx) {
       tr.querySelector('td[data-idx="' + target_idx + '"]').remove();
@@ -307,7 +307,7 @@ function fnSubmit() {
   let xhr = new XMLHttpRequest();
   xhr.open("POST", "/admin/data/register", true);
   xhr.setRequestHeader("Content-Type", "application/json");
-  xhr.onreadystatechange = function() {
+  xhr.onreadystatechange = function () {
     if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
       let res = JSON.parse(this.response);
       if (res.code !== 0) {
@@ -348,15 +348,15 @@ function fnGenerateFormData() {
 
   // x축 데이터 생성
   let table_x = { title: "", content: [] };
-  document.querySelectorAll("table thead input").forEach(function(v) {
+  document.querySelectorAll("table thead input").forEach(function (v) {
     if (v.dataset.title) table_x.title = v.value;
     else table_x.content.push(v.value);
   });
   // y축 데이터 생성 멀티 라인
   let table_y = [];
-  document.querySelectorAll("tbody tr").forEach(function(tr) {
+  document.querySelectorAll("tbody tr").forEach(function (tr) {
     let tr_obj = { title: "", content: [] };
-    tr.querySelectorAll("input").forEach(function(v) {
+    tr.querySelectorAll("input").forEach(function (v) {
       if (v.dataset.title) tr_obj.title = v.value;
       else tr_obj.content.push(v.value);
     });
@@ -370,27 +370,27 @@ function fnGenerateFormData() {
   }
 
   let category_obj = {};
-  document.querySelectorAll("div.col-4.mb-3").forEach(function(div) {
+  document.querySelectorAll("div.col-4.mb-3").forEach(function (div) {
     let cate_header = div.querySelector("h5").id;
     category_obj[cate_header] = [];
-    div.querySelectorAll("input:checked").forEach(function(input) {
+    div.querySelectorAll("input:checked").forEach(function (input) {
       let obj = {};
       obj[input.id] = input.value;
       category_obj[cate_header].push(obj);
     });
   });
   let region_array = [];
-  document.querySelectorAll("#region input:checked").forEach(function(input) {
+  document.querySelectorAll("#region input:checked").forEach(function (input) {
     region_array.push(input.value);
   });
   let city_array = [];
-  document.querySelectorAll("#city input:checked").forEach(function(input) {
+  document.querySelectorAll("#city input:checked").forEach(function (input) {
     city_array.push(input.value);
   });
   let object = [];
   document
     .querySelectorAll('input[name="obj"]:checked')
-    .forEach(function(input) {
+    .forEach(function (input) {
       object.push(input.value);
     });
   let description = document.querySelector('textarea[name="description"]');
@@ -409,18 +409,19 @@ function fnGenerateFormData() {
   post_data["object"] = object;
   post_data["description"] = description.value;
   post_data["source"] = source.value;
+  post_data["updated"] = new Date();
 
   // file upload. path, original name 이 있는지 확인 후 post_data 에 등록
   let path_arr = [],
     originalname_arr = [];
-  document.querySelectorAll('input[type="file"]').forEach(function(file) {
+  document.querySelectorAll('input[type="file"]').forEach(function (file) {
     if (file.value) {
       // path_arr.push(file.dataset.path);
       // originalname_arr.push(file.dataset.originalname);
       // post_data[file.name] = file.dataset.path.replace('temps\/', '');
       post_data[file.name] = {
         original: file.dataset.originalname,
-        path: file.dataset.path
+        path: file.dataset.path,
       };
     }
   });
@@ -438,7 +439,7 @@ function fnUpdateData(id) {
   let xhr = new XMLHttpRequest();
   xhr.open("PUT", "/admin/data/update/" + id, true);
   xhr.setRequestHeader("Content-Type", "application/json");
-  xhr.onreadystatechange = function() {
+  xhr.onreadystatechange = function () {
     if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
       let res = JSON.parse(this.response);
       if (res.ok === 1) {
@@ -456,7 +457,7 @@ function fnDeleteData(id) {
     let xhr = new XMLHttpRequest();
     xhr.open("DELETE", "/admin/data/" + id);
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    xhr.onreadystatechange = function() {
+    xhr.onreadystatechange = function () {
       if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
         let res = JSON.parse(this.response);
         if (res.ok === 1) {
@@ -476,7 +477,7 @@ function fnSearchData() {
   let xhr = new XMLHttpRequest();
   xhr.open("POST", "/admin/data/search");
   xhr.setRequestHeader("Content-Type", "application/json");
-  xhr.onreadystatechange = function() {
+  xhr.onreadystatechange = function () {
     if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
       let res = JSON.parse(this.response);
       console.log("res : ", res);
@@ -490,7 +491,7 @@ function fnSearchData() {
 function fnGenerateDataList(list) {
   let dataList = document.getElementById("data_item_list");
   dataList.innerHTML = "";
-  list.forEach(function(v) {
+  list.forEach(function (v) {
     let date = new Date(v.updated);
     let li = document.createElement("li");
     li.className = "list-group-item";
@@ -512,7 +513,7 @@ function fnGenerateDataList(list) {
     col_4.className = "col-1 text-normal";
     let cate_arr = [];
     for (let category in v.category_obj) {
-      v.category_obj[category].forEach(function(cate) {
+      v.category_obj[category].forEach(function (cate) {
         cate_arr.push(cate[Object.keys(cate)]);
       });
     }
@@ -576,7 +577,7 @@ function fnGenerateDataList(list) {
     }
     let col_6 = document.createElement("div");
     col_6.className = "col-1";
-    v.object.forEach(function(obj) {
+    v.object.forEach(function (obj) {
       let p = document.createElement("p");
       p.className = "m-0";
       p.innerText = obj;
@@ -590,7 +591,7 @@ function fnGenerateDataList(list) {
     a.innerText = "업데이트";
     let button = document.createElement("button");
     button.className = "btn btn-danger d-block my-1 mx-auto btn-sm";
-    button.addEventListener("click", function() {
+    button.addEventListener("click", function () {
       fnDeleteData(v._id);
     });
     button.innerText = "삭제";
@@ -618,7 +619,7 @@ function fnGenerateDataList(list) {
 }
 
 //  데이터 이미지 등록시 단위, 그래프 유형, 내용(데이터) 입력 차단 및 필수 항목 해제
-var fnInputImage = function() {
+var fnInputImage = function () {
   let input = document.querySelector('input[name="add_img_graph"]');
   let data_unit = document.querySelector('input[name="data_unit"]');
   let table_inputs = document.querySelectorAll("#table_content input");
@@ -626,24 +627,24 @@ var fnInputImage = function() {
   let table_buttons = document.querySelectorAll("button.btn-sm");
   if (input.value !== "") {
     data_unit.disabled = true;
-    table_inputs.forEach(function(inp) {
+    table_inputs.forEach(function (inp) {
       inp.disabled = true;
     });
-    table_radio.forEach(function(radio) {
+    table_radio.forEach(function (radio) {
       radio.disabled = true;
     });
-    table_buttons.forEach(function(btn) {
+    table_buttons.forEach(function (btn) {
       btn.disabled = true;
     });
   } else {
     data_unit.disabled = false;
-    table_inputs.forEach(function(inp) {
+    table_inputs.forEach(function (inp) {
       inp.disabled = false;
     });
-    table_radio.forEach(function(radio) {
+    table_radio.forEach(function (radio) {
       radio.disabled = false;
     });
-    table_buttons.forEach(function(btn) {
+    table_buttons.forEach(function (btn) {
       btn.disabled = false;
     });
   }
@@ -655,19 +656,19 @@ var fnInputImage = function() {
  *   3. 업로드 된 파일의 경로명(path), 파일명(originalname) 을 해당 input Element 의 dataset 에 기록한다.
  *   3. 파일이 없을 경우, 변화가 없으나 최종적으로 submit 을 할 때, value 유무 확인한 후 dataset 내용 업로드
  */
-document.querySelectorAll('input[type="file"]').forEach(function(file) {
-  file.addEventListener("change", function(e) {
+document.querySelectorAll('input[type="file"]').forEach(function (file) {
+  file.addEventListener("change", function (e) {
     const formData = new FormData();
-    Object.keys(e.target.files).forEach(function(key) {
+    Object.keys(e.target.files).forEach(function (key) {
       formData.append("file", e.target.files[key], e.target.files[key].name);
     });
     if (e.target.files.length > 0) {
       let xhr = new XMLHttpRequest();
       xhr.open("POST", "/admin/data/file_upload");
-      xhr.onreadystatechange = function() {
+      xhr.onreadystatechange = function () {
         if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
           let res = JSON.parse(this.response);
-          res.forEach(function(v) {
+          res.forEach(function (v) {
             file.dataset.path = v.path;
             file.dataset.originalname = v.originalname;
           });
@@ -686,7 +687,7 @@ function fnDeleteFile(id, file_name, input_name, opt) {
     "DELETE",
     "/admin/data/file/" + id + "/" + file_name + "?input_name=" + input_name
   );
-  xhr.onreadystatechange = function() {
+  xhr.onreadystatechange = function () {
     if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
       let res = JSON.parse(this.response);
       console.log("res : ", res);
@@ -711,7 +712,7 @@ function fnDeleteFile(id, file_name, input_name, opt) {
 function fnChangeAbleInput() {
   document
     .querySelectorAll("input[disabled]:not(.form-control-file)")
-    .forEach(function(inp) {
+    .forEach(function (inp) {
       inp.disabled = false;
     });
 }
@@ -728,7 +729,7 @@ function fnUpdateConfig() {
   let xhr = new XMLHttpRequest();
   xhr.open("POST", "/admin/config", true);
   xhr.setRequestHeader("Content-Type", "application/json");
-  xhr.onreadystatechange = function() {
+  xhr.onreadystatechange = function () {
     if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
       let res = JSON.parse(this.response);
       console.log("res : ", res);
@@ -741,7 +742,7 @@ function fnUpdateConfig() {
     JSON.stringify({
       forgot_password: forgot_password,
       request_report: request_report,
-      request_data: request_data
+      request_data: request_data,
     })
   );
 }
