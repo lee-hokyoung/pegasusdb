@@ -77,13 +77,17 @@ block append_js
   script(src='/chart.js/Chart.js')
   script.
     let d = !{JSON.stringify(data)};
-    console.log('data : ', d);
     if(d.add_img_graph){
 
     }else{
       // 차트 색 설정
       let bg_list = [
-        'rgba(255, 99, 132, 0.8)', 'rgba(54, 162, 235, 0.8)', 'rgba(255, 206, 86, 0.8)', 'rgba(75, 192, 192, 0.8)', 'rgba(153, 102, 255, 0.8)', 'rgba(255, 159, 64, 0.8)'
+        'rgba(255, 99, 132, 0.8)', 
+        'rgba(54, 162, 235, 0.8)', 
+        'rgba(255, 206, 86, 0.8)', 
+        'rgba(75, 192, 192, 0.8)', 
+        'rgba(153, 102, 255, 0.8)', 
+        'rgba(255, 159, 64, 0.8)'
       ];
       // 차트 타입
       let chart_type = '';
@@ -112,7 +116,6 @@ block append_js
           chart_type = 'polarArea';
           break;
       }
-      console.log('chart type : ', chart_type, ', d chart-type : ', d.chart_type);
       let x = d.table_x;
       let y = d.table_y;
       let ChartData = {};
@@ -182,7 +185,6 @@ block append_js
           ChartData.datasets.push(obj);
         });
       }
-      console.log('chart data : ', ChartData);
       let ctx = document.getElementById('chart');
       let chart = new Chart(ctx, {
         type: chart_type,

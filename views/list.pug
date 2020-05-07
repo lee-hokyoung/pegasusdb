@@ -6,6 +6,12 @@ block content
   - var page = parseInt(metadata.page);
   - var limit = parseInt(metadata.limit);
   - var max_page = Math.ceil(total / limit);
+  //  page grouping
+  - var page_size = 10;
+  - var page_group_size = Math.ceil(max_page / page_size)
+  - var current_page_group = Math.ceil(page / page_size)
+  - var init_page = (current_page_group - 1) * page_size + 1;
+  - var last_page = max_page > current_page_group * page_size ? current_page_group * page_size : max_page;
   //  카테고리 관련 변수
   - var group_info = {}
   each item in cate_list
@@ -65,8 +71,8 @@ block content
             option(value=10, selected=limit===10) 10
             option(value=20, selected=limit===20) 20
             option(value=30, selected=limit===30) 30
-            option(value=50, selected=limit===50) 50
-            option(value=100, selected=limit===100) 100
+            //- option(value=50, selected=limit===50) 50
+            //- option(value=100, selected=limit===100) 100
         .list-group
           each item in list[0].data
             - var region = item.region_array.concat(item.city_array);
@@ -95,19 +101,23 @@ block content
                 a.hidden-wrap.text-right(href='#', data-toggle='showMore', data-target='#info_' + item._id, data-expanded='false')
     .row
       .col-12
-        - var n = 0;
         nav
           ul.pagination.justify-content-center
-            //- li.page-item
-            //-   a.page-link(href="#" aria-label="Previous")
-            //-     span(aria-hidden="true") «
-            //-     span.sr-only Previous
-            while n < max_page
-              li.page-item(class=++n===parseInt(page)?'active':'')
-                button.btn.btn-link.page-link(type='button', data-page=n) #{n}
-            //-   a.page-link(href="#" aria-label="Next")
-            //-     span(aria-hidden="true") »
-            //-     span.sr-only Next
-
+            li.page-item
+              if(init_page > 10)
+                button.btn.btn-link.page-link(data-page=init_page - 1, aria-label="Previous")
+                  span(aria-hidden="true") «
+                  span.sr-only Previous
+              - var n = init_page;
+              while n < last_page + 1
+                li.page-item(class=n===parseInt(page)?'active':'')
+                  button.btn.btn-link.page-link(type='button', data-page=n) #{n}
+                - n++
+              if(last_page < max_page)
+                button.btn.btn-link.page-link(data-page=last_page + 1, aria-label="Next")
+                  span(aria-hidden="true") »
+                  span.sr-only Next
+  #loading_page
+    img(src='https://thumbs.gfycat.com/RespectfulBelovedArachnid.webp')
 block append_js
   script(src='/assets/js/list.js', type='text/javascript')
