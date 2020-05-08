@@ -8,12 +8,7 @@ const userModel = require("../model/userModel");
 const middle = require("./middlewares");
 const passport = require("passport");
 
-let obj = [
-  { name: "Industry" },
-  { name: "Market" },
-  { name: "Consumer" },
-  { name: "Company" },
-];
+let obj = [{ name: "Industry" }, { name: "Market" }, { name: "Consumer" }, { name: "Company" }];
 
 // main 화면
 router.get("", middle.isLoggedIn, async (req, res) => {
@@ -65,19 +60,15 @@ router.get("/list/:cate/:cate_item?", middle.isLoggedIn, async (req, res) => {
   });
 });
 // get by ajax -> 이제 이건 안 써
-router.get(
-  "/ajax/list/:cate/:cate_item?/:searchText?",
-  middle.isLoggedIn,
-  async (req, res) => {
-    let strQuery = req.query;
-    let list = await fnGetList(strQuery, req.params);
-    res.json({
-      list: list,
-      cate: req.params.cate,
-      cate_item: req.params.cate_item,
-    });
-  }
-);
+router.get("/ajax/list/:cate/:cate_item?/:searchText?", middle.isLoggedIn, async (req, res) => {
+  let strQuery = req.query;
+  let list = await fnGetList(strQuery, req.params);
+  res.json({
+    list: list,
+    cate: req.params.cate,
+    cate_item: req.params.cate_item,
+  });
+});
 
 const fnGetList = async (strQuery, params) => {
   let query_match = [{}];
@@ -94,8 +85,7 @@ const fnGetList = async (strQuery, params) => {
   if (Object.keys(strQuery).length > 0) {
     query_match = Object.keys(strQuery)
       .filter(function (key) {
-        if (key !== "list_size" && key !== "page" && key !== "searchText")
-          return key;
+        if (key !== "list_size" && key !== "page" && key !== "searchText") return key;
       })
       .map(function (key) {
         if (key === "region") {
@@ -103,10 +93,7 @@ const fnGetList = async (strQuery, params) => {
             $or: [
               {
                 $expr: {
-                  $gt: [
-                    { $indexOfArray: ["$region_array", strQuery[key]] },
-                    -1,
-                  ],
+                  $gt: [{ $indexOfArray: ["$region_array", strQuery[key]] }, -1],
                 },
               },
               {
@@ -125,7 +112,7 @@ const fnGetList = async (strQuery, params) => {
   }
   if (query_match.length === 0) query_match = [{}];
   const page = strQuery.page || 1;
-  let size = parseInt(strQuery.list_size) || 20;
+  let size = parseInt(strQuery.list_size) || 10;
   const limit = size;
   const skip = size * (page - 1);
   // let limit = { $limit: 20 };
@@ -135,11 +122,7 @@ const fnGetList = async (strQuery, params) => {
   return await dataModel.aggregate([
     {
       $match: {
-        $or: [
-          { data_title: searchRegex },
-          { region_array: searchRegex },
-          { city_array: searchRegex },
-        ],
+        $or: [{ data_title: searchRegex }, { region_array: searchRegex }, { city_array: searchRegex }],
       },
     },
     unwind_query,
@@ -152,10 +135,7 @@ const fnGetList = async (strQuery, params) => {
     { $sort: { updated: -1 } },
     {
       $facet: {
-        metadata: [
-          { $count: "total" },
-          { $addFields: { page: page, limit: limit } },
-        ],
+        metadata: [{ $count: "total" }, { $addFields: { page: page, limit: limit } }],
         data: [{ $skip: skip }, { $limit: limit }],
       },
     },

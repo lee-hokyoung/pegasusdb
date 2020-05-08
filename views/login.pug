@@ -1,19 +1,21 @@
 extends layout
 block content
-	.w-100.bg-gradient-zhupao
+	.w-100.bg-zhupao
 		.d-flex.align-items-center.min-vh-100(style='height:1px;')
 			.container
 				form(method='POST', action='/auth/login')
 					.text-center.my-3
 						h2.text-white Great China Region Market Data Portal
-						h5.text-secondary Market data and Studies from more than 23,400 Sources
+						h5.text-secondary Market data and studies from next generation industries
 					.mx-auto.w-50.mt-5
-						input.input-group.p-3.rounded.mb-2(type='text', name='user_id', placeholder='Login/user id')
-						input.input-group.p-3.rounded(type='password', name='user_pw' placeholder='Password')
+						input.input-group.p-3.rounded.border-0.mb-2(type='text', name='user_id', placeholder='id')
+						input.input-group.p-3.rounded.border-0(type='password', name='user_pw' placeholder='password')
 					.d-flex.justify-content-between.mx-auto.w-50.py-3
 						div(style='flex:1')
 						button.text-white.btn.btn-primary(style='flex:1' type='submit') Login
-						a.text-white.text-right(style='flex:1', href='httP://pegasusdb.net/Contact', target='_blank') Forget Password ?
+						.text-right(style='flex:1')
+							a.text-light(href='httP://pegasusdb.net/Contact', target='_blank') 
+								span(style='font-size:11px') Forget Password ?
 	block append_js
 		script.
 			function fnAjaxLogin() {

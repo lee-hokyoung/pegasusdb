@@ -12,19 +12,19 @@ block content
     if(item.cate_id === cate_item)
       - sub_cate_name = item.cate_name;
   .container
-    .bg-gradient-zhupao
+    .bg-zhupao
       .d-flex.justify-content-between
         a(href='/')
           img(src='/assets/images/pegasus_logo.jpg', alt='logo', style='width:250px;')
         include nav
-    .w-100.bg-gradient-primary.mb-3
+    .w-100.bg-lightblue.mb-3
       h5.m-0.text-white.p-2
         a.text-white(href='/') Home
         | &nbsp; > &nbsp;
         a.text-white(href='/list/' + cate_info[0].group_id + '/' + cate_item) #{cate_info[0].group_name}
         | &nbsp; > &nbsp; #{sub_cate_name}
-    .row
-      .col-8.text-zhupao
+    .row.pt-3
+      .col-8.graph-wrap
         h4.font-weight-bold #{data.data_title}
         h5.text-right 단위 : #{data.data_unit}
         .card.d-block
@@ -33,62 +33,82 @@ block content
               img(src='/downloads/' + data.add_img_graph.path.replace('temps/',''), width='100%')
             else
               canvas#chart(width='100%', height='50')
-        h6.text-right.text-zhupao.mt-3 Data No. #{data.data_no}
-      .col-4.font-weight-bold
+        h6.text-right.mt-3 Data No. #{data.data_no}
+      .col-4
         .d-flex.mb-2
-          span.px-3.py-2(style='flex:1; border-bottom:4px solid #007bff') DOWNLOAD
-          div.border-bottom(style='flex:2')
+          span.px-3.py-2(style='flex:1; color:rgb(0, 32, 96); border-bottom:4px solid rgb(143, 170, 220)') DOWNLOAD
+          .border-bottom-gray(style='flex:2;')
         .d-flex#img_wrap
           .border(class=data.add_png.path?'':'bg-disable')
-            a.btn.d-flex.justify-content-center.p-2(href=(data.add_png.path?'/downloads/' + data.add_png.path.replace('temps/',''):'javascript:void(0);'), target='_blank', class=data.add_png.path?'':'disabled')
+            a.btn.d-flex.justify-content-center.p-2(href=(data.add_png.path?'/downloads/' + data.add_png.path.replace('temps/',''):'javascript:void(0);'), download='download', class=data.add_png.path?'':'disabled')
               if(data.add_png.path)
                 img.icon-img(src='/assets/svgs/png.svg')
               span PNG
           .border.ml-2(class=data.add_ppt.path?'':'bg-disable')
-            a.btn.d-flex.justify-content-center.p-2(href=(data.add_ppt.path?'/downloads/' + data.add_ppt.path.replace('temps/',''):'javascript:void(0);'), target='_blank', class=data.add_ppt.path?'':'disabled')
+            a.btn.d-flex.justify-content-center.p-2(href=(data.add_ppt.path?'/downloads/' + data.add_ppt.path.replace('temps/',''):'javascript:void(0);'), download='download', class=data.add_ppt.path?'':'disabled')
               if(data.add_ppt.path)
                 img.icon-img(src='/assets/svgs/ppt.svg')
               span PPT
           .border.ml-2(class=data.add_xls.path?'':'bg-disable')
-            a.btn.d-flex.justify-content-center.p-2(href=(data.add_xls.path?'/downloads/' + data.add_xls.path.replace('temps/', ''):'javascript:void(0);'), target='_blank', class=data.add_xls.path?'':'disabled')
+            a.btn.d-flex.justify-content-center.p-2(href=(data.add_xls.path?'/downloads/' + data.add_xls.path.replace('temps/', ''):'javascript:void(0);'), download='download', class=data.add_xls.path?'':'disabled')
               if(data.add_xls.path)
                 img.icon-img(src='/assets/svgs/xls.svg')
               span XLS
           .border.ml-2(class=data.add_pdf.path?'':'bg-disable')
-            a.btn.d-flex.justify-content-center.p-2(href=(data.add_pdf.path?'/downloads/' + data.add_pdf.path.replace('temps/', ''):'javascript:void(0);'), target='_blank', class=data.add_pdf.path?'':'disabled')
+            a.btn.d-flex.justify-content-center.p-2(href=(data.add_pdf.path?'/downloads/' + data.add_pdf.path.replace('temps/', ''):'javascript:void(0);'), download='download', class=data.add_pdf.path?'':'disabled')
               if(data.add_pdf.path)
                 img.icon-img(src='/assets/svgs/pdf.svg')
               span PDF
-        ul#pills-tab.nav.nav-pills.mt-4.mb-3.pb-2.border-bottom(role="tablist")
+        ul#pills-tab.nav.nav-pills.mt-5.mb-3.pb-2.border-bottom-gray(role="tablist")
           li.nav-item
-            a#pills-home-tab.nav-link.active.rounded-0.border.border-primary.py-1(data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true") DESCRIPTION
+            a#pills-home-tab.nav-link.active.rounded-0.py-1(data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true") DESCRIPTION
           li.nav-item
-            a#pills-profile-tab.nav-link.rounded-0.border.border-primary.ml-1.py-1(data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false") SOURCE
+            a#pills-profile-tab.nav-link.rounded-0.ml-1.py-1(data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false") SOURCE
         #pills-tabContent.tab-content
           #pills-home.tab-pane.fade.show.active(role="tabpanel" aria-labelledby="pills-home-tab") #{data.description}
           #pills-profile.tab-pane.fade(role="tabpanel" aria-labelledby="pills-profile-tab") #{data.source}
-        .d-flex.justify-content-center
-          a(href='' + config.request_report, target='_blank', style='width:40%;')
-            img(src='/assets/images/REQUEST_REPORT.jpg', width='180px')
-          a(href='' + config.request_data, target='_blank', style='width:40%;')
-            img(src='/assets/images/REQUEST_DATA.jpg', width='180px')
+        .d-flex.justify-content-start
+          a(href='' + config.request_report, target='_blank', style='width:38%;')
+            img(src='/assets/images/REQUEST_REPORT.jpg', width='100%')
+          a(href='' + config.request_data, target='_blank', style='width:38%;')
+            img(src='/assets/images/REQUEST_DATA.jpg', width='100%')
 block append_js
   script(src='/bootstrap/js/dist/util.js', type='text/javascript')
   script(src='/chart.js/Chart.js')
   script.
     let d = !{JSON.stringify(data)};
+    let isReverse = ["bar_chart_horizontal"].indexOf(d.chart_type) > -1;
+    console.log('d : ', d);
     if(d.add_img_graph){
 
     }else{
       // 차트 색 설정
       let bg_list = [
-        'rgba(255, 99, 132, 0.8)', 
-        'rgba(54, 162, 235, 0.8)', 
-        'rgba(255, 206, 86, 0.8)', 
-        'rgba(75, 192, 192, 0.8)', 
-        'rgba(153, 102, 255, 0.8)', 
-        'rgba(255, 159, 64, 0.8)'
+        'rgba(191, 191, 191, 1)', 
+        'rgba(189, 215, 238, 1)', 
+        'rgba(188, 199, 231, 1)', 
+        'rgba(143, 170, 220, 1)', 
+        'rgba(158, 202, 225, 1)', 
+        'rgba(107, 174, 214, 1)',
+        'rgba(60, 148, 222, 1)',
+        'rgba(24, 91, 162, 1)',
+        'rgba(5, 44, 111, 1)',
+        'rgba(5, 9, 47, 1)',
       ];
+      if(isReverse){
+        bg_list = [
+        'rgba(5, 9, 47, 1)',
+        'rgba(5, 44, 111, 1)',
+        'rgba(24, 91, 162, 1)',
+        'rgba(60, 148, 222, 1)',
+        'rgba(107, 174, 214, 1)',
+        'rgba(158, 202, 225, 1)', 
+        'rgba(143, 170, 220, 1)', 
+        'rgba(188, 199, 231, 1)', 
+        'rgba(189, 215, 238, 1)', 
+        'rgba(191, 191, 191, 1)', 
+      ];
+      }
       // 차트 타입
       let chart_type = '';
       switch (d.chart_type) {
@@ -120,6 +140,8 @@ block append_js
       let y = d.table_y;
       let ChartData = {};
 
+      console.log('x : ', x);
+      console.log('y : ', y);
       // 파이차트의 경우 좌표를 재배열해준다.
       if (chart_type === 'pie') {
         ChartData.datasets = [];
@@ -135,7 +157,7 @@ block append_js
           let bg_arr = [];
           y.forEach(function (v, idx) {
             arr.push(v.content[i]);
-            bg_arr.push(bg_list[idx % 6]);
+            bg_arr.push(bg_list[idx % bg_list.length]);
           });
           new_y.data = arr;
           // new_y.label = x.content[i];
@@ -158,9 +180,12 @@ block append_js
           borderColor:backgroundList}
         ];
       } else {
-        ChartData.labels = d.table_x.content;
+        if(isReverse) ChartData.labels = d.table_x.content.reverse();
+        else ChartData.labels = d.table_x.content;
         ChartData.datasets = [];
         d.table_y.forEach(function (row, idx) {
+          console.log('row : ', row);
+          console.log('idx : ', idx);
           let obj = {};
           if(d.chart_type === 'comboBarLine_chart'){
             if(idx === 0) obj.type = 'line';
@@ -168,11 +193,17 @@ block append_js
           }else{
             obj.type = chart_type;
           }
+          //- obj.label = x.content;
           obj.label = row.title;
-          obj.data = row.content;
-          obj.backgroundColor = bg_list[idx % 6];
+          if(isReverse){
+            obj.data = row.content.reverse();
+          }else{
+            obj.data = row.content;
+          }
+          obj.backgroundColor = row.content.map(function(v, idx){return bg_list[idx % bg_list.length]});
+          //- obj.backgroundColor = bg_list[idx % bg_list.length];
           obj.fill = false;
-          obj.borderColor = bg_list[idx % 6];
+          obj.borderColor = bg_list[idx % bg_list.length];
           if(d.chart_type === 'radar_chart' || d.chart_type === 'stackedArea_chart'){
             obj.fill = true;
           }
@@ -193,12 +224,34 @@ block append_js
           scales: {
             xAxes: [{
               stacked: (['comboBarLine_chart'].indexOf(d.chart_type) > -1?false:true),
+              gridLines:{
+                //- drawOnChartArea:isReverse?true:false,
+                display:isReverse?true:false,
+              },
+              ticks:{
+                display:['pie_chart'].indexOf(d.chart_type) > -1 ? false : true
+              }
             }],
             yAxes: [{
-              stacked: (['stackedArea_chart', 'bar_chart_horizontal', 'bar_chart_vertical'].indexOf(d.chart_type) > -1?true:false),
+              stacked: (['stackedArea_chart', 'bar_chart_horizontal', 'bar_chart_vertical'].indexOf(d.chart_type) > -1 ? true:false),
+              gridLines:{
+                //- drawOnChartArea:isReverse?true:false,
+                display:isReverse?true:false,
+              },
+              ticks:{
+                display:['pie_chart'].indexOf(d.chart_type) > -1 ? false : true
+              },
             }]
           },
           responsive:true,
+          legend:{
+            position:['pie_chart'].indexOf(d.chart_type) > -1 ?'bottom':'top'
+          },
+          elements:{
+            line:{
+              tension:['line_chart'].indexOf(d.chart_type) > -1 ? 0: 0.4
+            }
+          }
         }
       });
     }

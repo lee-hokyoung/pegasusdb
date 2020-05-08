@@ -13,8 +13,7 @@ $(document).ready(function () {
     let path_len = path_obj.length;
     path_obj[path_len - 1] = o.currentTarget.value;
     let target = $(this)[0];
-    document.querySelector("#cate_info").innerText =
-      target.options[target.selectedIndex].text;
+    document.querySelector("#cate_info").innerText = target.options[target.selectedIndex].text;
     let pathname = path_obj.join("/");
     let strQuery = fnGetQuery();
     history.pushState(null, "", pathname + strQuery);
@@ -162,8 +161,7 @@ const fnGetQuery = function () {
   });
   let list_size = parseInt($("#list_size").val());
   query.push("list_size=" + list_size);
-  let page =
-    document.querySelector(".page-item.active button").dataset.page || 1;
+  let page = document.querySelector(".page-item.active button").dataset.page || 1;
   query.push("page=" + page);
   return "?" + query.join("&");
 };
@@ -175,6 +173,7 @@ $(document).on("click", 'a[data-toggle="showMore"]', function (e) {
   e.currentTarget.dataset.expanded = toggle === "false";
   if (toggle === "false") target.classList.remove("showMore");
   else target.classList.add("showMore");
+  return false;
 });
 // Search Words
 function searchList() {
@@ -269,8 +268,7 @@ $(document).on("click", "button.page-link", function () {
     }
   });
   let new_search = new_arr.join("&");
-  if (new_search === "" || arr_search.length === 1)
-    new_search = "?page=" + page_num;
+  if (new_search === "" || arr_search.length === 1) new_search = "?page=" + page_num;
   console.log("new search : ", location.pathname + new_search);
   location.href = location.pathname + new_search;
 

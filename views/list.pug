@@ -18,30 +18,30 @@ block content
     if(item.cate_id === cate_item)
       - group_info = item;
   .container
-    .bg-gradient-zhupao
+    .bg-zhupao
       .d-flex.justify-content-between
         a(href='/')
           img(src='/assets/images/pegasus_logo.jpg', alt='logo', style='width:250px;')
         include nav
-    .w-100.bg-gradient-primary.mb-3
+    .w-100.bg-lightblue.mb-3
       h5.m-0.text-white.p-2
         a.text-white(href='/') Home
         | &nbsp; > &nbsp; #{group_info.group_name} &nbsp; > &nbsp; 
         span#cate_info #{group_info.cate_name}
-    .row
+    .row.pt-3
       .col-3
-        .p-2(style='border:3px solid #aaa;')
-          h5.mb-5.font-weight-bold More filters
+        .p-2(style='border:1.5px solid rgb(209,209,209);')
+          h5.mb-5.font-weight-bold.text-uppercase(style='color:rgb(31,33,99)') More filters
           // 카테고리
           .form-group.d-flex.justify-content-between
-            label.font-weight-bold.text-primary.text-right Category
+            label.font-weight-bold.text-lightblue.text-right Category
             select.selectpicker(name='category', data-width='fix')
               //- option(disabled) Category Select
               each cate in cate_list
                 option(value=cate.cate_id, selected=cate.cate_id===cate_item, disabled=user_category.indexOf(cate.cate_id) === -1) !{cate.cate_name}
           // Region
           .form-group.d-flex.justify-content-between
-            label.font-weight-bold.text-primary.text-right Region
+            label.font-weight-bold.text-lightblue.text-right Region
             select.selectpicker.add_query(name='region', data-width='fix')
               option Region Select
               each region in region_list
@@ -51,29 +51,29 @@ block content
                 option(value=city.name, selected=city.name===strQuery.region) #{city.name} (#{city.cn_name})
           // Object
           .form-group.d-flex.justify-content-between
-            label.font-weight-bold.text-primary.text-right Object
+            label.font-weight-bold.text-lightblue.text-right Object
             select.selectpicker.add_query(name='object', data-width='fix')
               option Object Select
               each obj in object
                 option(value=obj._id, selected=obj.name===strQuery.object) #{obj.name}
-          .text-center
-            button.btn.btn-primary(type='button', onclick='fnSearchDetail()') DETAILED SEARCH
+          .text-center.mt-5
+            button.btn.btn-lightblue(type='button', onclick='fnSearchDetail()') DETAILED SEARCH
       .col-9
-        .p-2(style='border:3px solid #aaa;')
-          h5.mb-5.font-weight-bold Search Words
+        .p-2(style='border:1.5px solid rgb(209, 209, 209);')
+          h5.mb-5.font-weight-bold.text-uppercase(style='color:rgb(31,33,99)') Search Words
           form(onsubmit='searchList(); return false;')
             .input-group.mx-3.m-auto
               input.form-control#searchText(type='text', name='searchText')
               .input-group-prepend
-                button.btn.btn-primary(type='submit') Search
-          h5 Results
+                button.btn.btn-lightblue(type='submit') Search
+          h5.mt-5 Results
           select#list_size.selectpicker
             option(value=10, selected=limit===10) 10
             option(value=20, selected=limit===20) 20
             option(value=30, selected=limit===30) 30
             //- option(value=50, selected=limit===50) 50
             //- option(value=100, selected=limit===100) 100
-        .list-group
+        .list-group.mt-5
           each item in list[0].data
             - var region = item.region_array.concat(item.city_array);
             - var category = [];
@@ -92,13 +92,13 @@ block content
               .col-10.d-flex.flex-column.justify-content-around
                 h5 #{item.data_title}
                 .py-2.overflow-hidden(id='info_' + item._id, class=(category.length + region.length > 10 ? 'showMore':''))
-                  span.font-weight-bold.text-secondary #{category}
-                  span.text-secondary &nbsp; | &nbsp;
-                  span.font-weight-bold.text-secondary #{region}
-                  span.text-secondary &nbsp; | &nbsp;
-                  span.font-weight-bold.text-secondary #{item.object}
-              if((category.length + region.length) > 10)
-                a.hidden-wrap.text-right(href='#', data-toggle='showMore', data-target='#info_' + item._id, data-expanded='false')
+                  span #{category}
+                  span &nbsp; | &nbsp;
+                  span #{region}
+                  span &nbsp; | &nbsp;
+                  span #{item.object}
+              if((category.length + region.length) > 20)
+                a.hidden-wrap.text-right.text-lightblue(href='#', data-toggle='showMore', data-target='#info_' + item._id, data-expanded='false')
     .row
       .col-12
         nav
