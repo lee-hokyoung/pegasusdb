@@ -200,7 +200,11 @@ block append_js
           }else{
             obj.data = row.content;
           }
-          obj.backgroundColor = row.content.map(function(v, idx){return bg_list[idx % bg_list.length]});
+          if(d.chart_type === 'bar_chart_horizontal' && row.content.length === 1){
+            obj.backgroundColor = bg_list[idx % bg_list.length]
+          }else{
+            obj.backgroundColor = row.content.map(function(v, idx){return bg_list[idx % bg_list.length]});
+          }
           //- obj.backgroundColor = bg_list[idx % bg_list.length];
           obj.fill = false;
           obj.borderColor = bg_list[idx % bg_list.length];

@@ -1,51 +1,51 @@
 extends admin_layout
 block content
-	form(onsubmit='fnSearch(); return false;')
-		.input-group.my-3.w-50
-			input.form-control(placeholder='검색어를 입력해주세요', name='searchText')
-			.input-group-append
-				button.btn.btn-primary(type='submit') 검색
-	ul.list-group.list-group-flush.text-center#user_list
-		li.list-group-item.list-group-item-primary
-			.row.small
-				.col-1 고객번호
-				.col-1 기업명
-				.col-1 담당자
-				.col-1 연락처
-				.col-1 이메일
-				.col 아이디(ID)
-				.col 비밀번호(PW)
-				.col-1 데이터 구매목록
-				.col-1 중지/삭제
-				.col-1 상태
-		.user-list-wrap
-			each item, idx in users
-				- var n = 0
-				li.list-group-item(class=idx % 2 === 1 ? 'list-group-item-secondary':'')
-					.row.small
-						.col-1 #{item.user_no}
-						.col-1 #{item.user_corp}
-						.col-1 #{item.manager_name}
-						.col-1 #{item.manager_tel}
-						.col-1 #{item.email}
-						.col.text-nowrap #{item.user_id}
-						.col.text-nowrap #{item.user_pw}
-						.col-1
-							while n < (item.cate_info.length < 4 ? item.cate_info.length : 4)
-								| #{item.cate_info[n++].cate_name}
-								br
-							if(item.cate_info.length > 4)
-								.overflow-hidden.collapse(style='line-height:1.3em;', id='cate_' + item._id)
-									while n < item.cate_info.length
-										| #{item.cate_info[n++].cate_name}
-										br
-								a(href='#', data-toggle='collapse', data-target='#cate_' + item._id)
-						.col-1
-							.status-btn-wrap(data-id=item._id)
-								button.btn.btn-primary.btn-sm.p-1.mb-1(data-status='1') 제공
-								button.btn.btn-warning.btn-sm.p-1.mb-1(data-status='2') 중지
-								button.btn.btn-danger.btn-sm.p-1(data-status='3') 삭제
-						.col-1.colorStatus(data-id=item._id, data-status=item.status)
-						//#{item.status === 1 ? '제공' : item.status === 2 ? '중지' : '삭제'}
-	block append_Js
-		script(src='/assets/js/admin.js', type='text/javascript')
+  form(onsubmit='fnSearch(); return false;')
+    .input-group.my-3.w-50
+      input.form-control(placeholder='검색어를 입력해주세요', name='searchText')
+      .input-group-append
+        button.btn.btn-lightblue(type='submit') 검색
+  ul.list-group.list-group-flush.text-center#user_list
+    li.list-group-item.list-group-item-lightblue
+      .row.small
+        .col-1 고객번호
+        .col-1 기업명
+        .col-1 담당자
+        .col-1 연락처
+        .col-1 이메일
+        .col 아이디(ID)
+        .col 비밀번호(PW)
+        .col-1 데이터 구매목록
+        .col-1 중지/삭제
+        .col-1 상태
+    .user-list-wrap
+      each item, idx in users
+        - var n = 0
+        li.list-group-item(class=idx % 2 === 1 ? 'list-group-item-secondary':'')
+          .row.small
+            .col-1 #{item.user_no}
+            .col-1 #{item.user_corp}
+            .col-1 #{item.manager_name}
+            .col-1 #{item.manager_tel}
+            .col-1 #{item.email}
+            .col.text-nowrap #{item.user_id}
+            .col.text-nowrap #{item.user_pw}
+            .col-1
+              while n < (item.cate_info.length < 4 ? item.cate_info.length : 4)
+                | #{item.cate_info[n++].cate_name}
+                br
+              if(item.cate_info.length > 4)
+                .overflow-hidden.collapse(style='line-height:1.3em;', id='cate_' + item._id)
+                  while n < item.cate_info.length
+                    | #{item.cate_info[n++].cate_name}
+                    br
+                a(href='#', data-toggle='collapse', data-target='#cate_' + item._id)
+            .col-1
+              .status-btn-wrap(data-id=item._id)
+                button.btn.btn-lightblue.btn-sm.p-1.mb-1(data-status='1') 제공
+                button.btn.btn-warning.btn-sm.p-1.mb-1(data-status='2') 중지
+                button.btn.btn-danger.btn-sm.p-1(data-status='3') 삭제
+            .col-1.colorStatus(data-id=item._id, data-status=item.status)
+            //#{item.status === 1 ? '제공' : item.status === 2 ? '중지' : '삭제'}
+block append_js
+  script(src='/assets/js/admin.js', type='text/javascript')

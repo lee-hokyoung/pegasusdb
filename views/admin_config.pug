@@ -1,34 +1,34 @@
 extends admin_layout
 block content
-	style.
-		.input-group label, .img_wrap {
-			width: 200px;
-			font-weight: bold;
-		}
-		.img_wrap{
-			text-align: center;
-		}
-		#data-purchase-list input {
-			width: 15%;
-		}
-	#config-wrap
-		.input-group.mt-3
-			label.text-zhupao.my-auto.text-zhupao Forget Password?
-			input.text-center.form-control(type='text', name='forgot_password', placeholder='URL (http://www.zhupao.co.kr/)', value=data.forgot_password)
-		.input-group.mt-3
-			.img_wrap
-				img(src='/assets/images/RequestReport.JPG', alt='', width='100')
-				//p.text-zhupao.m-0 REQUEST
-				//p.text-zhupao REPORT
-			input.text-center.form-control.my-auto(type='text', name='request_report', placeholder='URL (http://www.zhupao.co.kr/)', value=data.request_report)
-		.input-group.mt-3
-			.img_wrap
-				img(src='/assets/images/RequestData.JPG', alt='', width='100')
-				//p.text-zhupao.m-0 REQUEST
-				//p.text-zhupao DATA
-			input.text-center.form-control.my-auto(type='text', name='request_data', placeholder='URL (http://www.zhupao.co.kr/)', value=data.request_data)
-		.row
-			.col.text-center
-				button.btn.btn-primary(type='button', onclick='fnUpdateConfig()') UPDATE
-block append_Js
+  style.
+    .input-group label, .img_wrap {
+      width: 200px;
+      font-weight: bold;
+    }
+    .img_wrap{
+      text-align: center;
+    }
+    #data-purchase-list input {
+      width: 15%;
+    }
+  #config-wrap
+    .input-group.mt-3
+      label.text-zhupao.my-auto.text-zhupao Forget Password?
+      input.text-center.form-control(type='text', name='forgot_password', placeholder='URL (http://www.zhupao.co.kr/)', value=data.forgot_password)
+    .input-group.mt-3
+      .img_wrap
+        img(src='/assets/images/RequestReport.JPG', alt='', width='100')
+        //p.text-zhupao.m-0 REQUEST
+        //p.text-zhupao REPORT
+      input.text-center.form-control.my-auto(type='text', name='request_report', placeholder='URL (http://www.zhupao.co.kr/)', value=data.request_report)
+    .input-group.mt-3
+      .img_wrap
+        img(src='/assets/images/RequestData.JPG', alt='', width='100')
+        //p.text-zhupao.m-0 REQUEST
+        //p.text-zhupao DATA
+      input.text-center.form-control.my-auto(type='text', name='request_data', placeholder='URL (http://www.zhupao.co.kr/)', value=data.request_data)
+    .row
+      .col.text-center
+        button.btn.btn-lightblue(type='button', onclick='fnUpdateConfig()') UPDATE
+block append_js
   script(src='/assets/js/admin.js', type='text/javascript')

@@ -12,7 +12,7 @@ block content
     .input-group.my-3.w-50
       input.form-control#searchText(placeholder='검색어를 입력해주세요', name='searchText')
       .input-group-append
-        button.btn.btn-primary(type='submit') 검색
+        button.btn.btn-lightblue(type='submit') 검색
   ul.list-group.list-group-flush.text-center#data_list
     li.list-group-item.list-group-item-dark
       .row.small.text-nowrap
@@ -61,7 +61,7 @@ block content
               each obj in item.object
                 p.m-0 #{obj}
             .col-2.text-center
-              a(href='/admin/data/read/' + item._id).btn.btn-primary.btn-sm.my-1.mx-auto 업데이트
+              a(href='/admin/data/read/' + item._id).btn.btn-lightblue.btn-sm.my-1.mx-auto 업데이트
               button.btn.btn-danger.d-block.my-1.mx-auto.btn-sm(onclick='fnDeleteData("' + item._id + '")') 삭제
             .col-1 #{item.status === 1 ? '제공' : item.status === 2 ? '중지' : '삭제'}
             .col-2 #{date.toLocaleDateString('ko')}

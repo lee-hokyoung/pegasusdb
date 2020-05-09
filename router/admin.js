@@ -15,39 +15,30 @@ const path = require("path");
 let category = [
   {
     cate: "Beauty",
-    sub_cate: ["Hair Salon", "SPA", "Nail Shop"]
+    sub_cate: ["Hair Salon", "SPA", "Nail Shop"],
   },
   {
     cate: "Living",
-    sub_cate: ["Infortainment", "Home appliances", "Interior"]
+    sub_cate: ["Infortainment", "Home appliances", "Interior"],
   },
   {
     cate: "Health",
-    sub_cate: [
-      "Adult care & Support",
-      "Silver care & Support",
-      "Baby care & Support"
-    ]
+    sub_cate: ["Adult care & Support", "Silver care & Support", "Baby care & Support"],
   },
   {
     cate: "Transport",
-    sub_cate: ["Smart Mobility", "Drone", "Public Transportation"]
+    sub_cate: ["Smart Mobility", "Drone", "Public Transportation"],
   },
   {
     cate: "Food & Beverage",
-    sub_cate: ["Restaurant & Cafe", "Delivery", "Franchise"]
+    sub_cate: ["Restaurant & Cafe", "Delivery", "Franchise"],
   },
   {
     cate: "E-Commerce",
-    sub_cate: ["PC & Mobile shopping", "Consumer", "Producer"]
-  }
+    sub_cate: ["PC & Mobile shopping", "Consumer", "Producer"],
+  },
 ];
-let obj = [
-  { name: "Industry" },
-  { name: "Market" },
-  { name: "Consumer" },
-  { name: "Company" }
-];
+let obj = [{ name: "Industry" }, { name: "Market" }, { name: "Consumer" }, { name: "Company" }];
 // 사용자 등록 화면
 router.get("/user/register", async (req, res) => {
   let category = await categoryModel.aggregate([
@@ -55,16 +46,16 @@ router.get("/user/register", async (req, res) => {
       $group: {
         _id: { id: "$group_id", name: "$group_name" },
         group_order: { $first: "$group_order" },
-        list: { $push: "$$ROOT" }
-      }
+        list: { $push: "$$ROOT" },
+      },
     },
-    { $sort: { group_order: 1 } }
+    { $sort: { group_order: 1 } },
   ]);
   let user = req.user;
   res.render("admin_user_register", {
     category: category,
     active: "user_register",
-    user: user
+    user: user,
   });
 });
 // 사용자 등록
@@ -90,14 +81,14 @@ router.get("/user/list", async (req, res) => {
         from: "categories",
         localField: "category",
         foreignField: "cate_id",
-        as: "cate_info"
-      }
-    }
+        as: "cate_info",
+      },
+    },
   ]);
   res.render("admin_user_list", {
     users: users,
     active: "user_list",
-    user: user
+    user: user,
   });
 });
 // 사용자 조회
@@ -109,24 +100,19 @@ router.post("/user/search", async (req, res) => {
         $and: [
           { lv: 1 },
           {
-            $or: [
-              { user_id: regex },
-              { user_corp: regex },
-              { manager_name: regex },
-              { manager_tel: regex }
-            ]
-          }
-        ]
-      }
+            $or: [{ user_id: regex }, { user_corp: regex }, { manager_name: regex }, { manager_tel: regex }],
+          },
+        ],
+      },
     },
     {
       $lookup: {
         from: "categories",
         localField: "category",
         foreignField: "cate_id",
-        as: "cate_info"
-      }
-    }
+        as: "cate_info",
+      },
+    },
   ]);
   res.json(list);
 });
@@ -134,10 +120,7 @@ router.post("/user/search", async (req, res) => {
 router.post("/user/status", async (req, res) => {
   let id = req.body.id;
   let status = req.body.status;
-  let result = await userModel.updateOne(
-    { _id: mongoose.Types.ObjectId(id) },
-    { $set: { status: status } }
-  );
+  let result = await userModel.updateOne({ _id: mongoose.Types.ObjectId(id) }, { $set: { status: status } });
   res.json(result);
 });
 // 데이터 등록 화면
@@ -148,10 +131,10 @@ router.get("/data/register", async (req, res) => {
       $group: {
         _id: { id: "$group_id", name: "$group_name" },
         group_order: { $first: "$group_order" },
-        list: { $push: "$$ROOT" }
-      }
+        list: { $push: "$$ROOT" },
+      },
     },
-    { $sort: { group_order: 1 } }
+    { $sort: { group_order: 1 } },
   ]);
   let region = await regionModel.find({});
   let city = await cityModel.find({});
@@ -161,42 +144,29 @@ router.get("/data/register", async (req, res) => {
     region: region,
     city: city,
     obj: obj,
-    user: user
+    user: user,
   });
 });
 function fnMoveFileTempToDownload(req) {
-  if (
-    typeof req.body.add_img_graph !== "undefined" &&
-    req.body.add_img_graph !== ""
-  ) {
+  if (typeof req.body.add_img_graph !== "undefined" && req.body.add_img_graph !== "") {
     let path = req.body.add_img_graph.path;
-    fs.createReadStream("./" + path).pipe(
-      fs.createWriteStream("./downloads" + path.replace("temps", ""))
-    );
+    fs.createReadStream("./" + path).pipe(fs.createWriteStream("./downloads" + path.replace("temps", "")));
   }
   if (typeof req.body.add_pdf !== "undefined" && req.body.add_pdf !== "") {
     let path = req.body.add_pdf.path;
-    fs.createReadStream("./" + path).pipe(
-      fs.createWriteStream("./downloads" + path.replace("temps", ""))
-    );
+    fs.createReadStream("./" + path).pipe(fs.createWriteStream("./downloads" + path.replace("temps", "")));
   }
   if (typeof req.body.add_xls !== "undefined" && req.body.add_xls !== "") {
     let path = req.body.add_xls.path;
-    fs.createReadStream("./" + path).pipe(
-      fs.createWriteStream("./downloads" + path.replace("temps", ""))
-    );
+    fs.createReadStream("./" + path).pipe(fs.createWriteStream("./downloads" + path.replace("temps", "")));
   }
   if (typeof req.body.add_ppt !== "undefined" && req.body.add_ppt !== "") {
     let path = req.body.add_ppt.path;
-    fs.createReadStream("./" + path).pipe(
-      fs.createWriteStream("./downloads" + path.replace("temps", ""))
-    );
+    fs.createReadStream("./" + path).pipe(fs.createWriteStream("./downloads" + path.replace("temps", "")));
   }
   if (typeof req.body.add_png !== "undefined" && req.body.add_png !== "") {
     let path = req.body.add_png.path;
-    fs.createReadStream("./" + path).pipe(
-      fs.createWriteStream("./downloads" + path.replace("temps", ""))
-    );
+    fs.createReadStream("./" + path).pipe(fs.createWriteStream("./downloads" + path.replace("temps", "")));
   }
   // temp 폴더 내에 모든 파일을 삭제
   let directory = "./temps";
@@ -204,7 +174,7 @@ function fnMoveFileTempToDownload(req) {
     if (!err) {
       try {
         for (let file of files) {
-          fs.unlink(path.join(directory, file), err => {
+          fs.unlink(path.join(directory, file), (err) => {
             if (err) throw err;
           });
         }
@@ -230,7 +200,8 @@ router.post("/data/register", async (req, res) => {
 // 데이터 대량 등록 화면
 router.get("/data/register_all", async (req, res) => {
   res.render("admin_data_register_all", {
-    user: req.user
+    user: req.user,
+    active: "data_register_all",
   });
 });
 // 데이터 리스트 화면
@@ -245,7 +216,7 @@ router.get("/data/list", async (req, res) => {
       region: "Henan",
       obj: "company",
       status: 1,
-      updated_data: "2019.09.29"
+      updated_data: "2019.09.29",
     },
     {
       id: "A7778",
@@ -255,15 +226,15 @@ router.get("/data/list", async (req, res) => {
       region: "Beijing",
       obj: "company",
       status: 1,
-      updated_data: "2019.09.29"
-    }
+      updated_data: "2019.09.29",
+    },
   ];
   let list = await dataModel.find({});
   res.render("admin_data_list", {
     active: "data_list",
     data: data,
     list: list,
-    user: user
+    user: user,
   });
 });
 // 데이터 삭제
@@ -273,10 +244,9 @@ router.delete("/data/:id", async (req, res) => {
   if (data) {
     if (data.add_img_graph.path) {
       try {
-        let path =
-          "./downloads/" + data.add_img_graph.path.replace("temps/", "");
+        let path = "./downloads/" + data.add_img_graph.path.replace("temps/", "");
         if (fs.existsSync(path)) {
-          fs.unlink(path, err => {
+          fs.unlink(path, (err) => {
             if (err) throw err;
           });
         }
@@ -288,7 +258,7 @@ router.delete("/data/:id", async (req, res) => {
       try {
         let path = "./downloads/" + data.add_pdf.path.replace("temps/", "");
         if (fs.existsSync(path)) {
-          fs.unlink(path, err => {
+          fs.unlink(path, (err) => {
             if (err) throw err;
           });
         }
@@ -300,7 +270,7 @@ router.delete("/data/:id", async (req, res) => {
       try {
         let path = "./downloads/" + data.add_png.path.replace("temps/", "");
         if (fs.existsSync(path)) {
-          fs.unlink(path, err => {
+          fs.unlink(path, (err) => {
             if (err) throw err;
           });
         }
@@ -312,7 +282,7 @@ router.delete("/data/:id", async (req, res) => {
       try {
         let path = "./downloads/" + data.add_ppt.path.replcae("temps/", "");
         if (fs.existsSync(path)) {
-          fs.unlink(path, err => {
+          fs.unlink(path, (err) => {
             if (err) throw err;
           });
         }
@@ -324,7 +294,7 @@ router.delete("/data/:id", async (req, res) => {
       try {
         let path = "./downloads/" + data.add_xls.path.replace("temps/", "");
         if (fs.existsSync(path)) {
-          fs.unlink(path, err => {
+          fs.unlink(path, (err) => {
             if (err) throw err;
           });
         }
@@ -345,10 +315,10 @@ router.get("/data/read/:id", async (req, res) => {
       $group: {
         _id: { id: "$group_id", name: "$group_name" },
         group_order: { $first: "$group_order" },
-        list: { $push: "$$ROOT" }
-      }
+        list: { $push: "$$ROOT" },
+      },
     },
-    { $sort: { group_order: 1 } }
+    { $sort: { group_order: 1 } },
   ]);
   let region = await regionModel.find({});
   let city = await cityModel.find({});
@@ -358,7 +328,7 @@ router.get("/data/read/:id", async (req, res) => {
     region: region,
     city: city,
     obj: obj,
-    user: user
+    user: user,
   });
 });
 // 데이터 update
@@ -373,9 +343,9 @@ router.post("/data/search", async (req, res) => {
   let list = await dataModel.aggregate([
     {
       $match: {
-        $or: [{ data_no: regex }, { data_title: regex }]
-      }
-    }
+        $or: [{ data_no: regex }, { data_title: regex }],
+      },
+    },
   ]);
   res.json(list);
 });
@@ -387,13 +357,10 @@ const upload = multer({
     },
     filename(req, file, cb) {
       const ext = path.extname(file.originalname);
-      cb(
-        null,
-        path.basename(file.originalname, ext) + new Date().valueOf() + ext
-      );
-    }
+      cb(null, path.basename(file.originalname, ext) + new Date().valueOf() + ext);
+    },
   }),
-  limits: { fileSize: 2 * 1024 * 1024 }
+  limits: { fileSize: 2 * 1024 * 1024 },
 });
 router.post("/data/file_upload", upload.array("file", 10), async (req, res) => {
   let files = await req.files;
@@ -408,7 +375,7 @@ router.delete("/data/file/:id/:fileName", async (req, res) => {
   try {
     let path = "./downloads/" + fileName;
     if (fs.existsSync(path)) {
-      fs.unlink(path, err => {
+      fs.unlink(path, (err) => {
         if (err) throw err;
       });
     }
@@ -426,16 +393,16 @@ router.post("/data/excelUpload", async (req, res) => {
     let category = await categoryModel.find({});
 
     let req_list = req.body;
-    req_list.forEach(b => {
+    req_list.forEach((b) => {
       var cate_obj = {};
       var req_cate = b.category_obj
-        .filter(cate => {
+        .filter((cate) => {
           if (cate.sub_cate.length > 0) return cate;
         })
         .reduce((a, b) => {
           return a.concat(b.sub_cate);
         }, []);
-      category.forEach(v => {
+      category.forEach((v) => {
         if (req_cate.indexOf(v.cate_name) > -1) {
           let obj = {};
           obj[v.cate_id] = v.cate_name;
@@ -462,15 +429,11 @@ router.get("/config", async (req, res) => {
   res.render("admin_config", {
     active: "config",
     data: data,
-    user: user
+    user: user,
   });
 });
 router.post("/config", async (req, res) => {
-  let result = await configModel.findOneAndUpdate(
-    {},
-    { $set: req.body },
-    { upsert: true }
-  );
+  let result = await configModel.findOneAndUpdate({}, { $set: req.body }, { upsert: true });
   res.json({ result: result, code: 1 });
 });
 module.exports = router;
