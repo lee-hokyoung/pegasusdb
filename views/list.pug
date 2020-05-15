@@ -2,9 +2,9 @@ extends layout
 block content
   //  page 관련 변수
   - var metadata = list[0].metadata[0];
-  - var total = parseInt(metadata.total);
-  - var page = parseInt(metadata.page);
-  - var limit = parseInt(metadata.limit);
+  - var total = parseInt(metadata ? metadata.total : 0);
+  - var page = parseInt(metadata ? metadata.page : 1);
+  - var limit = parseInt(metadata ? metadata.limit : 10);
   - var max_page = Math.ceil(total / limit);
   //  page grouping
   - var page_size = 10;
@@ -63,7 +63,7 @@ block content
           h5.mb-5.font-weight-bold.text-uppercase(style='color:rgb(31,33,99)') Search Words
           form(onsubmit='searchList(); return false;')
             .input-group.mx-3.m-auto
-              input.form-control#searchText(type='text', name='searchText')
+              input.form-control#searchText(type='text', name='searchText', value=strQuery.searchText)
               .input-group-prepend
                 button.btn.btn-lightblue(type='submit') Search
           h5.mt-5 Results

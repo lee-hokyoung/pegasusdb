@@ -35,7 +35,7 @@ const fnSearchDetail = function () {
         .join("&");
     }
   }
-  location.href = location.pathname + new_url;
+  location.href = location.pathname + "?" + new_url.replace("?", "");
   // let xhr = new XMLHttpRequest();
   // let searchText = $("#searchText").val();
   // let uri = "/ajax" + location.pathname + strQuery;
@@ -179,28 +179,31 @@ $(document).on("click", 'a[data-toggle="showMore"]', function (e) {
 function searchList() {
   let searchText = "searchText=" + document.querySelector("#searchText").value,
     url = "";
-  console.log("search text : ", searchText);
   if (location.search.indexOf("?") > -1) {
     url =
       location.pathname +
+      "?" +
       location.search
         .split("&")
         .map(function (v) {
-          console.log("v : ", v);
           if (v.indexOf("searchText") > -1) {
             return searchText;
+          } else if (v.indexOf("page") > -1) {
+            return "page=1";
           } else {
             return v;
           }
         })
-        .join("&");
+        .join("&")
+        .replace("?", "");
     if (url.indexOf("searchText") === -1) {
       url = url + "&" + searchText;
     }
+    console.log("url 1: ", url);
   } else {
-    url = location.pathname + "?" + searchText;
+    url = location.pathname + "?" + searchText.replace("?", "");
+    console.log("url 2: ", url);
   }
-  // console.log(url);
   location.href = url;
 
   // let xhr = new XMLHttpRequest();
@@ -251,26 +254,45 @@ document.querySelector("#list_size").addEventListener("change", function () {
 });
 //  페이징
 $(document).on("click", "button.page-link", function () {
-  document.querySelectorAll("li.page-item").forEach(function (v) {
-    v.className = "page-item";
-  });
-  $(this)[0].parentElement.className = "page-item active";
-
-  let search = location.search;
-  let arr_search = search.split("&");
-  let new_arr = [];
-  let page_num = $(this).data("page");
-  arr_search.forEach(function (v) {
-    if (v.indexOf("page") > -1) {
-      new_arr.push("page=" + page_num);
-    } else {
-      new_arr.push(v);
-    }
-  });
-  let new_search = new_arr.join("&");
-  if (new_search === "" || arr_search.length === 1) new_search = "?page=" + page_num;
-  console.log("new search : ", location.pathname + new_search);
+  let search = location.search,
+    new_search = "";
+  let page_num = this.dataset.page;
+  //  기존에 search 가 없을 경우...
+  if (search === "") {
+    new_search = "?page=" + page_num;
+  } else {
+    new_search = search
+      .split("&")
+      .map(function (v) {
+        return v.indexOf("page") > -1 ? "page=" + page_num : v;
+      })
+      .join("&");
+    console.log("url : ", new_search);
+    if (new_search.indexOf("page") === -1) new_search = new_search + "&page=" + page_num;
+    if (new_search.indexOf("page") > -1 && new_search.split("&").length === 1) new_search = "?" + new_search;
+  }
   location.href = location.pathname + new_search;
+
+  // document.querySelectorAll("li.page-item").forEach(function (v) {
+  //   v.className = "page-item";
+  // });
+  // $(this)[0].parentElement.className = "page-item active";
+
+  // let arr_search = search.split("&");
+  // let new_arr = [];
+  // let page_num = $(this).data("page");
+  // arr_search.forEach(function (v) {
+  //   if (v.indexOf("page") > -1) {
+  //     new_arr.push("page=" + page_num);
+  //   } else {
+  //     new_arr.push(v);
+  //   }
+  // });
+  // let new_search = new_arr.join("&");
+  // // if (new_search === "" || arr_search.length === 1) new_search = "page=" + page_num;
+  // console.log("new search : ", new_search);
+  // // console.log("new search : ", location.pathname + new_search);
+  // location.href = location.pathname + "?" + new_search.replace("?", "");
 
   //  ajax
   // let strQuery = fnGetQuery();

@@ -22,3 +22,7 @@ function updateQueryStringParameter(uri, key, value) {
     return uri + separator + key + "=" + value;
   }
 }
+// 마우스 우클릭 안 나오게 하는 이벤트
+document.addEventListener("contextmenu", function (e) {
+  e.preventDefault();
+});
