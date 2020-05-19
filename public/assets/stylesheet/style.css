@@ -189,3 +189,7 @@ select,
 .list-group-item-action:focus {
   background-color: #ddd;
 }
+input[name="searchText"],
+input[name="searchText"]:focus {
+  color: rgb(47, 85, 151);
+}

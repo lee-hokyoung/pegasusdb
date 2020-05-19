@@ -47,11 +47,9 @@ function fnRegisterUser() {
   document.querySelectorAll('input[type="text"]').forEach(function (v) {
     data[v.name] = v.value;
   });
-  document
-    .querySelectorAll('input[type="checkbox"]:checked')
-    .forEach(function (v) {
-      category.push(v.name);
-    });
+  document.querySelectorAll('input[type="checkbox"]:checked').forEach(function (v) {
+    category.push(v.name);
+  });
   data["category"] = category;
   // let data = $('form[name="formDataRegister"]').serialize();
   // let category = $('form[name="formCategory"]').serialize();
@@ -134,11 +132,7 @@ function fnGenerateUserList(res) {
     // 여덟번째 컬럼(데이터 구매목록)
     let col8 = document.createElement("div");
     col8.className = "col-1";
-    for (
-      let i = 0;
-      i < (v.cate_info.length < 4 ? v.cate_info.length : 4);
-      i++
-    ) {
+    for (let i = 0; i < (v.cate_info.length < 4 ? v.cate_info.length : 4); i++) {
       let p = document.createElement("p");
       p.className = "m-0";
       p.innerHTML = v.cate_info[i].cate_name;
@@ -174,7 +168,7 @@ function fnGenerateUserList(res) {
     wrap.className = "status-btn-wrap";
     wrap.setAttribute("data-id", v._id);
     let btn1 = document.createElement("button");
-    btn1.className = "btn btn-primary btn-sm p-1 mb-1";
+    btn1.className = "btn btn-lightblue btn-sm p-1 mb-1";
     btn1.setAttribute("data-status", "1");
     btn1.innerText = "제공";
     let btn2 = document.createElement("button");
@@ -388,11 +382,9 @@ function fnGenerateFormData() {
     city_array.push(input.value);
   });
   let object = [];
-  document
-    .querySelectorAll('input[name="obj"]:checked')
-    .forEach(function (input) {
-      object.push(input.value);
-    });
+  document.querySelectorAll('input[name="obj"]:checked').forEach(function (input) {
+    object.push(input.value);
+  });
   let description = document.querySelector('textarea[name="description"]');
   let source = document.querySelector('input[name="source"]');
 
@@ -546,11 +538,7 @@ function fnGenerateDataList(list) {
     let region_items = v.region_array.concat(v.city_array);
     let col_5 = document.createElement("div");
     col_5.className = "col-1";
-    for (
-      let n = 0;
-      n < (region_items.length < 4 ? region_items.length : 4);
-      n++
-    ) {
+    for (let n = 0; n < (region_items.length < 4 ? region_items.length : 4); n++) {
       let p = document.createElement("p");
       p.className = "m-0";
       p.innerText = region_items[n];
@@ -586,7 +574,7 @@ function fnGenerateDataList(list) {
     let col_7 = document.createElement("div");
     col_7.className = "col-2 text-center";
     let a = document.createElement("a");
-    a.className = "btn btn-primary btn-sm my-1 mx-auto";
+    a.className = "btn btn-lightblue btn-sm my-1 mx-auto";
     a.href = "/admin/data/read/" + v._id;
     a.innerText = "업데이트";
     let button = document.createElement("button");
@@ -599,8 +587,7 @@ function fnGenerateDataList(list) {
     col_7.appendChild(button);
     let col_8 = document.createElement("div");
     col_8.classList.add("col-1");
-    col_8.innerText =
-      v.status === 1 ? "제공" : v.status === 2 ? "중지" : "삭제";
+    col_8.innerText = v.status === 1 ? "제공" : v.status === 2 ? "중지" : "삭제";
     let col_9 = document.createElement("div");
     col_9.classList.add("col-2");
     col_9.innerText = date.toLocaleDateString("ko");
@@ -683,10 +670,7 @@ document.querySelectorAll('input[type="file"]').forEach(function (file) {
 function fnDeleteFile(id, file_name, input_name, opt) {
   if (!confirm("파일을 삭제하시겠습니까?")) return false;
   let xhr = new XMLHttpRequest();
-  xhr.open(
-    "DELETE",
-    "/admin/data/file/" + id + "/" + file_name + "?input_name=" + input_name
-  );
+  xhr.open("DELETE", "/admin/data/file/" + id + "/" + file_name + "?input_name=" + input_name);
   xhr.onreadystatechange = function () {
     if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
       let res = JSON.parse(this.response);
@@ -694,14 +678,10 @@ function fnDeleteFile(id, file_name, input_name, opt) {
       if (res.code !== 0) {
         alert(res.message);
       } else {
-        let file_wrap = document.querySelector(
-          'div[about="' + file_name + '"]'
-        );
+        let file_wrap = document.querySelector('div[about="' + file_name + '"]');
         file_wrap.remove();
         if (opt) fnChangeAbleInput();
-        document.querySelector(
-          'input[name="' + input_name + '"]'
-        ).disabled = false;
+        document.querySelector('input[name="' + input_name + '"]').disabled = false;
       }
     }
   };
@@ -710,20 +690,16 @@ function fnDeleteFile(id, file_name, input_name, opt) {
 
 // disabled 해제
 function fnChangeAbleInput() {
-  document
-    .querySelectorAll("input[disabled]:not(.form-control-file)")
-    .forEach(function (inp) {
-      inp.disabled = false;
-    });
+  document.querySelectorAll("input[disabled]:not(.form-control-file)").forEach(function (inp) {
+    inp.disabled = false;
+  });
 }
 
 // config update
 function fnUpdateConfig() {
   console.log("1");
-  let forgot_password = document.querySelector('input[name="forgot_password"]')
-    .value;
-  let request_report = document.querySelector('input[name="request_report"]')
-    .value;
+  let forgot_password = document.querySelector('input[name="forgot_password"]').value;
+  let request_report = document.querySelector('input[name="request_report"]').value;
   let request_data = document.querySelector('input[name="request_data"]').value;
 
   let xhr = new XMLHttpRequest();
