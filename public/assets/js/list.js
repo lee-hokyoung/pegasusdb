@@ -161,7 +161,9 @@ const fnGetQuery = function () {
   });
   let list_size = parseInt($("#list_size").val());
   query.push("list_size=" + list_size);
-  let page = document.querySelector(".page-item.active button").dataset.page || 1;
+  let page_btn = document.querySelector(".page-item.active button");
+  if (page_btn) page = page_btn.dataset.page;
+  else page = 1;
   query.push("page=" + page);
   return "?" + query.join("&");
 };
@@ -269,7 +271,11 @@ $(document).on("click", "button.page-link", function () {
       .join("&");
     console.log("url : ", new_search);
     if (new_search.indexOf("page") === -1) new_search = new_search + "&page=" + page_num;
-    if (new_search.indexOf("page") > -1 && new_search.split("&").length === 1) new_search = "?" + new_search;
+    if (
+      (new_search.indexOf("page") > -1 && new_search.split("&").length === 1) ||
+      new_search.indexOf("?") === -1
+    )
+      new_search = "?" + new_search;
   }
   location.href = location.pathname + new_search;
 

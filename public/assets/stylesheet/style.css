@@ -67,7 +67,11 @@ a.hidden-wrap[data-expanded="true"]:after {
 }
 
 #register-list-warp .input-group input,
-#config-wrap .input-group input {
+#config-wrap .input-group input,
+textarea[name="description"],
+textarea[name="description"]:focus,
+input[name="source"],
+input[name="source"]:focus {
   color: black;
   font-weight: 700;
 }
