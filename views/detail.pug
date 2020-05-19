@@ -78,6 +78,7 @@ block append_js
   script.
     let d = !{JSON.stringify(data)};
     let isReverse = ["bar_chart_horizontal"].indexOf(d.chart_type) > -1;
+    let labelDisplay = true;
     console.log('d : ', d);
     if(d.add_img_graph){
 
@@ -203,7 +204,12 @@ block append_js
           if(d.chart_type === 'bar_chart_horizontal' && row.content.length === 1){
             obj.backgroundColor = bg_list[idx % bg_list.length]
           }else{
-            obj.backgroundColor = row.content.map(function(v, idx){return bg_list[idx % bg_list.length]});
+            let i = 0
+            obj.backgroundColor = row.content.map(function(v, rowNum){
+              console.log('bg idx : ', rowNum);
+              console.log('idx : ', idx);
+              return bg_list[(d.table_y.length > 1 ? idx:rowNum) % bg_list.length]
+            });
           }
           //- obj.backgroundColor = bg_list[idx % bg_list.length];
           obj.fill = false;
@@ -249,6 +255,7 @@ block append_js
           },
           responsive:true,
           legend:{
+            //- display:false,
             position:['pie_chart'].indexOf(d.chart_type) > -1 ?'bottom':'top'
           },
           elements:{
