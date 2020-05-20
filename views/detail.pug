@@ -49,9 +49,9 @@ block content
               if(data.add_ppt.path)
                 img.icon-img(src='/assets/svgs/ppt.svg')
               span PPT
-          .border.ml-2(class=data.add_xls.path?'':'bg-disable')
-            a.btn.d-flex.justify-content-center.p-2(href=(data.add_xls.path?'/downloads/' + data.add_xls.path.replace('temps/', ''):'javascript:void(0);'), download='download', class=data.add_xls.path?'':'disabled')
-              if(data.add_xls.path)
+          .border.ml-2(class=data.add_img_graph.path?'bg-disable':'')
+            a.btn.d-flex.justify-content-center.p-2(class=data.add_img_graph.path?'disabled':'', href='/excel/download/' + data._id)
+              if(!data.add_img_graph.path)
                 img.icon-img(src='/assets/svgs/xls.svg')
               span XLS
           .border.ml-2(class=data.add_pdf.path?'':'bg-disable')
@@ -75,7 +75,9 @@ block content
 block append_js
   script(src='/bootstrap/js/dist/util.js', type='text/javascript')
   script(src='/chart.js/Chart.js')
+  script(src='/assets/js/detail.js')
   script.
+    console.log("data : ", !{JSON.stringify(data)})
     let d = !{JSON.stringify(data)};
     let isReverse = ["bar_chart_horizontal"].indexOf(d.chart_type) > -1;
     let labelDisplay = true;
@@ -141,8 +143,6 @@ block append_js
       let y = d.table_y;
       let ChartData = {};
 
-      console.log('x : ', x);
-      console.log('y : ', y);
       // 파이차트의 경우 좌표를 재배열해준다.
       if (chart_type === 'pie') {
         ChartData.datasets = [];
@@ -185,8 +185,6 @@ block append_js
         else ChartData.labels = d.table_x.content;
         ChartData.datasets = [];
         d.table_y.forEach(function (row, idx) {
-          console.log('row : ', row);
-          console.log('idx : ', idx);
           let obj = {};
           if(d.chart_type === 'comboBarLine_chart'){
             if(idx === 0) obj.type = 'line';
@@ -206,11 +204,9 @@ block append_js
           }else{
             let i = 0
             obj.backgroundColor = row.content.map(function(v, rowNum){
-              console.log('bg idx : ', rowNum);
-              console.log('idx : ', idx);
               return bg_list[(d.table_y.length > 1 ? idx:rowNum) % bg_list.length]
             });
-            if(d.chart_type === 'bar_chart_horizontal' || d.chart_type === 'bar_chart_vertical') labelDisplay = false;
+            if((d.chart_type === 'bar_chart_horizontal' && d.table_y.length === 1) || (d.chart_type === 'bar_chart_vertical' && d.table_y.length === 1)) labelDisplay = false;
           }
           //- obj.backgroundColor = bg_list[idx % bg_list.length];
           obj.fill = false;
