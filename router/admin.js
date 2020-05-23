@@ -100,7 +100,12 @@ router.post("/user/search", async (req, res) => {
         $and: [
           { lv: 1 },
           {
-            $or: [{ user_id: regex }, { user_corp: regex }, { manager_name: regex }, { manager_tel: regex }],
+            $or: [
+              { user_id: regex },
+              { user_corp: regex },
+              { manager_name: regex },
+              { manager_tel: regex },
+            ],
           },
         ],
       },
@@ -120,7 +125,10 @@ router.post("/user/search", async (req, res) => {
 router.post("/user/status", async (req, res) => {
   let id = req.body.id;
   let status = req.body.status;
-  let result = await userModel.updateOne({ _id: mongoose.Types.ObjectId(id) }, { $set: { status: status } });
+  let result = await userModel.updateOne(
+    { _id: mongoose.Types.ObjectId(id) },
+    { $set: { status: status } }
+  );
   res.json(result);
 });
 // 데이터 등록 화면
@@ -150,23 +158,33 @@ router.get("/data/register", async (req, res) => {
 function fnMoveFileTempToDownload(req) {
   if (typeof req.body.add_img_graph !== "undefined" && req.body.add_img_graph !== "") {
     let path = req.body.add_img_graph.path;
-    fs.createReadStream("./" + path).pipe(fs.createWriteStream("./downloads" + path.replace("temps", "")));
+    fs.createReadStream("./" + path).pipe(
+      fs.createWriteStream("./downloads" + path.replace("temps", ""))
+    );
   }
   if (typeof req.body.add_pdf !== "undefined" && req.body.add_pdf !== "") {
     let path = req.body.add_pdf.path;
-    fs.createReadStream("./" + path).pipe(fs.createWriteStream("./downloads" + path.replace("temps", "")));
+    fs.createReadStream("./" + path).pipe(
+      fs.createWriteStream("./downloads" + path.replace("temps", ""))
+    );
   }
   if (typeof req.body.add_xls !== "undefined" && req.body.add_xls !== "") {
     let path = req.body.add_xls.path;
-    fs.createReadStream("./" + path).pipe(fs.createWriteStream("./downloads" + path.replace("temps", "")));
+    fs.createReadStream("./" + path).pipe(
+      fs.createWriteStream("./downloads" + path.replace("temps", ""))
+    );
   }
   if (typeof req.body.add_ppt !== "undefined" && req.body.add_ppt !== "") {
     let path = req.body.add_ppt.path;
-    fs.createReadStream("./" + path).pipe(fs.createWriteStream("./downloads" + path.replace("temps", "")));
+    fs.createReadStream("./" + path).pipe(
+      fs.createWriteStream("./downloads" + path.replace("temps", ""))
+    );
   }
   if (typeof req.body.add_png !== "undefined" && req.body.add_png !== "") {
     let path = req.body.add_png.path;
-    fs.createReadStream("./" + path).pipe(fs.createWriteStream("./downloads" + path.replace("temps", "")));
+    fs.createReadStream("./" + path).pipe(
+      fs.createWriteStream("./downloads" + path.replace("temps", ""))
+    );
   }
   // temp 폴더 내에 모든 파일을 삭제
   let directory = "./temps";
@@ -360,11 +378,15 @@ const upload = multer({
       cb(null, path.basename(file.originalname, ext) + new Date().valueOf() + ext);
     },
   }),
-  limits: { fileSize: 2 * 1024 * 1024 },
+  limits: { fileSize: 10 * 1024 * 1024 },
 });
 router.post("/data/file_upload", upload.array("file", 10), async (req, res) => {
-  let files = await req.files;
-  res.json(files);
+  try {
+    let files = await req.files;
+    res.json({ code: 1, files: files });
+  } catch (err) {
+    res.json({ code: 0, message: "파일 업로드 최대 용량(10mb) 초과했습니다." });
+  }
 });
 //  파일 삭제
 router.delete("/data/file/:id/:fileName", async (req, res) => {

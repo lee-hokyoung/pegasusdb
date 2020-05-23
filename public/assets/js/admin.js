@@ -318,7 +318,7 @@ function fnSubmit() {
 // 폼 데이터 생성
 function fnGenerateFormData() {
   let add_img_graph = document.querySelector('input[name="add_img_graph"]');
-  let isAddImage = add_img_graph.value !== "";
+  let isAddImage = add_img_graph.dataset.file !== "";
   let data_title = document.querySelector('input[name="data_title"]');
   if (data_title.value === "") {
     alert("제목을 입력해 주세요");
@@ -646,19 +646,34 @@ var fnInputImage = function () {
 document.querySelectorAll('input[type="file"]').forEach(function (file) {
   file.addEventListener("change", function (e) {
     const formData = new FormData();
+    let isOverload = false;
     Object.keys(e.target.files).forEach(function (key) {
+      console.log(e.target.files[key].size);
+      let fileSize = e.target.files[key].size;
+      if (fileSize > 10 * 1024 * 1024) isOverload = true;
       formData.append("file", e.target.files[key], e.target.files[key].name);
     });
+    if (isOverload) {
+      alert("최대 파일 사이즈(10Mb)를 초과했습니다.");
+      e.target.value = "";
+      return false;
+    }
+    //  file size 체크
     if (e.target.files.length > 0) {
       let xhr = new XMLHttpRequest();
       xhr.open("POST", "/admin/data/file_upload");
       xhr.onreadystatechange = function () {
         if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
           let res = JSON.parse(this.response);
-          res.forEach(function (v) {
-            file.dataset.path = v.path;
-            file.dataset.originalname = v.originalname;
-          });
+          if (res.code === 0) {
+            alert(res.message);
+            return false;
+          } else {
+            res.files.forEach(function (v) {
+              file.dataset.path = v.path;
+              file.dataset.originalname = v.originalname;
+            });
+          }
         }
       };
       xhr.send(formData);

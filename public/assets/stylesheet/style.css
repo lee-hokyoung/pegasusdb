@@ -197,3 +197,6 @@ input[name="searchText"],
 input[name="searchText"]:focus {
   color: rgb(47, 85, 151);
 }
+select[name="category"] option:disabled {
+  color: rgb(200, 200, 200);
+}

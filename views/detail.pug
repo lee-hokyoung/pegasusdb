@@ -26,7 +26,7 @@ block content
     .row.pt-3
       .col-8.graph-wrap
         h4.font-weight-bold #{data.data_title}
-        h5.text-right 단위 : #{data.data_unit}
+        h5.text-right(class=data.add_img_graph.path?'invisible':'') 단위 : #{data.data_unit}
         .card.d-block
           .card-body.shadow.text-center
             if(data.add_img_graph.path)
