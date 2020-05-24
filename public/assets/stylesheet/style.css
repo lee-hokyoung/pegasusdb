@@ -148,9 +148,10 @@ select.selectpicker[data-width="fix"] {
 }
 #loading_page img {
   position: relative;
-  top: 50%;
-  left: 50%;
-  width: 100px;
+  top: calc(50% - 150px);
+  left: calc(50% - 150px);
+  width: 300px;
+  height: 300px;
 }
 .category-wrap h5 {
   font-size: 17px;

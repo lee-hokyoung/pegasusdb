@@ -1,6 +1,6 @@
 $(document).ready(function () {
   //  loading 페이지 숨김 처리
-  let page_out_time = 1000;
+  let page_out_time = 2500;
   let list_group = document.querySelector(".list-group");
   list_group.style.visibility = "collapse";
   setTimeout(function () {
