@@ -205,10 +205,17 @@ function fnGenerateUserList(res) {
 
 // 사용자 상태 변경 버튼 클릭 이벤트
 $(document).on("click", ".status-btn-wrap button", function () {
-  console.log($(this));
   let btn = $(this)[0];
   let id = btn.parentElement.dataset.id;
   let status = btn.dataset.status;
+  if (status === "3") {
+    if (
+      !confirm(
+        "고객 계정 삭제를 진행하겠습니다. 화면에 표시되지 않으며, 계정 기록은 서버에서 확인 하실 수 있습니다. 진행하시겠습니까?"
+      )
+    )
+      return false;
+  }
   let xhr = new XMLHttpRequest();
   let status_txt = document.querySelector('.colorStatus[data-id="' + id + '"]');
   xhr.open("POST", "/admin/user/status", true);
@@ -216,8 +223,8 @@ $(document).on("click", ".status-btn-wrap button", function () {
   xhr.onreadystatechange = function () {
     if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
       let res = JSON.parse(this.response);
-      status_txt.dataset.status = status;
-      alert("변경되었습니다.");
+      // status_txt.dataset.status = status;
+      location.reload();
     }
   };
   xhr.send(JSON.stringify({ id: id, status: status }));

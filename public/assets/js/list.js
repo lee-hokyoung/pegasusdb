@@ -1,10 +1,15 @@
 $(document).ready(function () {
   //  loading 페이지 숨김 처리
-  let page_out_time = 2500;
+  let page_out_time = 2000;
   let list_group = document.querySelector(".list-group");
+  let loading_page = document.querySelector("#loading_page");
+  loading_page.innerHTML = "";
+  let gif = document.createElement("img");
+  gif.src = "/assets/images/pegasus_loading.gif";
+  loading_page.appendChild(gif);
   list_group.style.visibility = "collapse";
   setTimeout(function () {
-    document.querySelector("#loading_page").style.display = "none";
+    loading_page.style.display = "none";
     list_group.style.visibility = "visible";
   }, page_out_time);
   //  Category 선택시

@@ -75,7 +75,7 @@ router.post("/user/register", async (req, res) => {
 router.get("/user/list", async (req, res) => {
   let user = req.user;
   let users = await userModel.aggregate([
-    { $match: { lv: 1 } },
+    { $match: { lv: 1, status: { $lt: 3 } } },
     {
       $lookup: {
         from: "categories",
